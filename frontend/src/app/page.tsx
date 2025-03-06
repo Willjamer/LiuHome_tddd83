@@ -117,7 +117,7 @@ export default function Home() {
 
 
         <section className="py-12 bg-muted/30 flex justify-center">
-          <div className="">
+          <div className="container">
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-2xl font-bold ">Featured Listings</h2>
               <Link href="/listings">
@@ -125,7 +125,7 @@ export default function Home() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-between">
               {featuredListings.map((listing) => (
                 <Link href={`/listings/${listing.id}`} key={listing.id}>
                   <Card className="overflow-hidden rounded-lg shadow-lg border-none pt-0 group">
@@ -146,7 +146,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="py-12 px-6">
+        <section className="py-12 px-6 ">
             <h2 className="text-2xl font-bold text-center mb-8">How It Works</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
               <div className="flex flex-col items-center text-center">
@@ -174,13 +174,13 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t py-6 md:py-8">
+      <footer className="border-t py-6 md:py-8 ">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center gap-2 font-semibold">
             <House className="h-5 w-5" />
             <span>liuHome</span>
           </div>
-          <p className="text-sm text-muted-foreground mt-4 md:mt-0">
+          <p className="text-sm text-muted-foreground mt-4 md:mt-0 ">
             © 2030 liuHome. All rights reserved.
           </p>
           <div className="flex gap-4 mt-4 md:mt-0">
