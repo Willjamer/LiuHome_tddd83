@@ -5,9 +5,10 @@ import axios from "axios";
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search, MapPin, Calendar, Wifi, House, Users, Bath, BedDouble } from "lucide-react"
+import { Search, Calendar, House, Users} from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import Image from "next/image";
+
 
 //TESTING COMMENT 1232323
 export default function Home() {
@@ -129,11 +130,9 @@ export default function Home() {
                 <Link href={`/listings/${listing.id}`} key={listing.id}>
                   <Card className="overflow-hidden rounded-lg shadow-lg border-none pt-0 group">
                     <div className="relative w-full h-56 rounded-t-lg overflow-hidden">
-                      <img
-                        src={listing.imageUrl}
-                        alt={listing.title}
-                        className="object-cover w-full h-full transition-transform duration-300 ease-in-out transform group-hover:scale-105"
-                      />
+                      <Image src={listing.imageUrl} alt={listing.title}  width={500} height={300} className="object-cover w-full h-full transition-transform duration-300 ease-in-out transform group-hover:scale-105"/>
+
+
                     </div>
                     <CardContent className="p-4">
                       <h3 className="text-lg font-semibold">{listing.title}</h3>
