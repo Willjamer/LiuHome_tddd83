@@ -32,9 +32,6 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.0.0(react@19.0.0)
-      react-slot:
-        specifier: ^0.1.2
-        version: 0.1.2(react@19.0.0)
       tailwind-merge:
         specifier: ^3.0.2
         version: 3.0.2
@@ -1427,11 +1424,6 @@ packages:
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
-
-  react-slot@0.1.2:
-    resolution: {integrity: sha512-smexOAGO7WyXMXlFgvzBjELeA9BYWKYdONI0vUmzSXYDEhxEG+FrpSPDaSdlc2fi2cKRJQa0q3NSD14hhCrdmw==}
-    peerDependencies:
-      react: ^15
 
   react@19.0.0:
     resolution: {integrity: sha512-V8AVnmPIICiWpGfm6GLzCR/W5FXLchHop40W4nXBmdlEceh16rCN8O8LNWm5bh5XUX91fh7KpA+W0TgMKmgTpQ==}
@@ -3170,11 +3162,6 @@ snapshots:
       scheduler: 0.25.0
 
   react-is@16.13.1: {}
-
-  react-slot@0.1.2(react@19.0.0):
-    dependencies:
-      prop-types: 15.8.1
-      react: 19.0.0
 
   react@19.0.0: {}
 
