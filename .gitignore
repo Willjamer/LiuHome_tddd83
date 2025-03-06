@@ -1,0 +1,10 @@
+# Node modules (frontend)
+frontend/node_modules/
+
+# Python virtual environment (backend)
+backend/venv/
+
+# Other unnecessary files
+__pycache__/
+*.pyc
+*.pyo
