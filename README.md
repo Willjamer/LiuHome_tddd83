@@ -1,12 +1,15 @@
 # liuHome – Student Apartment Rental Marketplace - TDDD83 Grupp 2
 
-liuHome is a **student-to-student** apartment rental marketplace. Rent directly from other students without middlemen or agency fees.
+liuHome is a **student-to-student** apartment rental marketplace. 
 
 ## SETUP GUIDE
 
-### **🔹 Step 1: WSL (windows only)**
-Install WSL: 
----
+### **🔹 Step 1: WSL skip this step if linux gl if mac**
+Inside Powershell 
+```bash
+wsl --install
+```
+Follow instructions given
 
 ### **🔹 Step 2: Clone the Repository**
 ```bash
