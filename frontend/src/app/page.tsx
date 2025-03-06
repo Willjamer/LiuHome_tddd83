@@ -52,12 +52,13 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col w-full">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 ">
-        <div className="flex h-16 items-center justify-between px-4">
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl">
+
+        <div className="flex h-16 items-center justify-between px-4 ">
+          <Link href="/" className="flex items-center gap-2 font-bold text-xl w-1/3 justify-center">
             <House className="h-5 w-5" />
             <span>liuHome</span>
           </Link>
-          <nav className="hidden md:flex gap-6">
+          <nav className="hidden md:flex gap-6 w-1/3 justify-center">
             <Link href="/listings" className="text-sm font-medium hover:underline underline-offset-4">
               Browse
             </Link>
@@ -68,7 +69,7 @@ export default function Home() {
               About
             </Link>
           </nav>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 w-1/3 justify-center">
             <Link href="/list-property">
               <Button variant="outline" size="sm">
                 List Your Place
@@ -88,8 +89,8 @@ export default function Home() {
             className="relative h-[500px] bg-cover bg-center"
             style={{ backgroundImage: "url('/images/Hero.jpg')" }}
           >
-            <div className="container h-full flex flex-col justify-center items-start sm:pl-8">
-              <div className="max-w-xl space-y-4">
+            <div className="h-full flex flex-col justify-center items-center sm:pl-8">
+              <div className="space-y-4">
                 <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Find Your Perfect Student Apartment</h1>
                 <p className="text-lg text-muted-foreground">
                   Rent directly from other students. No middlemen, no agency fees.
@@ -99,14 +100,13 @@ export default function Home() {
                   <div className="flex flex-col md:flex-row gap-4">
                     <div className="flex-1 relative">
                       <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input placeholder="University or neighborhood" className="pl-9" />
+                      <Input placeholder="Size or neighborhood" className="pl-9" />
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" className="whitespace-nowrap">
-                        <Calendar className="mr-2 h-4 w-4" />
+                      <Button variant="outline" className="whitespace-nowrap ">
+                        <Calendar className=" h-4 w-4" />
                         Dates
                       </Button>
-                      <Button className="whitespace-nowrap">Search</Button>
                     </div>
                   </div>
                 </div>
@@ -174,16 +174,16 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t py-6 md:py-8 ">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
-          <div className="flex items-center gap-2 font-semibold">
+      <footer className="border-t py-6 md:py-8 flex flex-col ">
+        <div className=" px-4 sm:px-6 lg:px-8 flex justify-between w-full items-center ">
+          <div className="flex  font-semibold w-1/3 justify-center">
             <House className="h-5 w-5" />
             <span>liuHome</span>
           </div>
-          <p className="text-sm text-muted-foreground mt-4 md:mt-0 ">
+          <p className="text-sm text-muted-foreground w-1/3 justify-center flex">
             © 2030 liuHome. All rights reserved.
           </p>
-          <div className="flex gap-4 mt-4 md:mt-0">
+          <div className="flex gap-4 mt-4 md:mt-0 w-1/3 justify-center">
             <Link href="/terms" className="text-sm text-muted-foreground hover:underline">
               Terms
             </Link>
