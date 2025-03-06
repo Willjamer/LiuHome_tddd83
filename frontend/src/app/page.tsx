@@ -9,7 +9,7 @@ import { Search, MapPin, Calendar, Wifi, House, Users, Bath, BedDouble } from "l
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 
-//TESTING COMMENT ONE TWO THREE FÖR FAN 
+//TESTING COMMENT 
 export default function Home() {
   const [data, setData] = useState(null);
 
