@@ -1,0 +1,218 @@
+from flask import Flask, jsonify
+from flask_sqlalchemy import SQLAlchemy
+import traceback
+import itertools
+import characters
+db = SQLAlchemy()
+class Apartment(db.Model):
+    apartment_id   = db.Column(db.Integer, primary_key = True)
+    user_id        = db.Column(db.Integer, db.ForeignKey("user.sso_id"), unique = True, nullable = False)
+    title          = db.Column(db.String, nullable = False)
+    description    = db.Column(db.String, nullable = True)
+    location       = db.Column(db.String, nullable = False)
+    rent_amount    = db.Column(db.Integer, nullable = False)
+    is_available   = db.Column(db.Boolean, nullable = False, default = True)
+    available_from = db.Column(db.Date, nullable = True)
+    # Något här om images, vet ej än hur
+
+    def __repr__(self):
+        return f"<Apartment {self.apartment_id}: {self.title}: {self.description}: {self.location}: {self.rent_amount}: {self.available_from}>"
+
+    def serialize(self):
+        return {
+            "apartment_id" : self.apartment_id,
+            "user_id" : self.user_id,
+            "review_id" : self.review_id,
+            "title" : self.title,
+            "description": self.description,
+            "location": self.location,
+            "rent_amount": self.rent_amount,
+            "is_available": self.is_available,
+            "available_from": self.available_from,
+
+        }
+        
+class User(db.Model):
+    sso_id    = db.Column(db.Integer, primary_key = True)
+    name      = db.Column(db.String, nullable = False)
+    email     = db.Column(db.String, nullable = False)
+    apartment = db.relationship("Apartment", backref = "user", uselist = False)
+    listing_expiry_date = db.Column(db.Date, nullable = False)
+
+    #Creating a relationship between users and reviews
+    created_reviews = db.relationship("Review", foreign_keys = "[Review.reviewer_id]", backref = "reviewer")
+    recieved_reviews = db.relationship("Review", foreign_keys = "[Review.reviewed_user_id]", backref = "reviewed_user")
+
+    def __repr__(self):
+        return f"<User {self.sso_id}: {self.name}: {self.email}: {self.apartment}>"
+    
+    def serialize(self):
+        return {
+            "sso_id": self.sso_id,
+            "name": self.name,
+            "email": self.email,
+            "apartment": self.apartment.serialize(),
+            "listing_expiry_date": self.listing_expiry_date
+        }
+
+# Not implemented until after first user test
+
+class Review(db.Model):
+    review_id   = db.Column(db.Integer, primary_key = True)
+    content     = db.Column(db.String, nullable = True)
+    rating      = db.Column(db.Integer, nullable = False)
+    review_date = db.Column(db.Date, nullable = False)
+
+    reviewer_id = db.Column(db.Integer, db.ForeignKey("user.sso_id"), nullable = False)
+    reviewed_user_id = db.Column(db.Integer, db.ForeignKey("user.sso_id"), nullable = False)
+
+    reviewer = db.relationship("User", foreign_keys = [reviewer_id], backref = "created_reviews")
+    reviewed_user = db.relationship("User", foreign_keys = [reviewed_user_id], backref = "recieved_reviews")
+
+
+    def __repr__(self):
+        return f"<Review {self.review_id}: {self.content}: {self.rating}: {self.review_date}>"
+    
+    def serialize(self): 
+        return {
+            "review_id": self.review_id,
+            "content": self.content,
+            "rating": self.rating,
+            "review_date": self.review_date,
+        }
+        
+
+class Payment(db.Model):
+    payment_id   = db.Column(db.String, primary_key = True)
+    amount       = db.Column(db.Integer, nullable = False)
+    payment_date = db.Column(db.Date, nullable = False)
+
+
+    def __repr__(self):
+        return f"<Payment {self.payment_id} {self.amount} {self.payment_date}>"
+    
+    def serialize(self):
+        return {
+            "payment_id": self.payment_id,
+            "amount": self.amount,
+            "payment_date": self.payment_date,
+        }
+
+
+# Nevermind this
+def generate_unique_id(determinator):
+    
+    match determinator:
+        case "user":
+            first = "A"
+        case "apartment":
+            first = "B"
+        case "review":
+            first = "C"
+        case "payment":
+            first = "D"
+
+characters = characters.get_characters()
+
+unique_strings = set("".join(p) for p in itertools.permutations(characters, 3))
+
+def get_all_available_apartments():
+    apartments = Apartment.query.filter_by(is_available=True).all()
+    if apartments: 
+        return jsonify({'Apartments': [apartment.serialize() for apartment in apartments]})
+
+    return jsonify({'message': 'No available apartments', 'Apartments': []}) 
+
+def db_get_specific_apartment(this_apartment_id):
+    this_apartment = Apartment.query.get(this_apartment_id)
+
+    return jsonify({'apartment' : this_apartment.serialize()})
+
+def db_add_apartment(user_id, title, description, location, rent_amount, available_from):
+    try:
+        new_apartment = Apartment(
+            apartment_id = 1000, # Temporary
+            user_id = user_id,
+            title = title,
+            description= description,
+            location = location,
+            rent_amount = rent_amount,
+            is_available = True,
+            available_from = available_from,
+        )
+        db.session.add(new_apartment)
+        db.session.commit()
+
+    except Exception as e:
+        traceback.print_exc()
+    
+def remove_appartment(this_apartment_id):
+    this_apartment = Apartment.query.get(this_apartment_id)
+
+    db.session.remove(this_apartment)
+    db.session.commit()
+    return jsonify({'message': 'apartment taken down'})
+
+def db_get_user(this_sso_id):
+    
+    this_user = User.query.get(this_sso_id)
+    return jsonify({'user': this_user.serialize()})
+
+def db_add_user(sso_id, name, email):
+    
+    try:
+        new_user = User(
+            sso_id = sso_id,
+            name = name,
+            email = email,
+        )
+        db.session.add(new_user)
+        db.session.commit()
+    except Exception as e:
+        traceback.print_exc()
+
+def db_add_review(content, rating, review_date, reviewer, reviewed_user):
+    try:
+        new_review = Review(
+            # review_id = review_id,
+            review_id = 1000,
+            content = content,
+            rating = rating,
+            review_date = review_date,
+            reviewer = reviewer,
+            reviewed_user = reviewed_user
+        )
+        db.session.add(new_review)
+        db.session.commit()
+    except Exception as e:
+        traceback.print_exc()
+
+# All edit functions are thought to be redone but this should work for now. 
+def db_edit_review(review_id, content, rating, review_date):
+    
+    this_review = Review.query.get(review_id)
+
+    this_review.content = content
+    this_review.rating = rating
+    this_review.review_date = review_date
+    db.session.commit()
+    return jsonify({'message': 'review editet successfully'})
+
+def db_delete_review(review_id):
+    
+    this_review = Review.query.get(review_id)
+    if this_review:
+        db.session.remove(this_review)
+        db.session.commit()
+        return jsonify({'message': 'review deleted successfully'}), 200
+    
+    return jsonify({'error': 'Review not found'}), 404
+
+# We should have something like this if the user doesn't check in for a long time or something
+
+def delete_user(this_sso_id):
+    
+    this_user = User.query.get(this_sso_id)
+
+    db.session.remove(this_user)
+    db.session.commit()
