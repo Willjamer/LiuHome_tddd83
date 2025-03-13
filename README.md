@@ -4,7 +4,7 @@ liuHome is a **student-to-student** apartment rental marketplace.
 
 ## SETUP GUIDE
 
-### **🔹 Step 1: WSL skip this step if linux gl if mac**
+### **🔹 Step 1: WSL skip this step if linux/mac**
 Inside Powershell 
 ```bash
 wsl --install
