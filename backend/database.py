@@ -1,9 +1,13 @@
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask_jwt_extended import create_access_token
+from .app import get_db, get_bcrypt
 import traceback
 import itertools
 import characters
-db = SQLAlchemy()
+
+db = get_db()
+
 class Apartment(db.Model):
     apartment_id   = db.Column(db.Integer, primary_key = True)
     user_id        = db.Column(db.Integer, db.ForeignKey("user.sso_id"), unique = True, nullable = False)
@@ -32,12 +36,14 @@ class Apartment(db.Model):
 
         }
         
+#This user class is for the website without SSO-id 
 class User(db.Model):
     sso_id    = db.Column(db.Integer, primary_key = True)
+    password  = db.Column(db.String, nullable = False)
     name      = db.Column(db.String, nullable = False)
     email     = db.Column(db.String, nullable = False)
     apartment = db.relationship("Apartment", backref = "user", uselist = False)
-    listing_expiry_date = db.Column(db.Date, nullable = False)
+    listing_expiry_date = db.Column(db.Date, nullable = False) # Vi vår kolla på denna. Vettefan riktigt hur vi ska styra upp det. 
 
     #Creating a relationship between users and reviews
     created_reviews = db.relationship("Review", foreign_keys = "[Review.reviewer_id]", backref = "reviewer")
@@ -54,6 +60,14 @@ class User(db.Model):
             "apartment": self.apartment.serialize(),
             "listing_expiry_date": self.listing_expiry_date
         }
+    
+    def set_password(self, password):
+        bcrypt = get_bcrypt()
+        self.password = bcrypt.generate_password_hash(password).decode('utf8')
+
+    def check_password(self, password):
+        bcrypt = get_bcrypt()
+        return bcrypt.check_password_hash(self.password, password)
 
 # Not implemented until after first user test
 
@@ -112,9 +126,9 @@ def generate_unique_id(determinator):
         case "payment":
             first = "D"
 
-characters = characters.get_characters()
+    characters = characters.get_characters()
 
-unique_strings = set("".join(p) for p in itertools.permutations(characters, 3))
+    unique_strings = set("".join(p) for p in itertools.permutations(characters, 3))
 
 def get_all_available_apartments():
     apartments = Apartment.query.filter_by(is_available=True).all()
@@ -146,7 +160,7 @@ def db_add_apartment(user_id, title, description, location, rent_amount, availab
     except Exception as e:
         traceback.print_exc()
     
-def remove_appartment(this_apartment_id):
+def db_remove_appartment(this_apartment_id):
     this_apartment = Apartment.query.get(this_apartment_id)
 
     db.session.remove(this_apartment)
@@ -158,18 +172,34 @@ def db_get_user(this_sso_id):
     this_user = User.query.get(this_sso_id)
     return jsonify({'user': this_user.serialize()})
 
-def db_add_user(sso_id, name, email):
+def db_add_user(json_data):
     
     try:
+        sso_id = json_data.get('sso_id')
+        name = json_data.get('name')
+        email = json_data.get('email')
+
         new_user = User(
             sso_id = sso_id,
             name = name,
             email = email,
         )
+        
+        new_user.set_password(json_data.get('password'))
         db.session.add(new_user)
         db.session.commit()
+        return jsonify({'message': 'user created successfully'})
     except Exception as e:
         traceback.print_exc()
+
+def db_login(json_data):
+    email = json_data.get('email')
+    this_user = User.query.filter_by(email = email).first() #assuming that a user logs in with the email
+
+    if this_user and this_user.check_password(json_data.get('password')):
+        access_token = create_access_token(identity = this_user.sso_id)
+        return jsonify({'access_token': access_token})
+    return jsonify({'message': 'login failed'})
 
 def db_add_review(content, rating, review_date, reviewer, reviewed_user):
     try:
@@ -210,7 +240,7 @@ def db_delete_review(review_id):
 
 # We should have something like this if the user doesn't check in for a long time or something
 
-def delete_user(this_sso_id):
+def db_delete_user(this_sso_id):
     
     this_user = User.query.get(this_sso_id)
 
