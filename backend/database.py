@@ -96,6 +96,7 @@ class Review(db.Model):
         }
         
 
+
 class Payment(db.Model):
     payment_id   = db.Column(db.String, primary_key = True)
     amount       = db.Column(db.Integer, nullable = False)
