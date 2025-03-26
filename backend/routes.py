@@ -30,8 +30,13 @@ def add_appartment():
 
 @app.route("/api/get-apartments", methods=['GET'])
 def get_appartments():
-    print("test 123")
-    return handler.get_all_appartments()
+    if request.method == 'GET':
+        print("test 123")
+        return handler.get_all_appartments()
+    elif request.method == 'PUT':
+        print("test 456")
+        json_data = request.get_json()
+        return handler.filter_apartment(json_data)
 
 @app.route("/api/get-user-profile", methods=['GET'])
 def get_user_profile():

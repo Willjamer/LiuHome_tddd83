@@ -32,7 +32,17 @@ class courier:
         apartment_id = json_data.get('apartment_id')
         db_remove_appartment(apartment_id)
         return {'message': 'apartment successfully taken down'}
-        
+    
+    def filter_apartment(self, json_data):
+        rent_interval = (json_data.get('min_rent'), json_data.get('max_rent'))
+        size_interval = (json_data.get('min_size'), json_data.get('max_size'))
+        room_interval = (json_data.get('min_rooms'), json_data.get('max_rooms'))
+        locations = json_data.get('locations')
+        sort_factor = json_data.get('sort_factor')
+        asc = json_data.get('asc')
+
+        return db_filtering(rent_interval, size_interval, room_interval, locations, sort_factor, asc)
+
     def get_user_profile(self, json_data):
         sso_id = json_data.get('sso_id')
         return db_get_user(sso_id)
