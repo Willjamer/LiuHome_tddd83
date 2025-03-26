@@ -6,7 +6,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 handler = courier()
 
-@app.route("/")
+@app.route("/hello")
 def home():
     return jsonify({"message": "Flask Backend Running"})
 
@@ -28,9 +28,10 @@ def add_appartment():
     json_data['user_id'] = user_id
     return handler.add_apartment(json_data)
 
-@app.route("/api/get-appartment", methods=['GET'])
-def get_appartment():
-    return handler.get_appartment
+@app.route("/api/get-apartments", methods=['GET'])
+def get_appartments():
+    print("test 123")
+    return handler.get_all_appartments()
 
 @app.route("/api/get-user-profile", methods=['GET'])
 def get_user_profile():
