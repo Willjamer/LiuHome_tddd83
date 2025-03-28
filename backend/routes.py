@@ -1,10 +1,17 @@
-from app import app
+# from app import app
+from apphandler import app
 from flask import Flask, jsonify, request
 from request_handler_stub import courier
 from flask_jwt_extended import jwt_required, get_jwt_identity
 # from request_handler import courier
+from flask_cors import CORS
+import logging
 
+# app = apphandler.get_app()
+CORS(app, origins=["http://localhost:3000"])  # Allow requests from the frontend
+logging.basicConfig(level=logging.DEBUG)
 handler = courier()
+
 
 @app.route("/hello")
 def home():
@@ -29,14 +36,14 @@ def add_appartment():
     return handler.add_apartment(json_data)
 
 @app.route("/api/get-apartments", methods=['GET'])
-def get_appartments():
-    if request.method == 'GET':
-        print("test 123")
-        return handler.get_all_appartments()
-    elif request.method == 'PUT':
-        print("test 456")
-        json_data = request.get_json()
-        return handler.filter_apartment(json_data)
+def get_apartments():
+    # if request.method == 'GET':
+    logging.info("test api")
+    return handler.get_all_appartments()
+    # elif request.method == 'PUT':
+        # print("test 456")
+        # json_data = request.get_json()
+        # return handler.filter_apartment(json_data)
 
 @app.route("/api/get-user-profile", methods=['GET'])
 def get_user_profile():
@@ -44,7 +51,7 @@ def get_user_profile():
 
 @app.route("/api/get-user", methods=['GET'])
 def get_user():
-    return handler.get_user
+    return handler.get_user()
 
 @app.route("/api/get-listing", methods=['GET'])
 def get_listing():

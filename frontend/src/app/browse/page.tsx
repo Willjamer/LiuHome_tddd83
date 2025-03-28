@@ -1,6 +1,5 @@
 "use client";
-import { SetStateAction, useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 
 interface Apartment {
   apartment_id: number;      
@@ -16,41 +15,30 @@ interface Apartment {
 export default function BrowsePage() {
   const [apartments, setApartments] = useState<Apartment[]>([]); 
 
-  // useEffect(() => {
-  //   axios.get("http://localhost:3000/api/get-apartments")
-  //     .then((response: { data: SetStateAction<Apartment[]>; }) => {
-  //       console.log(response.data);
-  //       setApartments(response.data);  
-  //     })
-  //     .catch((error: any) => {
-  //       console.error("Error fetching apartments:", error);
-  //     });
-  // }, []);
+async function fetchApartments(): Promise<void> {
+  try {
+    const response = await fetch("http://localhost:3001/api/get-apartments", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (!response.ok) throw new Error("Failed to fetch apartments");
+
+    const apartments: Apartment[] = await response.json();
+    console.log(apartments);
+    setApartments(apartments);
+  } catch (error) {
+    console.error("Error:", error);
+    setApartments([]); // Reset apartments on failure
+  }
+}
+
 
   useEffect(() => {
     fetchApartments();
   }, []);
-
-  const fetchApartments = async () => {
-    try {
-      console.log('Fetching apartments')
-      const response = await fetch('api/get-apartments', {
-      method : 'GET',
-      headers: {
-        'content_type': 'application/json'
-      }
-      });
-
-      if (response.ok) {
-        throw new Error ("fail");
-      }
-      const data = await response.json()
-      console.log("recieved data:", data)
-    } catch (error) {
-      console.error('Error fetching BOM items:', error);
-  }
-
-  }
 
   return (
     <div className="container mx-auto py-10">
@@ -65,7 +53,7 @@ export default function BrowsePage() {
           ))}
         </ul>
       ) : (
-        <p>Loading apartments...</p>
+        <p>No apartments found.</p>
       )}
     </div>
   );
