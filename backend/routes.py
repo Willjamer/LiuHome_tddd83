@@ -44,12 +44,12 @@ def login():
     json_data = request.get_json()
     return handler.login(json_data)
 
-@apartments_bp.route("/api/add-appartment", methods=['POST'])
-@jwt_required()
+@apartments_bp.route("/api/add-apartment", methods=['POST'])
+# @jwt_required()
 def add_appartment():
     json_data = request.get_json()
-    user_id = get_jwt_identity()
-    json_data['user_id'] = user_id
+    # user_id = get_jwt_identity()
+    # json_data['user_id'] = user_id
     return handler.add_apartment(json_data)
 
 @apartments_bp.route("/api/get-user-profile", methods=['GET'])

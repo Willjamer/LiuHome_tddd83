@@ -20,18 +20,30 @@ class courier:
         return db_get_specific_apartment(apartment_id)
 
     def add_apartment(self, json_data): 
+        
+        # This one  is temporary
+        apartment_id = json_data.get('apartment_id')
+
         user_id = json_data.get('user_id')
         title = json_data.get('title')
         description = json_data.get('description')
+        address = json_data.get('address')
+        size = json_data.get('size')
+        number_of_rooms = json_data.get('number_of_rooms')
         location = json_data.get('location')
         rent_amount = json_data.get('rent_amount')
-        available_from = json_data.get('available_from')
 
-        this_user = db_get_user(user_id).json
-        expiry_date = this_user['user']['listing_expiry_date']
+        available_from_primary = json_data.get('available_from').split('T')[0]
+        available_from = available_from_primary.split('-')
+
+
+        # this_user = db_get_user(user_id).json
+        # expiry_date = this_user['user']['listing_expiry_date']
 
         # Something to check if the user already has a listing to 
-        db_add_apartment(user_id, title, description, location, rent_amount, available_from)
+        # db_add_apartment(user_id, title, description, address, size, number_of_rooms, location, rent_amount, available_from)
+        db_add_apartment(apartment_id, user_id, title, description, address, size, number_of_rooms, location, rent_amount, available_from)
+
 
         return {'message': 'apartment added successfully'}
     

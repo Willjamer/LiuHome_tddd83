@@ -238,10 +238,13 @@ def db_get_specific_apartment(this_apartment_id):
     return jsonify({'apartment' : this_apartment.serialize()})
 
 
-def db_add_apartment(user_id, title, description, address, size, number_of_rooms, location, rent_amount, available_from):
+# def db_add_apartment(user_id, title, description, address, size, number_of_rooms, location, rent_amount, available_from):
+def db_add_apartment(apartment_id, user_id, title, description, address, size, number_of_rooms, location, rent_amount, available_from):
+    
     try:
         new_apartment = Apartment(
-            apartment_id = 1000, # Temporary
+            # apartment_id = 1000, # Temporary
+            apartment_id = apartment_id,
             user_id = user_id,
             title = title,
             description= description,
@@ -251,7 +254,7 @@ def db_add_apartment(user_id, title, description, address, size, number_of_rooms
             location = location,
             rent_amount = rent_amount,
             is_available = True,
-            available_from = available_from,
+            available_from = datetime.date(int(available_from[0]), int(available_from[1]), int(available_from[2]))
         )
         db.session.add(new_apartment)
         db.session.commit()
