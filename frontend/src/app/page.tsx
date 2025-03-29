@@ -70,7 +70,7 @@ export default function Home() {
             </Link>
           </nav>
           <div className="flex items-center gap-4 w-1/3 justify-center">
-            <Link href="/list-property">
+            <Link href="/list-apartment">
               <Button variant="outline" size="sm">
                 List Your Place
               </Button>
