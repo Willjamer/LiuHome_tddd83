@@ -6,6 +6,9 @@ interface Apartment {
   user_id: number;           
   title: string;
   description?: string;      
+  address: string;
+  size: number;
+  number_of_rooms: number;
   location: string;
   rent_amount: number;
   is_available: boolean;     
@@ -26,15 +29,17 @@ async function fetchApartments(): Promise<void> {
 
     if (!response.ok) throw new Error("Failed to fetch apartments");
 
-    const apartments: Apartment[] = await response.json();
+    const data = await response.json();
+    const apartments: Apartment[] = data.Apartments;  
+
     console.log(apartments);
-    setApartments(apartments);
+    console.log(apartments.length)
+    setApartments(apartments)
   } catch (error) {
     console.error("Error:", error);
-    setApartments([]); // Reset apartments on failure
+    setApartments([]); 
   }
 }
-
 
   useEffect(() => {
     fetchApartments();

@@ -1,12 +1,19 @@
-from .database import * # Temporary
+from database import * # Temporary
 from flask import jsonify
 from datetime import date
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 class courier:
         
+    def get_all_available_apartments(self):
+        logging.info("rq get ok")
+        return db_get_all_available_apartments()
+    
     def get_all_apartments(self):
         
-        return get_all_available_apartments()
+        return db_get_all_apartments()
 
     def get_specific_apartment(self, json_data):
         apartment_id = json_data.get('apartment_id')

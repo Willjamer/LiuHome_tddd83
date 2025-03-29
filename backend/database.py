@@ -1,30 +1,34 @@
-from flask import Flask, jsonify
-from flask_sqlalchemy import SQLAlchemy
+from flask import jsonify
 from flask_jwt_extended import create_access_token
-from .app import get_db, get_bcrypt
+from extensions import db, bcrypt
+import datetime
 import traceback
 import itertools
 import characters
+import logging
 
-db = get_db()
+logging.basicConfig(level=logging.DEBUG)
+
+db 
 
 class Apartment(db.Model):
     apartment_id    = db.Column(db.Integer, primary_key = True)
     user_id         = db.Column(db.Integer, db.ForeignKey("user.sso_id"), unique = True, nullable = False)
     title           = db.Column(db.String, nullable = False)
     description     = db.Column(db.String, nullable = True)
+    address         = db.Column(db.String, nullable = False)
     size            = db.Column(db.Float, nullable = False)
-    number_of_rooms = db.Column(db.Integer, primary_key = True)
+    number_of_rooms = db.Column(db.Integer, nullable = False)
     location        = db.Column(db.String, nullable = False)
     rent_amount     = db.Column(db.Integer, nullable = False)
     is_available    = db.Column(db.Boolean, nullable = False, default = True)
     available_from  = db.Column(db.Date, nullable = True)
     # Något här om images, vet ej än hur
 
-    all_locations: list(str) = ["Ryd", "Valla", "Irrblosset", "T1", "Lambohov", "Gottfridsberg"]
+    all_locations = ["Ryd", "Valla", "Irrblosset", "T1", "Lambohov", "Gottfridsberg"]
 
     def __repr__(self):
-        return f"<Apartment {self.apartment_id}: {self.title}: {self.description}: {self.size}: {self.number_of_rooms}: {self.location}: {self.rent_amount}: {self.available_from}>"
+        return f"<Apartment {self.apartment_id}: {self.title}: {self.description}: {self.address}: {self.size}: {self.number_of_rooms}: {self.location}: {self.rent_amount}: {self.available_from}>"
 
     def serialize(self):
         return {
@@ -32,6 +36,7 @@ class Apartment(db.Model):
             "user_id" : self.user_id,
             "title" : self.title,
             "description": self.description,
+            "address": self.address,
             "size": self.size,
             "number_of_rooms": self.number_of_rooms,
             "location": self.location,
@@ -67,11 +72,9 @@ class User(db.Model):
         }
     
     def set_password(self, password):
-        bcrypt = get_bcrypt()
         self.password = bcrypt.generate_password_hash(password).decode('utf8')
 
     def check_password(self, password):
-        bcrypt = get_bcrypt()
         return bcrypt.check_password_hash(self.password, password)
 
 # Not implemented until after first user test
@@ -85,10 +88,6 @@ class Review(db.Model):
     reviewer_id = db.Column(db.Integer, db.ForeignKey("user.sso_id"), nullable = False)
     reviewed_user_id = db.Column(db.Integer, db.ForeignKey("user.sso_id"), nullable = False)
 
-    reviewer = db.relationship("User", foreign_keys = [reviewer_id], backref = "created_reviews")
-    reviewed_user = db.relationship("User", foreign_keys = [reviewed_user_id], backref = "recieved_reviews")
-
-
     def __repr__(self):
         return f"<Review {self.review_id}: {self.content}: {self.rating}: {self.review_date}>"
     
@@ -99,7 +98,7 @@ class Review(db.Model):
             "rating": self.rating,
             "review_date": self.review_date,
         }
-        
+    
 
 
 class Payment(db.Model):
@@ -137,14 +136,20 @@ def generate_unique_id(determinator):
     unique_strings = set("".join(p) for p in itertools.permutations(characters, 3))
 
 
-def get_all_available_apartments():
+def db_get_all_available_apartments():
     apartments = Apartment.query.filter_by(is_available=True).all()
     if apartments: 
         return jsonify({'Apartments': [apartment.serialize() for apartment in apartments]})
 
     return jsonify({'message': 'No available apartments', 'Apartments': []}) 
 
-
+def db_get_all_apartments():
+    apartments = Apartment.query.all()
+    logging.info("db get ok")
+    if apartments:
+        logging.info("apartments ok")
+        return jsonify({'Apartments': [apartment.serialize() for apartment in apartments]}) 
+    
 def db_filter_by_rent(arrange):
     
     order = Apartment.rent_amount if arrange == "asc" else Apartment.rent_amount.desc()
@@ -228,15 +233,19 @@ def db_filtering(rent_interval, size_interval, room_interval, locations, sort_fa
 def db_get_specific_apartment(this_apartment_id):
     this_apartment = Apartment.query.get(this_apartment_id)
 
+    new_apartment = Apartment(apartment_id = 9999, user_id = 2, title = "jontes testlägga", description= "en fin lägenhet i linköping", address = "Vallavägen 4B", size = 40, number_of_rooms = 2, location = "Irrblosset", rent_amount = 6000, is_available = True, available_from = datetime.date(2025, 4, 15))
+
     return jsonify({'apartment' : this_apartment.serialize()})
 
-def db_add_apartment(user_id, title, description, size, number_of_rooms, location, rent_amount, available_from):
+
+def db_add_apartment(user_id, title, description, address, size, number_of_rooms, location, rent_amount, available_from):
     try:
         new_apartment = Apartment(
             apartment_id = 1000, # Temporary
             user_id = user_id,
             title = title,
             description= description,
+            address = address,
             size = size,
             number_of_rooms = number_of_rooms,
             location = location,

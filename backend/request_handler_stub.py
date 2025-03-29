@@ -1,22 +1,39 @@
 from flask import jsonify
+from datetime import date
 
 class courier:
 
     #Fetch DB
-    def get_all_appartments(self):
+    def get_all_apartments(self):
 
-        item = {
+        item = [{
             
-            "id": "1234",
-            "ownerUserID": "1",
-            "Address": "Vallavägen 6",
-            "City": "Linköping",
-            "State": "Östergötland",
-            "Description": "En lägenhet i Linköping",
-            "NumRooms": 1,
-            "SquareFootage": 30
+            "apartment_id": "1234",
+            "user_id": "1",
+            "title": "chrippas testlägga",
+            "description": "En lägenhet i Linköping",
+            "address": "Vallavägen 6",
+            "size": 30.0,
+            "number_of_rooms": 1,
+            "location": "Irrblosset",
+            "rent_amount": 6000,
+            "is_available": True,
+            "available_from": date(2025, 4, 15)
  
-        }
+        },
+        {
+            "apartment_id": "5678",
+            "user_id": "2",
+            "title": "Jontes testlägga",
+            "description": "En annan lägenhet i Linköping",
+            "address": "Betonggatan 12",
+            "size": 90.0,
+            "number_of_rooms": 5,
+            "location": "T1",
+            "rent_amount": 7500,
+            "is_available": True,
+            "available_from": date(2025, 5, 20)
+        }]
         if item:
             return jsonify(item), 200  # Return the found item as JSON
         else:
