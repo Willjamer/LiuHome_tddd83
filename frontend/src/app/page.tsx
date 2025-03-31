@@ -59,7 +59,7 @@ export default function Home() {
             <span>liuHome</span>
           </Link>
           <nav className="hidden md:flex gap-6 w-1/3 justify-center">
-            <Link href="/listings" className="text-sm font-medium hover:underline underline-offset-4">
+            <Link href="/browse" className="text-sm font-medium hover:underline underline-offset-4">
               Browse
             </Link>
             <Link href="/how-it-works" className="text-sm font-medium hover:underline underline-offset-4">
@@ -70,7 +70,7 @@ export default function Home() {
             </Link>
           </nav>
           <div className="flex items-center gap-4 w-1/3 justify-center">
-            <Link href="/list-property">
+            <Link href="/list-apartment">
               <Button variant="outline" size="sm">
                 List Your Place
               </Button>
