@@ -1,7 +1,7 @@
 from flask import jsonify, request, Blueprint
-# from request_handler_stub import courier
+from request_handler_stub import courier
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from request_handler import courier
+# from request_handler import courier
 import logging
 
 logging.basicConfig(level=logging.DEBUG)

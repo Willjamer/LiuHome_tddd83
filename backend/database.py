@@ -9,7 +9,6 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
-db 
 
 class Apartment(db.Model):
     apartment_id    = db.Column(db.Integer, primary_key = True)
