@@ -1,6 +1,9 @@
 from flask import jsonify
 from flask_jwt_extended import create_access_token
 from extensions import db, bcrypt
+# from sqlalchemy.event import listens_for
+# from flask_mail import Mail, Message  # Assuming you're using Flask-Mail
+# from flask import current_app
 import datetime
 import traceback
 import itertools
@@ -8,6 +11,8 @@ import characters
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
+
+# mail = Mail()
 
 
 class Apartment(db.Model):
@@ -22,6 +27,8 @@ class Apartment(db.Model):
     rent_amount     = db.Column(db.Integer, nullable = False)
     is_available    = db.Column(db.Boolean, nullable = False, default = True)
     available_from  = db.Column(db.Date, nullable = True)
+    date_added      = db,Column(db.Date, nullable = False)
+    expiry_date     = db.Colunm(db.Date, nullable = False)
     # Något här om images, vet ej än hur
 
     all_locations = ["Ryd", "Valla", "Irrblosset", "T1", "Lambohov", "Gottfridsberg"]
@@ -52,7 +59,7 @@ class User(db.Model):
     name      = db.Column(db.String, nullable = False)
     email     = db.Column(db.String, nullable = False)
     apartment = db.relationship("Apartment", backref = "user", uselist = False)
-    listing_expiry_date = db.Column(db.Date, nullable = False) # Vi vår kolla på denna. Vettefan riktigt hur vi ska styra upp det. 
+    # listing_expiry_date = db.Column(db.Date, nullable = False) # Vi vår kolla på denna. Vettefan riktigt hur vi ska styra upp det. 
 
     #Creating a relationship between users and reviews
     created_reviews = db.relationship("Review", foreign_keys = "[Review.reviewer_id]", backref = "reviewer")
@@ -348,3 +355,40 @@ def db_delete_user(this_sso_id):
 
     db.session.remove(this_user)
     db.session.commit()
+
+
+def mark_expired_apartments():
+    expired_apartments = Apartment.__table__.update().where(
+        Apartment.is_available == True,
+        Apartment.expiry_date <= datetime.today()
+    ).values(is_available=False)
+
+    db.session.execute(expired_apartments)
+    db.session.commit()  # Commit the changes
+
+
+
+# @listens_for(Apartment, "before_update")
+# def apartment_status_change(mapper, connection, target):
+#     """
+#     This function runs before an Apartment object is updated.
+#     It checks if 'is_available' changed from True to False.
+#     If so, it sends an email to the apartment owner.
+#     """
+#     if target.is_available is False:  # Apartment is no longer available
+#         user = User.query.get(target.user_id)  # Fetch the owner
+#         if user:
+#             send_email(user.email, target.title)  # Call email function
+
+# def send_email(to_email, apartment_title):
+#     """
+#     Sends an email to notify the apartment owner.
+#     """
+#     with current_app.app_context():
+#         msg = Message(
+#             subject="Your Apartment Listing is Now Unavailable",
+#             sender="noreply@example.com",
+#             recipients=[to_email],
+#             body=f"Hello,\n\nYour apartment '{apartment_title}' is now marked as unavailable.\n\nBest,\nYour Website Team"
+#         )
+#         mail.send(msg)
