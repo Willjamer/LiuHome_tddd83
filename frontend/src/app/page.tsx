@@ -120,7 +120,7 @@ export default function Home() {
           <div className="container">
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-2xl font-bold ">Featured Listings</h2>
-              <Link href="/listings">
+              <Link href="/browse">
                 <Button variant="link">View all</Button>
               </Link>
             </div>
