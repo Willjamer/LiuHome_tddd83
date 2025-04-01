@@ -51,37 +51,6 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen flex-col w-full">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 ">
-
-        <div className="flex h-16 items-center justify-between px-4 ">
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl w-1/3 justify-center">
-            <House className="h-5 w-5" />
-            <span>liuHome</span>
-          </Link>
-          <nav className="hidden md:flex gap-6 w-1/3 justify-center">
-            <Link href="/browse" className="text-sm font-medium hover:underline underline-offset-4">
-              Browse
-            </Link>
-            <Link href="/how-it-works" className="text-sm font-medium hover:underline underline-offset-4">
-              How It Works
-            </Link>
-            <Link href="/about" className="text-sm font-medium hover:underline underline-offset-4">
-              About
-            </Link>
-          </nav>
-          <div className="flex items-center gap-4 w-1/3 justify-center">
-            <Link href="/list-apartment">
-              <Button variant="outline" size="sm">
-                List Your Place
-              </Button>
-            </Link>
-            <Link href="/login">
-              <Button size="sm">Sign In</Button>
-            </Link>
-          </div>
-
-        </div>
-      </header>
       <main className="flex-1">
         <section className="relative">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/5 z-0 " />
@@ -174,28 +143,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t py-6 md:py-8 flex flex-col ">
-        <div className=" px-4 sm:px-6 lg:px-8 flex justify-between w-full items-center ">
-          <div className="flex  font-semibold w-1/3 justify-center">
-            <House className="h-5 w-5" />
-            <span>liuHome</span>
-          </div>
-          <p className="text-sm text-muted-foreground w-1/3 justify-center flex">
-            © 2030 liuHome. All rights reserved.
-          </p>
-          <div className="flex gap-4 mt-4 md:mt-0 w-1/3 justify-center">
-            <Link href="/terms" className="text-sm text-muted-foreground hover:underline">
-              Terms
-            </Link>
-            <Link href="/privacy" className="text-sm text-muted-foreground hover:underline">
-              Privacy
-            </Link>
-            <Link href="/contact" className="text-sm text-muted-foreground hover:underline">
-              Contact
-            </Link>
-          </div>
-        </div>
-      </footer>
+      
 
 
       <div className="bg-blue-500  justify-center flex">
