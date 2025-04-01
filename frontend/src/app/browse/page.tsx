@@ -29,8 +29,12 @@ async function fetchApartments(): Promise<void> {
 
     if (!response.ok) throw new Error("Failed to fetch apartments");
 
-    const data = await response.json();
-    const apartments: Apartment[] = data.Apartments;  
+    // OM STUB, KÖR DENNA
+    const apartments: Apartment[] = await response.json();  
+
+    // OM VANLIG (databas), KÖR DESSA TVÅ
+    // const data = await response.json();
+    // const apartments: Apartment[] = data.Apartments;  
 
     console.log(apartments);
     console.log(apartments.length)

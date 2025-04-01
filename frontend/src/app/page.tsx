@@ -15,7 +15,7 @@ export default function Home() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/data")
+    axios.get("http://localhost:5000/")
       .then(response => {
         setData(response.data.message);
       })

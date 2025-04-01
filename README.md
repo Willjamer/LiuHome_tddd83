@@ -1,6 +1,8 @@
 # liuHome – Student Apartment Rental Marketplace - TDDD83 Grupp 2
 
-liuHome is a **student-to-student** apartment rental marketplace. 
+liuHome is a **student-to-student** apartment rental marketplace.  
+### **🔹Git cheat sheet**
+https://education.github.com/git-cheat-sheet-education.pdf  
 
 ## SETUP GUIDE
 
