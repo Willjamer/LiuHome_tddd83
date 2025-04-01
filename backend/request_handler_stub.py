@@ -1,15 +1,16 @@
 from flask import jsonify
 from datetime import date
+import logging
 
 class courier:
 
     #Fetch DB
     def get_all_apartments(self):
-
+        logging.info("stub get ok")
         item = [{
             
-            "apartment_id": "1234",
-            "user_id": "1",
+            "apartment_id": 1234,
+            "user_id": 1,
             "title": "chrippas testlägga",
             "description": "En lägenhet i Linköping",
             "address": "Vallavägen 6",
@@ -22,8 +23,8 @@ class courier:
  
         },
         {
-            "apartment_id": "5678",
-            "user_id": "2",
+            "apartment_id": 5678,
+            "user_id": 2,
             "title": "Jontes testlägga",
             "description": "En annan lägenhet i Linköping",
             "address": "Betonggatan 12",
@@ -33,7 +34,9 @@ class courier:
             "rent_amount": 7500,
             "is_available": True,
             "available_from": date(2025, 5, 20)
+
         }]
+
         if item:
             return jsonify(item), 200  # Return the found item as JSON
         else:

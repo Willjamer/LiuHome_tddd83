@@ -135,6 +135,7 @@ def generate_unique_id(determinator):
     unique_strings = set("".join(p) for p in itertools.permutations(characters, 3))
 
 
+
 def db_get_all_available_apartments():
     apartments = Apartment.query.filter_by(is_available=True).all()
     if apartments: 
