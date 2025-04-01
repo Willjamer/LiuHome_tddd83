@@ -3,7 +3,7 @@ import React from 'react';
 const AboutPage: React.FC = () => {
   return (
     <div className="flex min-h-screen flex-col w-full">
-      
+
       <main className="flex-1 p-8 space-y-16">
         <h1 className="text-4xl font-bold mb-8">About Us</h1>
         <section id="what-we-do" className="mb-16">
