@@ -348,3 +348,28 @@ def db_delete_user(this_sso_id):
 
     db.session.remove(this_user)
     db.session.commit()
+
+# @listens_for(Apartment, "before_update")
+# def apartment_status_change(mapper, connection, target):
+#     """
+#     This function runs before an Apartment object is updated.
+#     It checks if 'is_available' changed from True to False.
+#     If so, it sends an email to the apartment owner.
+#     """
+#     if target.is_available is False:  # Apartment is no longer available
+#         user = User.query.get(target.user_id)  # Fetch the owner
+#         if user:
+#             send_email(user.email, target.title)  # Call email function
+
+# def send_email(to_email, apartment_title):
+#     """
+#     Sends an email to notify the apartment owner.
+#     """
+#     with current_app.app_context():
+#         msg = Message(
+#             subject="Your Apartment Listing is Now Unavailable",
+#             sender="noreply@example.com",
+#             recipients=[to_email],
+#             body=f"Hello,\n\nYour apartment '{apartment_title}' is now marked as unavailable.\n\nBest,\nYour Website Team"
+#         )
+#         mail.send(msg)
