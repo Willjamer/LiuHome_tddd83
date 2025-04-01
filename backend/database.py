@@ -27,8 +27,8 @@ class Apartment(db.Model):
     rent_amount     = db.Column(db.Integer, nullable = False)
     is_available    = db.Column(db.Boolean, nullable = False, default = True)
     available_from  = db.Column(db.Date, nullable = True)
-    date_added      = db,Column(db.Date, nullable = False)
-    expiry_date     = db.Colunm(db.Date, nullable = False)
+    # date_added      = db.Column(db.Date, nullable = False)
+    # expiry_date     = db.Column(db.Date, nullable = False)
     # Något här om images, vet ej än hur
 
     all_locations = ["Ryd", "Valla", "Irrblosset", "T1", "Lambohov", "Gottfridsberg"]
