@@ -3,7 +3,7 @@ from flask_jwt_extended import create_access_token
 from extensions import db, bcrypt
 # from sqlalchemy.event import listens_for
 # from flask_mail import Mail, Message  # Assuming you're using Flask-Mail
-# from flask import current_app
+from flask import current_app
 import datetime
 import traceback
 import itertools
@@ -88,7 +88,7 @@ class User(db.Model):
 class Review(db.Model):
     review_id   = db.Column(db.Integer, primary_key = True)
     content     = db.Column(db.String, nullable = True)
-    rating      = db.Column(db.Integer, nullable = False)
+    liked      = db.Column(db.Boolean, nullable = False)
     review_date = db.Column(db.Date, nullable = False)
 
     reviewer_id = db.Column(db.Integer, db.ForeignKey("user.sso_id"), nullable = False)
@@ -281,6 +281,7 @@ def db_get_user(this_sso_id):
     this_user = User.query.get(this_sso_id)
     return jsonify({'user': this_user.serialize()})
 
+
 def db_add_user(json_data):
     
     try:
@@ -310,33 +311,48 @@ def db_login(json_data):
         return jsonify({'access_token': access_token})
     return jsonify({'message': 'login failed'})
 
-def db_add_review(content, rating, review_date, reviewer, reviewed_user):
-    try:
-        new_review = Review(
-            # review_id = review_id,
-            review_id = 1000,
-            content = content,
-            rating = rating,
-            review_date = review_date,
-            reviewer = reviewer,
-            reviewed_user = reviewed_user
-        )
-        db.session.add(new_review)
-        db.session.commit()
-    except Exception as e:
-        traceback.print_exc()
+def db_add_review(content, rating, reviewer_id, reviewed_user_id):
+
+    reviewer = User.query.get(reviewer_id)
+    reviewed_user = User.query.get(reviewed_user_id)
+
+    if reviewer && reviewed_user:
+        try:
+            new_review = Review(
+                # review_id = review_id,
+                review_id = 1000,
+                content = content,
+                rating = rating,
+                review_date = datetime.today()
+                reviewer = reviewer,
+                reviewed_user = reviewed_user
+            )
+            db.session.add(new_review)
+            db.session.commit()
+        except Exception as e:
+            traceback.print_exc()
+    else:
+        return jsonify({'error': 'user not found'}), 423
+
+def db_get_review(review_id):
+    this_review = Review.query.get(review_id)
+    
+    if this_review:
+        return jsonify({'review': this_review.serialize()}), 200
 
 # All edit functions are thought to be redone but this should work for now. 
-def db_edit_review(review_id, content, rating, review_date):
+def db_edit_review(review_id, content, rating):
     
     this_review = Review.query.get(review_id)
-
-    this_review.content = content
-    this_review.rating = rating
-    this_review.review_date = review_date
-    db.session.commit()
-    return jsonify({'message': 'review editet successfully'})
-
+    if this_review:
+        this_review.content = content
+        this_review.rating = rating
+        this_review.review_date = datetime.today()
+        db.session.commit()
+        return jsonify({'message': 'review editet successfully'})
+    else:
+        return jsonify({'error': 'review editet unsuccessfully'})
+        
 def db_delete_review(review_id):
     
     this_review = Review.query.get(review_id)

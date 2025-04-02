@@ -75,20 +75,20 @@ class courier:
     def login(self, json_data):
         return db_login(json_data) 
     
-    def add_review(self, json_data):
+    def add_review(self, current_user_id, json_data):
         content = json_data.get('content')
         rating = json_data.get('rating')
-        review_date = json_data.get('review_date')
+        reviewed_user_id = json_data.get('reviewed_user_id')
 
-        db_add_review(content, rating, review_date)
+        db_add_review(content, rating, current_user_id, reviewed_user_id)
         return {'message': 'review added'}
     
     def edit_review(self, json_data):
+        review_id = json_data.get('review_id')
         content = json_data.get('content')
         rating = json_data.get('rating')
-        review_date = json_data.get('review_date')
 
-        db_edit_review(content, rating, review_date)
+        db_edit_review(review_id, content, rating)
         return {'message': 'review edited'}
     
     def delete_review(self, json_data):
@@ -97,3 +97,8 @@ class courier:
         db_delete_review(review_id)
 
         return {'message': 'review deleted.'}
+
+    def get_review(self, json_data)
+        review_id = json_data.get('review_id')
+
+        return db_get_review(review_id)

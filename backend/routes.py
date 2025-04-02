@@ -1,6 +1,7 @@
 from flask import jsonify, request, Blueprint
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import logging
+from authlib.integrations.flask_client import OAuth
 
 # OM STUB, KÖR DENNA: 
 from request_handler_stub import courier
@@ -11,7 +12,42 @@ from request_handler_stub import courier
 logging.basicConfig(level=logging.DEBUG)
 handler = courier()
 
+oauth = OAuth()
 apartments_bp = Blueprint('apartments', __name__)
+microsoft_login = Blueprrint('microsoft_login', __name__)
+
+@microsoft_login.before_app_first_request
+def register_oauth():
+    oauth.register(
+        "microsoft",
+        client_id=current_app.config["MICROSOFT_CLIENT_ID"],
+        client_secret=current_app.config["MICROSOFT_CLIENT_SECRET"],
+        authorize_url="https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+        access_token_url="https://login.microsoftonline.com/common/oauth2/v2.0/token",
+        client_kwargs={"scope": "openid email profile"},
+    )
+
+# Route to start login
+@microsoft_login.route("/login")
+def login():
+    return oauth.microsoft.authorize_redirect(
+        redirect_uri=url_for("microsoft_login.callback", _external=True)
+    )
+
+# OAuth callback route
+@microsoft_login.route("/callback")
+def callback():
+    token = oauth.microsoft.authorize_access_token()
+    user = oauth.microsoft.parse_id_token(token)
+    session["user"] = user  # Store user info in session
+    return f"Logged in as {user['name']}!"
+
+# Logout Route
+@microsoft_login.route("/logout")
+def logout():
+    session.pop("user", None)
+    return redirect("/")
+
 @apartments_bp.route("/api/get-apartments", methods=['GET', 'OPTIONS'])
 def get_apartments():
     if request.method == 'OPTIONS':
@@ -82,3 +118,21 @@ def edit_item():
     return handler.edit_item(json_data)
 
 
+@apartments_bp.route("/api/add-review", methods=['POST'])
+@jwt_required()
+def add_review():
+    current_user = get_jwt_identity()
+    json_data = request.get_json()
+    return handler.add_review(current_user, json_data)
+
+@apartments_bp.route("/api/get-review", methods=['GET', 'PUT', 'DELETE'])
+@jwt_required()
+def edit_review():
+    json_data = request.get_json()
+
+    if request.method == 'GET':
+        return handler.get_review(json_data)
+    elif request.method == 'PUT':
+        return handler.edit_review(json_data)
+    elif request.method == 'DELETE':
+        return handler.delete_review(json_data)
