@@ -3,6 +3,9 @@ import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Calendar} from "lucide-react"
 
 interface Apartment {
   apartment_id: number;
@@ -49,15 +52,56 @@ export default function BrowseSpecificPage() {
 
     <main className="w-min-screen">
       <h1 className="text-3xl font-bold text-center py-4">{apartment.title}</h1>
-      <div className= "flex flex-row h-min-screen w-screen mx-8 gap-6">
-        <div className="w-3/5 rounded-lg overflow-hidden">
-          <Image src={"/images/apartment2.jpg"} alt={apartment.title} width={500} height={300} className="object-cover w-full h-full" />
+      <div className= "flex flex-row  w-screen px-16 gap-8 ">
+        <div className="w-2/3 ">
+          <Image src={"/images/apartment2.jpg"} alt={apartment.title} width={500} height={300} className="object-cover w-full h-3/4 rounded-lg overflow-hidden" />
         </div>
-        <div>
-          <Card>
-            <div>
+        <div className="w-1/3">
+          <Card className="sticky top-24">
+          <CardContent className="p-6">
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <div className="text-2xl font-bold">
+                      ${apartment.rent_amount}
+                      <span className="text-base font-normal text-muted-foreground">/month</span>
+                    </div>
+                    <Badge>Student Verified</Badge>
+                  </div>
 
-            </div>
+                  <div className="border rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-4">
+                      <Calendar className="h-4 w-4" />
+                      <span className="font-medium">Availability</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <div className="text-muted-foreground">From</div>
+                        <div>{apartment.available_from}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    <div className="h-12 w-12 rounded-full overflow-hidden">
+                      <img
+                        src={"/images/apartment2.jpg"}                    //BYT GREJERNA MOT REAL PROFILE
+                        alt={"jimmy"}
+                        className="h-full w-full object-cover"
+                      />
+                    </div> 
+                    <div>
+                      <div className="font-medium">{"jimmy"} </div>
+                      <div className="text-sm text-muted-foreground">Student at {"liu"}</div>  
+                      <div className="text-xs">jimmy.cool@gmail.com</div>
+                    </div> 
+                     
+                  </div>
+                  <div>JIMMYS COOL BIO : Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum fugit officia velit quod commodi consequatur maxime aliquid repudiandae quos ab minima nemo ipsum numquam, illum ad debitis excepturi tempore ipsa?
+                  </div>
+                  <Button className="w-full">Copy email</Button>
+        
+                </div>
+              </CardContent>
 
           </Card>
         </div>
