@@ -69,6 +69,12 @@ def get_listing():
     json_data = request.get_json()
     return handler.get_Listing(json_data)
 
+#lagt till denna, osäker på hur korrekt det är /Nils
+@apartments_bp.route("/api/browseSpecific/<int:apartment_id>", methods=['GET'])
+def get_specific_apartment(apartment_id):
+    return handler.get_specific_apartment(apartment_id)
+
+
 @apartments_bp.route("/api/remove-item", methods=['POST'])
 @jwt_required()
 def remove_item():
