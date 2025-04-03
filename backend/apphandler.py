@@ -2,7 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 from extensions import db, bcrypt, jwt
 from routes import apartments_bp
-from auth import oauth, microsoft_login
+# from auth import oauth, microsoft_login
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
@@ -12,7 +12,7 @@ app.config["SECRET_KEY"] = "supersecretkey"
 app.config["MICROSOFT_CLIENT_ID"] = "your-client-id"
 app.config["MICROSOFT_CLIENT_SECRET"] = "your-client-secret"
 
-oauth = oauth()
+# oauth = oauth()
 
 db.init_app(app)
 bcrypt.init_app(app)
@@ -21,7 +21,7 @@ CORS(app, origins=["http://localhost:3000"])
 app.register_blueprint(apartments_bp)
 app.register_blueprint(microsoft_login)
 
-oauth.init_app(app)
+# oauth.init_app(app)
 def get_app():
     return app
 

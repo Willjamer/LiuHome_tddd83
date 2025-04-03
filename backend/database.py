@@ -83,6 +83,8 @@ class User(db.Model):
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
 
+
+
 # Not implemented until after first user test
 
 class Review(db.Model):
@@ -140,8 +142,6 @@ def generate_unique_id(determinator):
     characters = characters.get_characters()
 
     unique_strings = set("".join(p) for p in itertools.permutations(characters, 3))
-
-
 
 def db_get_all_available_apartments():
     apartments = Apartment.query.filter_by(is_available=True).all()
