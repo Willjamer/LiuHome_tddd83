@@ -3,10 +3,10 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 import logging
 
 # OM STUB, KÖR DENNA: 
-from request_handler_stub import courier
+#from request_handler_stub import courier
 
 # OM VANLIG (databas), KÖR DENNA:
-# from request_handler import courier
+from request_handler import courier
 
 logging.basicConfig(level=logging.DEBUG)
 handler = courier()
@@ -58,7 +58,15 @@ def add_appartment():
 
 @apartments_bp.route("/api/get-user-profile", methods=['GET'])
 def get_user_profile():
-    return handler.get_user_profile
+    sso_id = request.args.get("sso_id")
+    if not sso_id:
+        return jsonify({"error": "Missing sso_id"}), 400
+    return handler.get_user_profile({"sso_id": sso_id})
+
+@apartments_bp.route("/api/update-user-profile", methods=['POST'])
+def update_user_profile():
+    json_data = request.get_json()
+    return handler.update_user_profile(json_data)
 
 @apartments_bp.route("/api/get-user", methods=['GET'])
 def get_user():
