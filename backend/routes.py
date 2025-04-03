@@ -51,10 +51,10 @@ def logout():
 
 @apartments_bp.route("/api/get-apartments", methods=['GET', 'OPTIONS'])
 def get_apartments():
-    # if request.method == 'OPTIONS':
-    #     return _build_cors_preflight_response()
+    if request.method == 'OPTIONS':
+        return _build_cors_preflight_response()
     
-    if request.method == 'GET':
+    elif request.method == 'GET':
         logging.info("routes get ok")
         return handler.get_all_apartments()
 
@@ -63,6 +63,12 @@ def get_apartments():
         # json_data = request.get_json()
         # return handler.filter_apartment(json_data)
 
+def _build_cors_preflight_response():
+    response = jsonify({'message': 'CORS preflight'})
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+    response.headers.add("Access-Control-Allow-Methods", "GET,OPTIONS")
+    return response
 
 @apartments_bp.route("/hello")
 def home():
