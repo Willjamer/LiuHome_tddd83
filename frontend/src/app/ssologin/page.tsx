@@ -1,4 +1,5 @@
 "use client";
+import { WindArrowDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function LoginPage() {
@@ -6,13 +7,18 @@ export default function LoginPage() {
 
   useEffect(() => {
     // Check if user is already logged in
-    fetch("/api/check-session")
-      .then(response => response.json())
-      .then(data => {
-        if (data.user) {
-          setUser(data.user);
-        }
-      });
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("login") === "success") {
+      window.history.replaceState({}, document.title, "/");
+
+      fetch("/api/check-session", { credentials: "include"})
+        .then(response => response.json())
+        .then(data => {
+          if (data.user) {
+            setUser(data.user)
+          }
+        });
+    }
   }, []);
 
   const handleLogin = () => {

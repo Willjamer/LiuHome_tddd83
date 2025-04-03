@@ -25,25 +25,29 @@ def register_oauth():
         client_secret=current_app.config["MICROSOFT_CLIENT_SECRET"],
         authorize_url="https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
         access_token_url="https://login.microsoftonline.com/common/oauth2/v2.0/token",
-        client_kwargs={"scope": "openid email profile"},
+        client_kwargs={"scope": "openid email profile User.Read"},
     )
 
-# Route to start login
 @microsoft_login.route("/login")
 def login():
     return oauth.microsoft.authorize_redirect(
         redirect_uri=url_for("microsoft_login.callback", _external=True)
     )
 
-# OAuth callback route
 @microsoft_login.route("/callback")
 def callback():
     token = oauth.microsoft.authorize_access_token()
     user = oauth.microsoft.parse_id_token(token)
-    session["user"] = user  # Store user info in session
+
+    headers = {"Authorization": f"Bearer {token['access_token']}"}
+    graph_url = "https://graph.microsoft.com/v1.0/me"
+    response = request.get(graph_url, headers = headers)
+    user_data = response.json()
+    
+    session["user"] = user
+    headers = {"Authorization: "}
     return f"Logged in as {user['name']}!"
 
-# Logout Route
 @microsoft_login.route("/logout")
 def logout():
     session.pop("user", None)
