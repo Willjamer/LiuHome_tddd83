@@ -285,7 +285,7 @@ export default function AddApartmentPage() {
                   type="text"
                   name="name"
                   value={name}
-                  onChange={(e) => setName(e.target.value)} // Uppdatera namn
+                  onChange={(e) => setName(e.target.value)}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
                   required
                 />
