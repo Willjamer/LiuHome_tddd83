@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from extensions import db, bcrypt, jwt
-from routes import apartments_bp
+from routes import apartments_bp, microsoft_login
 # from auth import oauth, microsoft_login
 
 app = Flask(__name__)
