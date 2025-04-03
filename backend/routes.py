@@ -1,4 +1,4 @@
-from flask import jsonify, request, Blueprint, current_app, session, redirect
+from flask import jsonify, request, Blueprint, current_app, session, redirect, url_for
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import logging
 from authlib.integrations.flask_client import OAuth
@@ -16,8 +16,9 @@ oauth = OAuth()
 apartments_bp = Blueprint('apartments', __name__)
 microsoft_login = Blueprint('microsoft_login', __name__)
 
-@microsoft_login.before_app_first_request
+@microsoft_login.before_app_request
 def register_oauth():
+    oauth.init_app(current_app)
     oauth.register(
         "microsoft",
         client_id=current_app.config["MICROSOFT_CLIENT_ID"],
@@ -61,13 +62,6 @@ def get_apartments():
         # print("test 456")
         # json_data = request.get_json()
         # return handler.filter_apartment(json_data)
-
-def _build_cors_preflight_response():
-    response = jsonify({'message': 'CORS preflight'})
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
-    response.headers.add("Access-Control-Allow-Methods", "GET,OPTIONS")
-    return response
 
 
 @apartments_bp.route("/hello")
