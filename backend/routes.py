@@ -51,10 +51,10 @@ def logout():
 
 @apartments_bp.route("/api/get-apartments", methods=['GET', 'OPTIONS'])
 def get_apartments():
-    if request.method == 'OPTIONS':
-        return _build_cors_preflight_response()
+    # if request.method == 'OPTIONS':
+    #     return _build_cors_preflight_response()
     
-    elif request.method == 'GET':
+    if request.method == 'GET':
         logging.info("routes get ok")
         return handler.get_all_apartments()
 
