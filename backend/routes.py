@@ -1,4 +1,4 @@
-from flask import jsonify, request, Blueprint
+from flask import jsonify, request, Blueprint, current_app, session, redirect
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import logging
 from authlib.integrations.flask_client import OAuth
@@ -14,7 +14,7 @@ handler = courier()
 
 oauth = OAuth()
 apartments_bp = Blueprint('apartments', __name__)
-microsoft_login = Blueprrint('microsoft_login', __name__)
+microsoft_login = Blueprint('microsoft_login', __name__)
 
 @microsoft_login.before_app_first_request
 def register_oauth():
