@@ -1,7 +1,7 @@
 from flask import jsonify, request, Blueprint, current_app, session, redirect, url_for
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import logging
-from authlib.integrations.flask_client import OAuth
+from authextension import get_auth
 
 # OM STUB, KÖR DENNA: 
 from request_handler_stub import courier
@@ -12,7 +12,7 @@ from request_handler_stub import courier
 logging.basicConfig(level=logging.DEBUG)
 handler = courier()
 
-oauth = OAuth()
+oauth = get_auth()
 apartments_bp = Blueprint('apartments', __name__)
 microsoft_login = Blueprint('microsoft_login', __name__)
 

@@ -12,7 +12,7 @@ app.config["SECRET_KEY"] = "supersecretkey"
 app.config["MICROSOFT_CLIENT_ID"] = "your-client-id"
 app.config["MICROSOFT_CLIENT_SECRET"] = "your-client-secret"
 
-oauth = Oauth()
+oauth = oauth()
 
 db.init_app(app)
 bcrypt.init_app(app)
