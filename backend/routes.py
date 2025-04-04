@@ -37,17 +37,31 @@ def login():
         redirect_uri=url_for("microsoft_login.callback", _external=True)
     )
 
-@apartments_bp.route("/mock-login")
+@apartments_bp.route("/mock-login", methods = ['POST', 'OPTIONS'])
 def mock_login():
+        if request.method == 'OPTIONS':
+        response = jsonify({"message": "CORS preflight"})
+        response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
+        response.headers.add("Access-Control-Allow-Credentials", "true")
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type")
+        response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+        return response
+
     json_data = request.get_json()
     logging.info(json_data)
-    session["user"] = data.get("user")
-    user_email = data.get("user_email")
+    
+    session["user"] = json_data.get("user")
+    user = session.get("user")
+
+    email = user.get("email")
     logging.info(user_email)
 
     # if not handler.check_user(user_email):
     #     return handler.add_user(json_data)
-    return {"message": "Mock user ok"}
+    response = jsonify({"message": "Mock user ok"})
+    response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
+    response.headers.add("Access-Control-Allow-Credentials", "true")
+    return response
 
 @microsoft_login.route("/callback")
 def callback():
