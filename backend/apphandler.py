@@ -17,7 +17,7 @@ app.config["MICROSOFT_CLIENT_SECRET"] = "my_temp_secret"
 db.init_app(app)
 bcrypt.init_app(app)
 jwt.init_app(app)
-CORS(app, origins=["http://localhost:3000"]) 
+CORS(app, origins=["http://localhost:3000"], support_credentials = True) 
 app.register_blueprint(apartments_bp)
 app.register_blueprint(microsoft_login)
 
