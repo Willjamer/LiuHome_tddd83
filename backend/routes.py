@@ -4,10 +4,10 @@ import logging
 from authextension import get_auth
 
 # OM STUB, KÖR DENNA: 
-from request_handler_stub import courier
+# from request_handler_stub import courier
 
 # OM VANLIG (databas), KÖR DENNA:
-# from request_handler import courier
+from request_handler import courier
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -99,6 +99,7 @@ def login():
 @apartments_bp.route("/api/add-apartment", methods=['POST'])
 # @jwt_required()
 def add_appartment():
+    logging.info("addapt route ok")
     json_data = request.get_json()
     # user_id = get_jwt_identity()
     # json_data['user_id'] = user_id

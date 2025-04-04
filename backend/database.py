@@ -316,14 +316,14 @@ def db_add_review(content, rating, reviewer_id, reviewed_user_id):
     reviewer = User.query.get(reviewer_id)
     reviewed_user = User.query.get(reviewed_user_id)
 
-    if reviewer && reviewed_user:
+    if (reviewer and reviewed_user):
         try:
             new_review = Review(
                 # review_id = review_id,
                 review_id = 1000,
                 content = content,
                 rating = rating,
-                review_date = datetime.today()
+                review_date = datetime.today(),
                 reviewer = reviewer,
                 reviewed_user = reviewed_user
             )

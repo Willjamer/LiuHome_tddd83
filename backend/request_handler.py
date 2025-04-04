@@ -98,7 +98,7 @@ class courier:
 
         return {'message': 'review deleted.'}
 
-    def get_review(self, json_data)
+    def get_review(self, json_data):
         review_id = json_data.get('review_id')
 
         return db_get_review(review_id)
