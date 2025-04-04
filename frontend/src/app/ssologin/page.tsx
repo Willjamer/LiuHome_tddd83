@@ -80,7 +80,7 @@ export default function LoginPage() {
       credentials: "include",
     }).then(() => {
       setUser(null);
-      router.push("/")
+      Router.push("/")
     });
   };
 

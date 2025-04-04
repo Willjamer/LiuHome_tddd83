@@ -55,7 +55,7 @@ def callback():
     headers = {"Authorization: "}
     return f"Logged in as {user['name']}!"
 
-@microsoft_login.route("/logout", methods = ['GET, POST'])
+@apartments_bp.route("/logout", methods = ['GET, POST'])
 def logout():
     if request.method == 'POST':
         session.pop("user", None)

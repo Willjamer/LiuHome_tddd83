@@ -2,10 +2,11 @@
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useUser } from "../ssologin/page";
 
 interface Apartment {
   apartment_id: number;      
-  user_id: number;           
+  user_id: string;           
   title: string;
   description?: string;      
   address: string;
@@ -18,9 +19,11 @@ interface Apartment {
 }
 
 export default function AddApartmentPage() {
+
+  const { user } = useUser();
   const [apartment, setApartment] = useState<Partial<Apartment>>({
     apartment_id: 0,
-    user_id: 0,
+    user_id: user?.email,
     title: "",
     description: "",
     address: "",
@@ -84,7 +87,7 @@ export default function AddApartmentPage() {
             required
           />
         </div>
-          <div>
+          {/* <div>
           <label className="block text-sm font-medium text-gray-700">(Temp) User ID</label>
           <input
             type="number"
@@ -94,7 +97,7 @@ export default function AddApartmentPage() {
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
             required
           />
-        </div>
+        </div> */}
         <div>
           <label className="block text-sm font-medium text-gray-700">Title</label>
           <input
