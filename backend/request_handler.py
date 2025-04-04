@@ -24,7 +24,7 @@ class courier:
         # This one  is temporary
         apartment_id = json_data.get('apartment_id')
 
-        user_id = json_data.get('user_id')
+        user_id = json_data.get('user_id').split('@')[0]
         title = json_data.get('title')
         description = json_data.get('description')
         address = json_data.get('address')
@@ -70,8 +70,17 @@ class courier:
         return json_data
 
     def add_user(self, json_data):
-        return db_add_user(json_data)
-        
+        logging.info('json_data', json_data)
+        email = str(json_data.get('email'))
+        logging.info(email)
+        sso_id = str(email.split('@')[0])
+        logging.info(sso_id)
+        name = str(json_data.get('name'))
+        logging.info(name)
+        password = json_data.get('password')
+        logging.info(password)
+        return db_add_user(sso_id, name, password, email)
+
     def login(self, json_data):
         return db_login(json_data) 
     
@@ -103,4 +112,6 @@ class courier:
 
         return db_get_review(review_id)
 
-        
+    def check_user(self, email):
+        return db_check_SSO_user(email)
+
