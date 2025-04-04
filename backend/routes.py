@@ -10,8 +10,40 @@ from authextension import get_auth
 from request_handler import courier
 
 
-Access to fetch at 'http://localhost:3001/mock-login' from origin 'http://localhost:3000' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: The value of the 'Access-Control-Allow-Credentials' header in the response is '' which must be 'true' when the request's credentials mode is 'include'.
+# Access to fetch at 'http://localhost:3001/mock-login' from origin 'http://localhost:3000' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: The value of the 'Access-Control-Allow-Credentials' header in the response is '' which must be 'true' when the request's credentials mode is 'include'.
 
+
+[1] Traceback (most recent call last):
+[1]   File "/Users/jonatanbillger/Desktop/Kandidatarbete/kod/LiuHome_tddd83/backend/venv/lib/python3.11/site-packages/flask/app.py", line 1536, in __call__
+[1]     return self.wsgi_app(environ, start_response)
+[1]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[1]   File "/Users/jonatanbillger/Desktop/Kandidatarbete/kod/LiuHome_tddd83/backend/venv/lib/python3.11/site-packages/flask/app.py", line 1514, in wsgi_app
+[1]     response = self.handle_exception(e)
+[1]                ^^^^^^^^^^^^^^^^^^^^^^^^
+[1]   File "/Users/jonatanbillger/Desktop/Kandidatarbete/kod/LiuHome_tddd83/backend/venv/lib/python3.11/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+[1]     return cors_after_request(app.make_response(f(*args, **kwargs)))
+[1]                                                 ^^^^^^^^^^^^^^^^^^^^
+[1]   File "/Users/jonatanbillger/Desktop/Kandidatarbete/kod/LiuHome_tddd83/backend/venv/lib/python3.11/site-packages/flask/app.py", line 1511, in wsgi_app
+[1]     response = self.full_dispatch_request()
+[1]                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[1]   File "/Users/jonatanbillger/Desktop/Kandidatarbete/kod/LiuHome_tddd83/backend/venv/lib/python3.11/site-packages/flask/app.py", line 919, in full_dispatch_request
+[1]     rv = self.handle_user_exception(e)
+[1]          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[1]   File "/Users/jonatanbillger/Desktop/Kandidatarbete/kod/LiuHome_tddd83/backend/venv/lib/python3.11/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+[1]     return cors_after_request(app.make_response(f(*args, **kwargs)))
+[1]                                                 ^^^^^^^^^^^^^^^^^^^^
+[1]   File "/Users/jonatanbillger/Desktop/Kandidatarbete/kod/LiuHome_tddd83/backend/venv/lib/python3.11/site-packages/flask/app.py", line 917, in full_dispatch_request
+[1]     rv = self.dispatch_request()
+[1]          ^^^^^^^^^^^^^^^^^^^^^^^
+[1]   File "/Users/jonatanbillger/Desktop/Kandidatarbete/kod/LiuHome_tddd83/backend/venv/lib/python3.11/site-packages/flask/app.py", line 902, in dispatch_request
+[1]     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+[1]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[1]   File "/Users/jonatanbillger/Desktop/Kandidatarbete/kod/LiuHome_tddd83/backend/routes.py", line 48, in mock_login
+[1]     return response
+[1]            ^^^^^^^^
+[1] UnboundLocalError: cannot access local variable 'response' where it is not associated with a value
+    
+    
 logging.basicConfig(level=logging.DEBUG)
 handler = courier()
 
@@ -39,13 +71,13 @@ def login():
 
 @apartments_bp.route("/mock-login", methods = ['POST', 'OPTIONS'])
 def mock_login():
-        if request.method == 'OPTIONS':
+    if request.method == 'OPTIONS':
         response = jsonify({"message": "CORS preflight"})
         response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
         response.headers.add("Access-Control-Allow-Credentials", "true")
         response.headers.add("Access-Control-Allow-Headers", "Content-Type")
         response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
-        return response
+    return response
 
     json_data = request.get_json()
     logging.info(json_data)
