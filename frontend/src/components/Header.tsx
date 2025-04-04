@@ -2,8 +2,11 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import {House} from "lucide-react"
+import { useUser } from "@/app/ssologin/page"
 
 export default function Header() {
+
+  const { user } = useUser();
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 ">
 
@@ -32,16 +35,23 @@ export default function Header() {
                 List Your Place
               </Button>
             </Link>
-            <Link href="/login">
-              <Button size="sm">Sign In</Button>
-            </Link>
-            <Link href="/ssologin">
-              <Button size="sm">Sign In SSO</Button>
-            </Link>
+            {!user ? (
+              <>
+                <Link href="/login">
+                  <Button size="sm">Sign In</Button>
+                </Link>
+                <Link href="/ssologin">
+                  <Button size="sm">Sign In SSO</Button>
+                </Link>
+              </>
+            ) : (
+              <div className="text-sm text-muted-foreground">
+                Welcome, {user.first_name || user.name}!
+              </div>
+            )}
           </div>
-
         </div>
       </header>
-    )
+    );
   }
   
