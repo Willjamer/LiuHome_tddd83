@@ -79,14 +79,18 @@ export default function LoginPage() {
     });
   };
 
+  // const handleLogout = () => {
+  //   fetch("http://localhost:3001/logout", {
+  //     method: "POST",
+  //     credentials: "include",
+  //   }).then(() => {
+  //     localStorage.removeItem("mockUser")
+  //     setUser(null);
+  //   });
+  // };
+
   const handleLogout = () => {
-    fetch("http://localhost:3001/logout", {
-      method: "POST",
-      credentials: "include",
-    }).then(() => {
-      localStorage.removeItem("mockUser")
-      setUser(null);
-    });
+    localStorage.removeItem("mockUser");
   };
 
   return (
