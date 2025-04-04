@@ -13,44 +13,66 @@ type User = {
 const UserContext = createContext<{
   user: User;
   setUser: (user: User) => void;
+  logout: () => void;
 }>({
   user: null,
   setUser: () => {},
+  logout: () => {},
 });
+
+export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("http://localhost:3001/api/check-session", {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.user) {
+          setUser(data.user);
+        } else {
+          const storedUser = localStorage.getItem("mockUser");
+          if (storedUser) {
+            setUser(JSON.parse(storedUser));
+          }
+        }
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const logout = () => {
+    fetch("http://localhost:3001/logout", {
+      method: "POST",
+      credentials: "include",
+    }).then(() => {
+      localStorage.removeItem("mockUser");
+      setUser(null);
+    });
+  };
+
+  if (loading) return <div>Loading...</div>; // Optional: remove flicker
+
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, logout }}>
       {children}
     </UserContext.Provider>
   );
 };
 
-export const useUser = () => useContext(UserContext);
-
 export default function LoginPage() {
-  const { user, setUser } = useUser(); 
+  const { user, setUser, logout } = useUser();
+  // const router = useRouter();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("mockUser");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser))
-    }
-
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get("login") === "success") {
       window.history.replaceState({}, document.title, "/");
-
-      fetch("/api/check-session", { credentials: "include" })
-        .then(response => response.json())
-        .then(data => {
-          if (data.user) {
-            setUser(data.user);
-          }
-        });
     }
-  }, [setUser]);
+  }, []);
 
   const handleLogin = () => {
     window.location.href = "http://localhost:3001/login";
@@ -59,14 +81,13 @@ export default function LoginPage() {
   const handleMockLogin = () => {
     const mockUser = {
       id: "12345",
-      email: "jonbi172@student.liu.se",
+      email: "jonbi171@student.liu.se",
       first_name: "Jonatan",
       last_name: "Billger",
       name: "Jonatan Billger",
     };
 
     localStorage.setItem("mockUser", JSON.stringify(mockUser));
-
     setUser(mockUser);
 
     fetch("http://localhost:3001/mock-login", {
@@ -75,7 +96,7 @@ export default function LoginPage() {
         "Content-Type": "application/json",
       },
       credentials: "include",
-      body: JSON.stringify({ user: mockUser }),
+      body: JSON.stringify(mockUser),
     });
   };
 
@@ -84,14 +105,10 @@ export default function LoginPage() {
   //     method: "POST",
   //     credentials: "include",
   //   }).then(() => {
-  //     localStorage.removeItem("mockUser")
+  //     localStorage.removeItem("mockUser");
   //     setUser(null);
   //   });
   // };
-
-  const handleLogout = () => {
-    localStorage.removeItem("mockUser");
-  };
 
   return (
     <div className="container mx-auto py-10">
@@ -100,7 +117,7 @@ export default function LoginPage() {
         <div>
           <p>Welcome, {user.name}!</p>
           <button
-            onClick={handleLogout}
+            onClick={logout}
             className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md shadow-sm"
           >
             Logout
