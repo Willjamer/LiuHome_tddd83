@@ -9,29 +9,6 @@ from request_handler_stub import courier
 # OM VANLIG (databas), KÖR DENNA:
 # from request_handler import courier
 
-[1] INFO:werkzeug:127.0.0.1 - - [04/Apr/2025 14:14:57] "OPTIONS /api/get-apartments HTTP/1.1" 200 -
-[1] INFO:werkzeug:127.0.0.1 - - [04/Apr/2025 14:14:57] "OPTIONS /api/get-apartments HTTP/1.1" 200 -
-[1] INFO:root:routes get ok
-[1] INFO:root:stub get ok
-[1] INFO:werkzeug:127.0.0.1 - - [04/Apr/2025 14:14:57] "GET /api/get-apartments HTTP/1.1" 200 -
-[1] INFO:root:routes get ok
-[1] INFO:root:stub get ok
-[1] INFO:werkzeug:127.0.0.1 - - [04/Apr/2025 14:14:57] "GET /api/get-apartments HTTP/1.1" 200 -
-[1] INFO:werkzeug:127.0.0.1 - - [04/Apr/2025 14:15:11] "POST /logout HTTP/1.1" 405 -
-^C[0] 
-[0] next dev exited with code 0
-[1] Exception ignored in: <function Popen.__del__ at 0x10a08fa60>
-[1] Traceback (most recent call last):
-[1]   File "/usr/local/Cellar/python@3.11/3.11.3/Frameworks/Python.framework/Versions/3.11/lib/python3.11/subprocess.py", line 1125, in __del__
-[1]     _warn("subprocess %s is still running" % self.pid,
-[1] KeyboardInterrupt: 
-[1] Exception ignored in: <Finalize object, dead>
-[1] Traceback (most recent call last):
-[1]   File "/usr/local/Cellar/python@3.11/3.11.3/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/util.py", line 224, in __call__
-[1]     res = self._callback(*self._args, **self._kwargs)
-[1]           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[1]   File "/usr/local/Cellar/python@3.11/3.11.3/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/heap.py", line 282, in free
-[1]     if not self._lock.acquire(False):
 
 logging.basicConfig(level=logging.DEBUG)
 handler = courier()
@@ -78,10 +55,11 @@ def callback():
     headers = {"Authorization: "}
     return f"Logged in as {user['name']}!"
 
-@microsoft_login.route("/logout")
+@microsoft_login.route("/logout", methods = ['GET, POST'])
 def logout():
-    session.pop("user", None)
-    return redirect("/")
+    if request.method == 'POST':
+        session.pop("user", None)
+        return redirect("/")
 
 @apartments_bp.route("/api/get-apartments", methods=['GET', 'OPTIONS'])
 def get_apartments():
