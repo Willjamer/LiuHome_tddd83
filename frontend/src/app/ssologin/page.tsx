@@ -27,14 +27,17 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-
 export const useUser = () => useContext(UserContext);
-
 
 export default function LoginPage() {
   const { user, setUser } = useUser(); 
 
   useEffect(() => {
+    const storedUser = localStorage.getItem("mockUser");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser))
+    }
+
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get("login") === "success") {
       window.history.replaceState({}, document.title, "/");
@@ -62,6 +65,8 @@ export default function LoginPage() {
       name: "Jonatan Billger",
     };
 
+    localStorage.setItem("mockUser", JSON.stringify(mockUser));
+
     setUser(mockUser);
 
     fetch("http://localhost:3001/mock-login", {
@@ -79,8 +84,8 @@ export default function LoginPage() {
       method: "POST",
       credentials: "include",
     }).then(() => {
+      localStorage.removeItem("mockUser")
       setUser(null);
-      Router.push("/")
     });
   };
 
