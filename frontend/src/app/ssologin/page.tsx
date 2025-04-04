@@ -32,6 +32,10 @@ export default function LoginPage() {
     window.location.href = "http://localhost:3001/login";
   };
 
+  const getName = () => {
+    
+  }
+
   const handleMockLogin = () => {
     const mockUser = {
       id: "12345",
