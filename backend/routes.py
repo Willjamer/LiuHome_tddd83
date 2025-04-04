@@ -37,8 +37,14 @@ def login():
 
 @apartments_bp.route("/mock-login")
 def mock_login():
-    data = request.get_json()
+    json_data = request.get_json()
+    logging.info(json_data)
     session["user"] = data.get("user")
+    user_email = data.get("user_email")
+    logging.info(user_email)
+
+    # if not handler.check_user(user_email):
+    #     return handler.add_user(json_data)
     return {"message": "Mock user ok"}
 
 @microsoft_login.route("/callback")
