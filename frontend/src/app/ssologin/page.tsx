@@ -1,17 +1,37 @@
 "use client";
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+
+type User = {
+  id: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  name: string;
+} | null;
+
+const UserContext = createContext<{
+  user: User;
+  setUser: (user: User) => void;
+}>({
+  user: null,
+  setUser: () => {},
+});
+
+export const UserProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<User>(null);
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      {children}
+    </UserContext.Provider>
+  );
+};
+
+
+export const useUser = () => useContext(UserContext);
+
 
 export default function LoginPage() {
-
-  type User = {
-    id: string;
-    email: string;
-    first_name: string;
-    last_name: string;
-    name: string;
-  };
-  
-  const [user, setUser] = useState<User | null>(null);
+  const { user, setUser } = useUser(); 
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -26,15 +46,11 @@ export default function LoginPage() {
           }
         });
     }
-  }, []);
+  }, [setUser]);
 
   const handleLogin = () => {
     window.location.href = "http://localhost:3001/login";
   };
-
-  const getName = () => {
-    
-  }
 
   const handleMockLogin = () => {
     const mockUser = {
@@ -47,7 +63,6 @@ export default function LoginPage() {
 
     setUser(mockUser);
 
-    // Optional: send to backend session
     fetch("http://localhost:3001/mock-login", {
       method: "POST",
       headers: {
