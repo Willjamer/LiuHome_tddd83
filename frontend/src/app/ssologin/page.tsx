@@ -59,7 +59,7 @@ export default function LoginPage() {
   const handleMockLogin = () => {
     const mockUser = {
       id: "12345",
-      email: "jonbi171@student.liu.se",
+      email: "jonbi172@student.liu.se",
       first_name: "Jonatan",
       last_name: "Billger",
       name: "Jonatan Billger",
