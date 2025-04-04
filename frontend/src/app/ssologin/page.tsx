@@ -1,5 +1,6 @@
 "use client";
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { useRouter } from "next/router";
 
 type User = {
   id: string;
@@ -79,6 +80,7 @@ export default function LoginPage() {
       credentials: "include",
     }).then(() => {
       setUser(null);
+      router.push("/")
     });
   };
 
