@@ -10,6 +10,8 @@ from authextension import get_auth
 from request_handler import courier
 
 
+Access to fetch at 'http://localhost:3001/mock-login' from origin 'http://localhost:3000' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: The value of the 'Access-Control-Allow-Credentials' header in the response is '' which must be 'true' when the request's credentials mode is 'include'.
+
 logging.basicConfig(level=logging.DEBUG)
 handler = courier()
 
