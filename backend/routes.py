@@ -9,6 +9,20 @@ from request_handler_stub import courier
 # OM VANLIG (databas), KÖR DENNA:
 # from request_handler import courier
 
+[0]  ⨯ Error: Attempted to call useUser() from the server but useUser is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.
+[0]     at <unknown> (.next/server/app/page.js:133:20)
+[0]     at Header (src/components/Header.tsx:9:26)
+[0]    7 | export default function Header() {
+[0]    8 |
+[0] >  9 |   const { user } = useUser();
+[0]      |                          ^
+[0]   10 |     return (
+[0]   11 |         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 ">
+[0]   12 | {
+[0]   digest: '940144573'
+[0] }
+[0]  GET / 500 in 85ms
+
 logging.basicConfig(level=logging.DEBUG)
 handler = courier()
 
