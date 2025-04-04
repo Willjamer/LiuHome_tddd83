@@ -34,6 +34,12 @@ def login():
         redirect_uri=url_for("microsoft_login.callback", _external=True)
     )
 
+@apartmennts_bp.route("/mock-login")
+def mock_login()
+    data = request.get_json()
+    session["user"] = data.get("user")
+    return {"message": "Mock user ok"}
+    
 @microsoft_login.route("/callback")
 def callback():
     token = oauth.microsoft.authorize_access_token()

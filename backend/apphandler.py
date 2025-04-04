@@ -8,9 +8,9 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 app.config['JWT_SECRET_KEY'] = "Kursen TDDD83 är en av de i särklass sämsta kurserna jag har läst i mitt liv och det är liksom inte ens kul hur den bara blir sämre och sämre"
 
-app.config["SECRET_KEY"] = "cok hemlig nyckel wallah"
-app.config["MICROSOFT_CLIENT_ID"] = "din morsa"
-app.config["MICROSOFT_CLIENT_SECRET"] = "din syrra"
+app.config["SECRET_KEY"] = "my_temp_key_which_should_be_longer"
+app.config["MICROSOFT_CLIENT_ID"] = "my_temp_id"
+app.config["MICROSOFT_CLIENT_SECRET"] = "my_temp_secret"
 
 # oauth = oauth()
 

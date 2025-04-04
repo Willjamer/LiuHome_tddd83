@@ -1,21 +1,28 @@
 "use client";
-import { WindArrowDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function LoginPage() {
-  const [user, setUser] = useState(null);
+
+  type User = {
+    id: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+    name: string;
+  };
+  
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    // Check if user is already logged in
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get("login") === "success") {
       window.history.replaceState({}, document.title, "/");
 
-      fetch("/api/check-session", { credentials: "include"})
+      fetch("/api/check-session", { credentials: "include" })
         .then(response => response.json())
         .then(data => {
           if (data.user) {
-            setUser(data.user)
+            setUser(data.user);
           }
         });
     }
@@ -25,10 +32,32 @@ export default function LoginPage() {
     window.location.href = "http://localhost:3001/login";
   };
 
+  const handleMockLogin = () => {
+    const mockUser = {
+      id: "12345",
+      email: "jonbi171@student.liu.se",
+      first_name: "Jonatan",
+      last_name: "Billger",
+      name: "Jonatan Billger",
+    };
+
+    setUser(mockUser);
+
+    // Optional: send to backend session
+    fetch("http://localhost:3001/mock-login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ user: mockUser }),
+    });
+  };
+
   const handleLogout = () => {
     fetch("http://localhost:3001/logout", {
       method: "POST",
-      credentials: "include"
+      credentials: "include",
     }).then(() => {
       setUser(null);
     });
@@ -48,12 +77,20 @@ export default function LoginPage() {
           </button>
         </div>
       ) : (
-        <button
-          onClick={handleLogin}
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm"
-        >
-          Login with Microsoft
-        </button>
+        <div className="space-y-4">
+          <button
+            onClick={handleLogin}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm"
+          >
+            Login with Microsoft
+          </button>
+          <button
+            onClick={handleMockLogin}
+            className="px-4 py-2 bg-gray-500 text-white rounded-md shadow-sm"
+          >
+            Use Mock Login
+          </button>
+        </div>
       )}
     </div>
   );
