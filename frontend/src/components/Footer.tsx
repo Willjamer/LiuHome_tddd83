@@ -15,13 +15,13 @@ export default function Footer() {
                     © 2030 liuHome. All rights reserved.
                 </p>
                 <div className="flex gap-4 mt-4 md:mt-0 w-1/3 justify-center">
-                    <Link href="/terms" className="text-sm text-muted-foreground hover:underline">
+                    <Link href="/about#terms" className="text-sm text-muted-foreground hover:underline">
                         Terms
                     </Link>
-                    <Link href="/privacy" className="text-sm text-muted-foreground hover:underline">
+                    <Link href="/about#privacy" className="text-sm text-muted-foreground hover:underline">
                         Privacy
                     </Link>
-                    <Link href="/contact" className="text-sm text-muted-foreground hover:underline">
+                    <Link href="/about#contact" className="text-sm text-muted-foreground hover:underline">
                         Contact
                     </Link>
                 </div>
