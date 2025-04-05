@@ -130,7 +130,7 @@ export default function BrowseSpecificPage() {
               {apartment.rent_amount} SEK
               <span className="text-base font-normal text-muted-foreground">/month</span>
             </div>
-            <Badge>Student Verified</Badge>
+            <Badge className="bg-green-500 text-white text-sm px-2 py-1">Verified Student</Badge>
           </div>
 
           <div className="border rounded-lg p-4">
