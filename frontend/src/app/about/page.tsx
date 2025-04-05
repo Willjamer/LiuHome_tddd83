@@ -34,9 +34,13 @@ const AboutPage: React.FC = () => {
         </div>
         </section>
 
-        
 
-        <section id="terms" className="flex-1 min-h-[200px] bg-blue-50 flex items-center justify-center" style ={{ scrollMarginTop: "100px" }}>
+
+        
+      <section id = "Terms,Privacy and Contact" className="flex flex-col items-center justify-center" style = {{ backgroundImage : "url('/images/TermsPrivacyContact.png')"}}>
+
+{/* Terms */}
+        <section id="terms" className="flex-1 min-h-[200px] bg-blue-50 flex items-center justify-center" style ={{ scrollMarginTop: "100px", marginBottom: "0px" }}>
           <div className="max-w-3xl p-8 text-center">
             <h2 className="text-3xl font-bold mb-6">Terms</h2>
             <ul className="list-disc list-inside text-lg mb-4 space-y-2">
@@ -53,7 +57,8 @@ const AboutPage: React.FC = () => {
           </div>
         </section>
 
-        <div className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] flex flex-row items-stretch justify-center gap-4 bg-white-50 p-8">
+{/* Privacy and contact  */}
+        {/* <div id="privacyandcontact" className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] flex flex-row items-stretch justify-center gap-8 bg-white-50 p-8"> */}
           <section id="privacy" className="flex-1 min-h-[200px] bg-blue-50 flex items-center justify-center">
             <div className="max-w-3xl p-8 text-center">
               <h2 className="text-3xl font-bold mb-6">Privacy</h2>
@@ -79,8 +84,9 @@ const AboutPage: React.FC = () => {
               </div>
             </div>
           </section>
-        </div>
+        {/* </div> */}
 
+      </section>
         
       </main>
     </div>
