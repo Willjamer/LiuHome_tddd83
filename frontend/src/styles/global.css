@@ -1,0 +1,12 @@
+body {
+  margin: 0; /* Ta bort standardmarginal från body */
+  padding: 0; /* Ta bort standardpadding från body */
+}
+
+section:first-of-type {
+  margin-top: 0; /* Se till att första sektionen inte har någon toppmarginal */
+}
+
+.rounded-box {
+  border-radius: 16px; /* Justera värdet för att ändra hur rundade kanterna är */
+}
