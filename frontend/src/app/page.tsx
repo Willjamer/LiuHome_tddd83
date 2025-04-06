@@ -126,21 +126,21 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
               <div className="flex flex-col items-center text-center">
                 <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                  <Search className="h-6 w-6 text-primary" />
+                  <Search className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2 text-white">Find</h3>
                 <p className="text-muted-foreground text-white">Browse verified listings from students at your university.</p>
               </div>
               <div className="flex flex-col items-center text-center">
                 <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                  <Users className="h-6 w-6 text-primary" />
+                  <Users className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2 text-white">Connect</h3>
                 <p className="text-muted-foreground text-white">Message directly with student landlords to arrange viewings.</p>
               </div>
               <div className="flex flex-col items-center text-center">
                 <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                  <House className="h-6 w-6 text-primary" />
+                  <House className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold mb-2 text-white">Move In</h3>
                 <p className="text-muted-foreground text-white">Secure your new home with our safe payment system.</p>
