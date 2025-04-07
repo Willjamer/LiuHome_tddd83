@@ -163,7 +163,14 @@ export default function BrowseSpecificPage() {
           <div>
             JIMMYS COOL BIO : Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum fugit officia velit quod commodi consequatur maxime aliquid repudiandae quos ab minima nemo ipsum numquam, illum ad debitis excepturi tempore ipsa?
           </div>
-          <Button className="w-full">Copy email</Button>
+            <Button
+            className="w-full"
+            onClick={() => {
+              window.location.href = `mailto:jimmy.cool@gmail.com?subject=LiuHome - Hyra lägenhet&body=Hej, jag är intresserad av att hyra din lägenhet.`;   //ändra till riktig email sen
+            }}
+            >
+            Send email
+            </Button>
         </div>
       </CardContent>
     </Card>

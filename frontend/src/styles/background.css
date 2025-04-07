@@ -1,0 +1,11 @@
+.background-cover {
+  background-size: cover; /* Bilden täcker hela sektionen */
+}
+
+.background-contain {
+  background-size: contain; /* Hela bilden syns */
+}
+
+.background-custom {
+  background-size: 100% 100%; /* Anpassa storleken exakt */
+}
