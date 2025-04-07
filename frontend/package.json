@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@radix-ui/react-slot": "^1.1.2",
     "axiom": "^0.1.6",
     "axios": "^1.8.4",
