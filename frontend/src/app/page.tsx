@@ -52,7 +52,7 @@ export default function Home() {
   return (
 
     
-    <div className="flex min-h-screen flex-col w-full" style={{ backgroundImage: "url('/images/Studenthuset.jpg')", backgroundSize: "cover" }}>
+    <div className="flex min-h-screen flex-col w-full" style={{ backgroundImage: "url('/images/Studenthuset3.jpg')", backgroundSize: "cover" }}>
 
       <main className="flex-1">
 
@@ -92,7 +92,7 @@ export default function Home() {
         <section className="py-12 flex justify-center">
           <div className="container">
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-2xl font-bold ">Featured Listings</h2>
+              <h2 className="text-2xl font-bold text-white ">Featured Listings</h2>
               <Link href="/browse">
                 <Button variant="link">View all</Button>
               </Link>
