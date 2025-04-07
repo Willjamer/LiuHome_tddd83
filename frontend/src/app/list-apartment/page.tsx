@@ -2,7 +2,7 @@
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { CheckCircle, Home } from "react-feather"; //npm install react-feather
+import { CheckCircle, Home } from "react-feather"; 
 
 interface Apartment {
   apartment_id: number;      
@@ -125,6 +125,7 @@ export default function AddApartmentPage() {
             name="apartment_id"
             value={apartment.apartment_id}
             onChange={handleChange}
+            placeholder="Ex: 12345" // Exempeltext
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
             required
           />
@@ -136,6 +137,7 @@ export default function AddApartmentPage() {
             name="user_id"
             value={apartment.user_id}
             onChange={handleChange}
+            placeholder="Ex: 67890" // Exempeltext
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
             required
           />
@@ -147,6 +149,7 @@ export default function AddApartmentPage() {
             name="title"
             value={apartment.title}
             onChange={handleChange}
+            placeholder="Cozy Apartment in City Center" // Exempeltext
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
             required
           />
@@ -157,6 +160,7 @@ export default function AddApartmentPage() {
             name="description"
             value={apartment.description}
             onChange={handleChange}
+            placeholder="A spacious 2-bedroom apartment with a balcony and great views." // Exempeltext
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
           />
         </div>
@@ -167,6 +171,7 @@ export default function AddApartmentPage() {
             name="address"
             value={apartment.address}
             onChange={handleChange}
+            placeholder="123 Main Street, Stockholm" // Exempeltext
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
             required
           />
@@ -178,8 +183,10 @@ export default function AddApartmentPage() {
             name="size"
             value={apartment.size}
             onChange={handleChange}
+            placeholder="Ex: 75" // Exempeltext
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
             required
+            step="1"
           />
         </div>
         <div>
@@ -189,8 +196,10 @@ export default function AddApartmentPage() {
             name="number_of_rooms"
             value={apartment.number_of_rooms}
             onChange={handleChange}
+            placeholder="Ex: 3" // Exempeltext
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
             required
+            step="1"
           />
         </div>
         <div>
@@ -200,6 +209,7 @@ export default function AddApartmentPage() {
             name="location"
             value={apartment.location}
             onChange={handleChange}
+            placeholder="Ex: Södermalm, Stockholm" // Exempeltext
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
             required
           />
@@ -211,6 +221,7 @@ export default function AddApartmentPage() {
             name="rent_amount"
             value={apartment.rent_amount}
             onChange={handleChange}
+            placeholder="Ex: 12000" // Exempeltext
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
             required
           />
@@ -220,6 +231,7 @@ export default function AddApartmentPage() {
           <DatePicker
             selected={apartment.available_from ? new Date(apartment.available_from) : null}
             onChange={handleDateChange}
+            placeholderText="Ex: 2023-12-01" // Exempeltext för DatePicker
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
             dateFormat="yyyy-MM-dd"
           />
@@ -257,9 +269,9 @@ export default function AddApartmentPage() {
       </form>
       {isModalVisible && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-md shadow-md w-1/3">
-            <h2 className="text-2xl font-bold mb-4">Payment Information</h2>
-            <p className="text-sm text-gray-600 mb-4">
+          <div className="bg-white p-4 rounded-md shadow-md w-full max-w-sm"> {/* Mindre bredd */}
+            <h2 className="text-xl font-bold mb-4 text-center">Payment Information</h2> {/* Mindre rubrik */}
+            <p className="text-sm text-gray-600 mb-4 text-center">
               Please enter your payment information to complete the listing.
             </p>
             <form
@@ -270,14 +282,12 @@ export default function AddApartmentPage() {
                 console.log("CVC:", cvc);
                 console.log("Expiration Date:", expirationDate);
 
-                
                 handleSubmit(e);
 
-              
                 setIsModalVisible(false);
                 setIsPaymentSuccessVisible(true); // Visa PaymentSuccess
               }}
-              className="space-y-4"
+              className="space-y-3" // Mindre mellanrum mellan fälten
             >
               <div>
                 <label className="block text-sm font-medium text-gray-700">Name</label>
@@ -293,7 +303,7 @@ export default function AddApartmentPage() {
               <div>
                 <label className="block text-sm font-medium text-gray-700">Card Number</label>
                 <input
-                  type="text"
+                  type="number"
                   name="cardNumber"
                   value={cardNumber}
                   onChange={(e) => setCardNumber(e.target.value)}
@@ -301,39 +311,41 @@ export default function AddApartmentPage() {
                   required
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">CVC</label>
-                <input
-                  type="text"
-                  name="cvc"
-                  value={cvc}
-                  onChange={(e) => setCvc(e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Expiration Date</label>
-                <input
-                  type="text"
-                  name="expirationDate"
-                  placeholder="MM/YY"
-                  value={expirationDate}
-                  onChange={(e) => setExpirationDate(e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
-                  required
-                />
+              <div className="flex space-x-4"> {/* Flexbox för att placera fälten bredvid varandra */}
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-gray-700">CVC</label>
+                  <input
+                    type="number"
+                    name="cvc"
+                    value={cvc}
+                    onChange={(e) => setCvc(e.target.value)}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+                    required
+                  />
+                </div>
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-gray-700">Expiration Date</label>
+                  <input
+                    type="text"
+                    name="expirationDate"
+                    placeholder="MM/YY"
+                    value={expirationDate}
+                    onChange={(e) => setExpirationDate(e.target.value)}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+                    required
+                  />
+                </div>
               </div>
               <button
                 type="submit"
-                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm"
+                className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm w-full"
               >
                 Submit Payment
               </button>
               <button
                 type="button"
                 onClick={() => setIsModalVisible(false)} // Stäng modalen
-                className="mt-4 px-4 py-2 bg-gray-400 text-white rounded-md shadow-sm"
+                className="mt-2 px-4 py-2 bg-gray-400 text-white rounded-md shadow-sm w-full"
               >
                 Cancel
               </button>
