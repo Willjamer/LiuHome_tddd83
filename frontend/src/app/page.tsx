@@ -89,12 +89,12 @@ export default function Home() {
         </section>
 
 
-        <section className="py-12 flex justify-center">
+        <section className="py-0 flex justify-center">
           <div className="container">
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-2xl font-bold text-white ">Featured Listings</h2>
+              <h2 className="text-2xl font-bold text-white">Featured Listings</h2>
               <Link href="/browse">
-                <Button variant="link">View all</Button>
+                <Button variant="link" className="text-white">View all</Button>
               </Link>
             </div>
 
@@ -104,8 +104,6 @@ export default function Home() {
                   <Card className="overflow-hidden rounded-lg shadow-lg border-none pt-0 group">
                     <div className="relative w-full h-56 rounded-t-lg overflow-hidden">
                       <Image src={listing.imageUrl} alt={listing.title} width={500} height={300} className="object-cover w-full h-full transition-transform duration-300 ease-in-out transform group-hover:scale-105" />
-
-
                     </div>
                     <CardContent className="p-4">
                       <h3 className="text-lg font-semibold">{listing.title}</h3>
