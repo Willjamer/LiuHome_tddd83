@@ -57,8 +57,6 @@ export default function BrowsePage() {
             // const data = await response.json();
             // const apartments: Apartment[] = data.Apartments;  
 
-            console.log(apartments);
-            console.log(apartments.length)
             setApartments(apartments)
         } catch (error) {
             console.error("Error:", error);
@@ -83,7 +81,7 @@ export default function BrowsePage() {
                 <section className="flex-1 justify-center ">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-center">
                         {filteredApartments.map((apt) => (
-                            <Link href={`/listings/${apt.apartment_id}`} key={apt.apartment_id}>
+                            <Link href={`/browseSpecific/${apt.apartment_id}`} key={apt.apartment_id}>
                                 <Card className="overflow-hidden rounded-lg shadow-lg border-none p-0 h-full hover:shadow-xl transition-shadow group">
                                     <div className="relative w-full h-48 overflow-hidden">
                                         <img
