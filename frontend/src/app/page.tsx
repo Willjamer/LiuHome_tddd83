@@ -149,10 +149,6 @@ export default function Home() {
         </section>
       </main>
       
-
-      
-
-
       <div className="bg-blue-500  justify-center flex">
         <h1>Next.js Frontend</h1>
         <p>Flask says: {data || "Loading..."}</p>
