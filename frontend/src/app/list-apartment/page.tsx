@@ -65,6 +65,7 @@ export default function AddApartmentPage() {
       const result = await response.json();
       console.log("Apartment added:", result);
 
+      // Visa framgångsmeddelande
       setIsPaymentSuccessVisible(true);
       setIsModalVisible(false);
     } catch (error) {
@@ -354,6 +355,26 @@ export default function AddApartmentPage() {
           </div>
         </div>
       )}
+
+      {/* Payment Success Modal */}
+      {isPaymentSuccessVisible && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-md shadow-md w-1/3 text-center">
+            <h2 className="text-2xl font-bold mb-4">Payment was added successfully</h2>
+            <p className="text-gray-700 mb-6">Your apartment has been listed successfully!</p>
+            <Button
+              onClick={() => {
+                setIsPaymentSuccessVisible(false);
+                router.push("/"); // Redirect to homepage or another page
+              }}
+              className="bg-blue-600 text-white hover:bg-blue-700"
+            >
+              Go to Homepage
+            </Button>
+          </div>
+        </div>
+      )}
+
       {/* Footer */}
       <footer className="border-t py-6 md:py-8 flex flex-col">
         <div className="px-4 sm:px-6 lg:px-8 flex justify-between w-full items-center">
