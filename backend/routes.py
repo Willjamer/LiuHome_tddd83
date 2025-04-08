@@ -24,12 +24,9 @@ def register_oauth():
         "microsoft",
         client_id=current_app.config["MICROSOFT_CLIENT_ID"],
         client_secret=current_app.config["MICROSOFT_CLIENT_SECRET"],
-        # authorize_url="https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
-        # access_token_url="https://login.microsoftonline.com/common/oauth2/v2.0/token",
         authorize_url=f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/authorize",
         access_token_url=f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/token",
-            server_metadata_url=f"https://login.microsoftonline.com/{tenant_id}/v2.0/.well-known/openid-configuration",
-        # client_kwargs={"scope": "openid email profile User.Read"}, 
+        server_metadata_url=f"https://login.microsoftonline.com/{tenant_id}/v2.0/.well-known/openid-configuration",
         client_kwargs={"scope": "openid email profile "}, 
 
     )
