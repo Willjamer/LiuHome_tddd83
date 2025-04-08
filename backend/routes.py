@@ -18,13 +18,17 @@ microsoft_login = Blueprint('microsoft_login', __name__)
 
 @microsoft_login.before_app_request
 def register_oauth():
+    tenant_id = current_app.config["MICROSOFT_TENANT_ID"]
     oauth.init_app(current_app)
     oauth.register(
         "microsoft",
         client_id=current_app.config["MICROSOFT_CLIENT_ID"],
         client_secret=current_app.config["MICROSOFT_CLIENT_SECRET"],
-        authorize_url="https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
-        access_token_url="https://login.microsoftonline.com/common/oauth2/v2.0/token",
+        # authorize_url="https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+        # access_token_url="https://login.microsoftonline.com/common/oauth2/v2.0/token",
+        authorize_url=f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/authorize",
+        access_token_url=f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/token",
+            server_metadata_url=f"https://login.microsoftonline.com/{tenant_id}/v2.0/.well-known/openid-configuration",
         # client_kwargs={"scope": "openid email profile User.Read"}, 
         client_kwargs={"scope": "openid email profile "}, 
 
@@ -64,7 +68,8 @@ def mock_login():
 @microsoft_login.route("/callback")
 def callback():
     token = oauth.microsoft.authorize_access_token()
-    user = oauth.microsoft.parse_id_token(token)
+    # user = oauth.microsoft.parse_id_token(token)
+    user = token.get("userinfo")
 
     session["user"] = {
         "id": user.get("sub"),

@@ -9,9 +9,9 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 app.config['JWT_SECRET_KEY'] = "Kursen TDDD83 är en av de i särklass sämsta kurserna jag har läst i mitt liv och det är liksom inte ens kul hur den bara blir sämre och sämre"
 
 app.config["SECRET_KEY"] = "my_temp_key_which_should_be_longer"
-app.config["MICROSOFT_CLIENT_ID"] = "my_temp_id"
-app.config["MICROSOFT_CLIENT_SECRET"] = "my_temp_secret"
-
+app.config["MICROSOFT_CLIENT_ID"] = "0b0f8650-fca0-47a0-8887-939b62c27038"
+app.config["MICROSOFT_CLIENT_SECRET"] = "z5k8Q~S4dQsNnN_5ycGFczGe-HJy0vx-U5H2VbDi"
+app.config["MICROSOFT_TENANT_ID"] = "913f18ec-7f26-4c5f-a816-784fe9a58edd"
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
 app.config["SESSION_COOKIE_SECURE"] = True
 
