@@ -3,10 +3,10 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 import logging
 
 # OM STUB, KÖR DENNA: 
-# from request_handler_stub import courier
+from request_handler_stub import courier
 
 # OM VANLIG (databas), KÖR DENNA:
-from request_handler import courier
+#from request_handler import courier
 
 logging.basicConfig(level=logging.DEBUG)
 handler = courier()

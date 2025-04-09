@@ -14,16 +14,6 @@ import Image from "next/image";
 export default function Home() {
   const [data, setData] = useState(null);
 
-  useEffect(() => {
-    axios.get("http://localhost:5000/")
-      .then(response => {
-        setData(response.data.message);
-      })
-      .catch(error => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
-
   const featuredListings = [
     {
       id: 1,
@@ -146,11 +136,7 @@ export default function Home() {
             </div>
         </section>
       </main>
-      
-      <div className="bg-blue-500  justify-center flex">
-        <h1>Next.js Frontend</h1>
-        <p>Flask says: {data || "Loading..."}</p>
-      </div>
+    
     </div>
   );
 }
