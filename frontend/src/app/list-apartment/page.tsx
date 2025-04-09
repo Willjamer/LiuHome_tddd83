@@ -16,10 +16,11 @@ export default function AddApartmentPage() {
     title: "",
     description: "",
     address: "",
-    size: "",
-    number_of_rooms: "",
+    size: 0,
+    number_of_rooms: 0,
     location: "",
-    rent_amount: "",
+    rent_amount: 0,
+    is_available: true,
     available_from: "",
   });
 
@@ -50,6 +51,7 @@ export default function AddApartmentPage() {
         expirationDate,
       },
     };
+    console.log("Submitting:", payload);
 
     try {
       const response = await fetch("http://localhost:3001/api/add-apartment", {
