@@ -34,8 +34,10 @@ export default function LoginPage() {
         // Spara token, t.ex. i localStorage, och/eller hantera den i ett auth-context
         localStorage.setItem("access_token", response.data.access_token);
         localStorage.setItem("sso_id", response.data.sso_id)
+
         // Omdirigera till startsidan eller en dashboard
         router.push("/");
+        router.refresh();
       } else {
         setError(response.data.message || "Login failed");
       }
@@ -45,44 +47,55 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <Card className="w-full max-w-md">
-        <CardContent className="p-6">
-          <h2 className="text-2xl font-bold mb-4">Log In</h2>
+    <div className="flex flex-col h-screen gap-8 pb-32 justify-center items-center w-full">
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <Input
-              placeholder="Email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              type="email"
-              required
-            />
-            <Input
-              placeholder="Password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              type="password"
-              required
-            />
+      <img
+        src={"/images/liu-logga.png"}
+        alt={"YOOOOOO"}
+        className="w-1/4"
+      />
 
-            {error && <p className="text-red-500 text-sm">{error}</p>}
 
-            <Button type="submit" className="w-full">
-              Log In
-            </Button>
-          </form>
+      <div className="flex items-center justify-center px-2 w-full ">
+        <Card className="w-full max-w-md">
+          <CardContent className="p-6">
+            <h2 className="text-2xl font-bold mb-4">Log In</h2>
 
-          <p className="text-sm text-center mt-4">
-            Don't have an account?{" "}
-            <Link href="/user/sign-up" className="text-blue-500 underline">
-              Sign Up
-            </Link>
-          </p>
-        </CardContent>
-      </Card>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <Input
+                placeholder="Email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                type="email"
+                required
+              />
+              <Input
+                placeholder="Password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                type="password"
+                required
+              />
+
+              {error && <p className="text-red-500 text-sm">{error}</p>}
+
+              <Button type="submit" className="w-full">
+                Log In
+              </Button>
+            </form>
+
+            <p className="text-sm text-center mt-4">
+              Don't have an account?{" "}
+              <Link href="/user/sign-up" className="text-blue-500 underline">
+                Sign Up
+              </Link>
+            </p>
+          </CardContent>
+        </Card>
+      </div>
     </div>
+
   );
 }

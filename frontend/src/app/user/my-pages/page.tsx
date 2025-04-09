@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { House } from "lucide-react"
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -86,69 +87,81 @@ export default function ProfilePage() {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <Button onClick={handleLogout} className="self-end mb-4" variant="outline">
-        Log Out
-      </Button>
-      <Card className="w-full max-w-md">
-        <CardContent className="p-6">
-          <h2 className="text-2xl font-bold mb-4">User Profile</h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <Input
-              placeholder="First Name"
-              name="first_name"
-              value={profile.first_name}
-              onChange={handleChange}
-              required
+
+    <div className="flex flex-col h-screen gap-8 pb-32 justify-center items-center w-full">
+      <img
+        src={"/images/liu-logga.png"} 
+        alt={"YOOOOOO"}
+        className="w-1/4"
+      />
+
+      <div className=" flex flex-col items-center justify-center w-full ">
+        <Card className="w-full max-w-md">
+          <CardContent className="p-6">
+            <img
+              src = {"/images/Icon.png"}
+              alt = {"user icon"}
+              className = "h-20 mx-auto mb-4 rounded-full border-1 border-black bg-gray-100 hover:bg-gray-300 transition-colors duration-200 ease-in-out"
             />
-            <Input
-              placeholder="Last Name"
-              name="last_name"
-              value={profile.last_name}
-              onChange={handleChange}
-              required
-            />
-            <Input
-              placeholder="Email"
-              name="email"
-              value={profile.email}
-              onChange={handleChange}
-              type="email"
-              required
-              disabled
-            />
-            <Input
-              placeholder="Profile Picture URL"
-              name="profile_picture"
-              value={profile.profile_picture}
-              onChange={handleChange}
-            />
-            <Input
-              placeholder="Program"
-              name="program"
-              value={profile.program}
-              onChange={handleChange}
-            />
-            <Input
-              placeholder="Year"
-              name="year"
-              value={profile.year}
-              onChange={handleChange}
-              type="number"
-            />
-            <textarea
-              name="bio"
-              placeholder="Bio"
-              value={profile.bio}
-              onChange={handleChange}
-              className="w-full p-2 border rounded"
-            />
-            {updateMessage && <p className="text-green-500">{updateMessage}</p>}
-            {error && <p className="text-red-500">{error}</p>}
-            <Button type="submit">Update Profile</Button>
-          </form>
-        </CardContent>
-      </Card>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <Input
+                placeholder="First Name"
+                name="first_name"
+                value={profile.first_name}
+                onChange={handleChange}
+                required
+              />
+              <Input
+                placeholder="Last Name"
+                name="last_name"
+                value={profile.last_name}
+                onChange={handleChange}
+                required
+              />
+              <Input
+                placeholder="Email"
+                name="email"
+                value={profile.email}
+                onChange={handleChange}
+                type="email"
+                required
+                disabled
+              />
+              <Input
+                placeholder="Program"
+                name="program"
+                value={profile.program}
+                onChange={handleChange}
+              />
+              <Input
+                placeholder="Year"
+                name="year"
+                value={profile.year}
+                onChange={handleChange}
+                type="number"
+                min="1"
+                max="7"
+              />
+              <textarea
+                name="bio"
+                placeholder="Bio"
+                value={profile.bio}
+                onChange={handleChange}
+                className="w-full p-2 border rounded"
+              />
+              {updateMessage && <p className="text-green-500">{updateMessage}</p>}
+              {error && <p className="text-red-500">{error}</p>}
+              <div className="flex flex-row justify-between pt-4">
+                <Button type="submit">Update Profile</Button>
+                <Button onClick={handleLogout} className="self-end mb-4" variant="outline">
+                  Log Out
+                </Button>
+              </div>
+
+            </form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

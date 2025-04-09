@@ -51,7 +51,14 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
+    <div className="flex flex-col h-screen gap-8 pb-32 justify-center items-center w-full">
+
+    <img
+      src={"/images/liu-logga.png"}
+      alt={"YOOOOOO"}
+      className="w-1/4"
+    />
+    <div className="w-full flex items-center justify-center px-4">
       <Card className="w-full max-w-md">
         <CardContent className="p-6">
           <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
@@ -74,6 +81,7 @@ export default function SignUpPage() {
           </p>
         </CardContent>
       </Card>
+    </div>
     </div>
   )
 }
