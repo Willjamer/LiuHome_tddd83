@@ -51,11 +51,11 @@ export default function BrowsePage() {
             if (!response.ok) throw new Error("Failed to fetch apartments");
 
             // OM STUB, KÖR DENNA
-            const apartments: Apartment[] = await response.json();
+            // const apartments: Apartment[] = await response.json();
 
             // OM VANLIG (databas), KÖR DESSA TVÅ
-            // const data = await response.json();
-            // const apartments: Apartment[] = data.Apartments;  
+            const data = await response.json();
+            const apartments: Apartment[] = data.Apartments;  
 
             setApartments(apartments)
         } catch (error) {

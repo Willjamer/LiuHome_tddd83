@@ -6,7 +6,7 @@ import logging
 from request_handler_stub import courier
 
 # OM VANLIG (databas), KÖR DENNA:
-#from request_handler import courier
+from request_handler import courier
 
 logging.basicConfig(level=logging.DEBUG)
 handler = courier()
