@@ -20,7 +20,11 @@ class courier:
             # Använd apartment_id direkt
             apartment = db.session.query(Apartment).filter_by(apartment_id=apartment_id).first()
             if not apartment:
+                logging.info('rq get specifik ej ok')
+                
                 return jsonify({"error": "Apartment not found"}), 404
+            logging.info('rq get specifik ok')
+            return db_get_specific_apartment(apartment_id)
             return jsonify(apartment.serialize()), 200
         except Exception as e:
             logging.error(f"Error in get_specific_apartment: {e}")

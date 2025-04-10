@@ -51,7 +51,6 @@ class Apartment(db.Model):
             "rent_amount": self.rent_amount,
             "is_available": self.is_available,
             "available_from": self.available_from,
-
         }
         
 
@@ -243,8 +242,6 @@ def db_filtering(rent_interval, size_interval, room_interval, locations, sort_fa
     
 def db_get_specific_apartment(this_apartment_id):
     this_apartment = Apartment.query.get(this_apartment_id)
-
-    new_apartment = Apartment(apartment_id = 9999, user_id = 2, title = "jontes testlägga", description= "en fin lägenhet i linköping", address = "Vallavägen 4B", size = 40, number_of_rooms = 2, location = "Irrblosset", rent_amount = 6000, is_available = True, available_from = datetime.date(2025, 4, 15))
 
     return jsonify({'apartment' : this_apartment.serialize()})
 
