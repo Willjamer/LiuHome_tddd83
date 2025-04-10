@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { House } from "lucide-react";
+import { Contact, House, List, ListCheck, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,21 +8,24 @@ import SearchBar from "@/components/ui/search-bar";
 
 const HowItWorksPage: React.FC = () => {
   return (
-    <div className="flex min-h-screen flex-col w-full ">
+    <div className="flex min-h-screen flex-col w-full" style={{ backgroundImage: "url('/images/tvåstudenter.png')", backgroundSize: "cover", backgroundPosition: "right" }}>
       <main className="flex-1 p-8 space-y-16">
-        <h1 className="text-4xl font-bold text-center mb-4">How It Works</h1>
-        <p className="text-lg text-muted-foreground text-center">
+        <h1 className="text-4xl font-bold text-center text-white mb-4">How It Works</h1>
+        <p className="text-lg text-muted-foreground text-white text-center">
           Here's a guide to how our website works.
         </p>
-        <hr className="border-b" />
+        {/* <hr className="border-b" /> */}
 
 
-        <Card className="mb-8">
+        <Card className="mb-8 bg-transparent border-4 border-white">
           <CardContent>
-            <h2 className="text-2xl font-semibold text-center mb-4">
+            <div className="flex justify-center mb-4">
+              <House className="text-white w-10 h-10" />
+            </div>
+            <h2 className="text-2xl font-semibold text-center text-white mb-4">
               1. Sign Up
             </h2>
-            <p>
+            <p className="text-white">
               To get started, you can create a liuHome account. This will allow
               you to browse and save your favorite listings, contact landlords,
               and list your own property. You can sign up by clicking the "Sign
@@ -33,12 +36,15 @@ const HowItWorksPage: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="mb-8">
+        <Card className="mb-8 bg-transparent border-4 border-white">
           <CardContent>
-            <h2 className="text-2xl font-semibold text-center mb-4">
+          <div className="flex justify-center mb-4">
+              <Search className="text-white w-10 h-10" />
+            </div>
+            <h2 className="text-2xl font-semibold text-center text-white mb-4">
               2. Browse Listings
             </h2>
-            <p>
+            <p className="text-white">
               To get started, you can either browse the listings or search for a
               specific property using the search bar. As a student seeking to
               rent a property, you can find a variety of housing options that
@@ -50,12 +56,15 @@ const HowItWorksPage: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="mb-8">
+        <Card className="mb-8 bg-transparent border-4 border-white">
           <CardContent>
-            <h2 className="text-2xl font-semibold text-center mb-4">
+          <div className="flex justify-center mb-4">
+              <Contact className="text-white w-10 h-10" />
+            </div>
+            <h2 className="text-2xl font-semibold text-center text-white mb-4">
               3. Contact Landlords
             </h2>
-            <p>
+            <p className="text-white">
               Once you've found a listing that interests you, you can contact
               the landlord directly through our website. You can send them a
               message to inquire about the property, ask for more information,
@@ -68,12 +77,15 @@ const HowItWorksPage: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="mb-8">
+        <Card className="mb-8 bg-transparent border-4 border-white">
           <CardContent>
-            <h2 className="text-2xl font-semibold text-center mb-4">
+          <div className="flex justify-center mb-4">
+              <ListCheck className="text-white w-10 h-10" />
+            </div>
+            <h2 className="text-2xl font-semibold text-center text-white mb-4">
               4. List Your Property
             </h2>
-            <p>
+            <p className="text-white">
               If you're a landlord looking to rent out your property, you can
               list it on liuHome. To do this, you'll need to have an account and
               provide details about your property, such as location, price, and
