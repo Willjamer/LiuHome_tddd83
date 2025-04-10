@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useUser } from "../ssologin/page";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +13,9 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 
 export default function AddApartmentPage() {
   const router = useRouter();
+  const user = useUser();
   const [apartment, setApartment] = useState({
+    user_id: user?.user?.email || "",
     title: "",
     description: "",
     address: "",
