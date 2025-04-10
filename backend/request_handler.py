@@ -20,20 +20,25 @@ class courier:
         return db_get_specific_apartment(apartment_id)
 
     def add_apartment(self, json_data): 
-        
+        print(json_data)
+        logging.info(json_data)
         # This one  is temporary
-        apartment_id = json_data.get('apartment_id')
 
-        user_id = json_data.get('user_id').split('@')[0]
-        title = json_data.get('title')
-        description = json_data.get('description')
-        address = json_data.get('address')
-        size = json_data.get('size')
-        number_of_rooms = json_data.get('number_of_rooms')
-        location = json_data.get('location')
-        rent_amount = json_data.get('rent_amount')
+        apartment_data = json_data.get('apartment')
+        payment_data = json_data.get('payment')
+        apartment_id = apartment_data.get('apartment_id')
 
-        available_from_primary = json_data.get('available_from').split('T')[0]
+        user_id = apartment_data.get('user_id')
+        title = apartment_data.get('title')
+        description = apartment_data.get('description')
+        address = apartment_data.get('address')
+        size = apartment_data.get('size')
+        number_of_rooms = apartment_data.get('number_of_rooms')
+        location = apartment_data.get('location')
+        rent_amount = apartment_data.get('rent_amount')
+
+        available_from_primary = apartment_data.get('available_from')
+        logging.info('available_from:', available_from_primary)
         available_from = available_from_primary.split('-')
 
 

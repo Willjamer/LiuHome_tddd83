@@ -1,0 +1,15 @@
+@keyframes vibrate-hover {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  50% { transform: translateX(2px); }
+  75% { transform: translateX(-2px); }
+  100% { transform: translateX(0); }
+}
+
+.hover-vibrate {
+  transition: transform 0.3s ease-in-out; /* Smooth transition */
+}
+
+.hover-vibrate:hover {
+  animation: vibrate-hover 0.5s ease-in-out;
+}

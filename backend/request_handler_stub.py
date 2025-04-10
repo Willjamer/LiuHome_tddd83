@@ -198,7 +198,6 @@ class courier:
             "FirstName": "Christoffer",
             "LastName": "Roempke",
             "Email": "chrro688@student.liu.se"
- 
         }
         if item:
             return jsonify(item), 200  # Return the found item as JSON
@@ -220,6 +219,25 @@ class courier:
                 "rentCost": 5506
  
         }
+            
+
+    #la till detta för att kunna hämta specifik lägenhet /Nils
+    def get_specific_apartment(self, json_data):
+            item = {
+                "apartment_id": 7181,
+                "user_id": 7,
+                "title": "Billig studentetta",
+                "description": "Enkel men prisvärd studentlägenhet.",
+                "address": "Kårhusgatan 3",
+                "size": 20.0,
+                "number_of_rooms": 1,
+                "location": "Ryd",
+                "rent_amount": 4200,
+                "bathrooms" : 1,
+                "is_available": True,
+                "available_from": date(2025, 4, 25)
+        }
+            return jsonify(item), 200 
 
     def add_user(self, json_data):
         sso_id = json_data.get('sso_id')
