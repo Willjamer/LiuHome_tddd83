@@ -67,11 +67,8 @@ export default function Header() {
             </>
           ) : (
             <>
-              <Link href="/login">
-                <Button size="sm">Sign In</Button>
-              </Link>
               <Link href="/ssologin">
-                <Button size="sm">Sign In SSO</Button>
+                <Button size="sm">Sign In </Button>
               </Link>
             </>
           )}
