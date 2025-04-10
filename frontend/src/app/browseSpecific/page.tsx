@@ -1,12 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-    BedDouble,
-    Bath,
-} from "lucide-react";
+import { BedDouble, Bath } from "lucide-react";
 
 interface Apartment {
     apartment_id: number;
@@ -25,21 +22,20 @@ interface Apartment {
 
 export default function BrowseSpecificPage() {
     const router = useRouter();
+    const searchParams = useSearchParams(); // Use Next.js hook to get query params
+
     const [apartment, setApartment] = useState<Apartment | null>(null);
     const [loading, setLoading] = useState(true);
 
-    const searchParams = new URLSearchParams(window.location.search);
-    const apartmentId = searchParams.get("apartment_id"); // Extract apartment_id from URL
+    async function fetchApartmentDetails(): Promise<void> {
+        const apartmentId = searchParams.get("apartment_id"); // Kontrollera att detta är korrekt
+        if (!apartmentId) {
+            console.error("No apartment_id provided in URL");
+            return;
+        }
 
-    async function fetchApartmentDetails(id: string): Promise<void> {
         try {
-            const response = await fetch(`http://localhost:3001/api/getApt/${id}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-
+            const response = await fetch(`http://localhost:3001/api/browseSpecific/${apartmentId}`);
             if (!response.ok) throw new Error("Failed to fetch apartment details");
 
             const data: Apartment = await response.json();
@@ -53,10 +49,8 @@ export default function BrowseSpecificPage() {
     }
 
     useEffect(() => {
-        if (apartmentId) {
-            fetchApartmentDetails(apartmentId as string);
-        }
-    }, [apartmentId]);
+        fetchApartmentDetails();
+    }, []);
 
     if (loading) {
         return <p>Loading...</p>;
@@ -71,7 +65,7 @@ export default function BrowseSpecificPage() {
             <Card className="w-full max-w-2xl">
                 <div className="relative w-full h-64 overflow-hidden">
                     <img
-                        src={"/images/apartment2.jpg"} // byt mot riktig bild sen
+                        src={"/images/apartment2.jpg"} // Replace with actual image URL later
                         alt={apartment.title}
                         className="object-cover w-full h-full"
                     />
