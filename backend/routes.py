@@ -35,6 +35,7 @@ def register_oauth():
 def login():
     return oauth.microsoft.authorize_redirect(
         redirect_uri=url_for("microsoft_login.callback", _external=True)
+        
     )
 
 @apartments_bp.route("/mock-login", methods = ['POST', 'OPTIONS'])
@@ -65,7 +66,6 @@ def mock_login():
 @microsoft_login.route("/callback")
 def callback():
     token = oauth.microsoft.authorize_access_token()
-    # user = oauth.microsoft.parse_id_token(token)
     user = token.get("userinfo")
 
     session["user"] = {
@@ -81,14 +81,8 @@ def callback():
     if not handler.check_user(email):
         handler.add_user(json_data)
 
-    # We might need to use this later //Jonte
-
-    # headers = {"Authorization": f"Bearer {token['access_token']}"}
-    # graph_url = "https://graph.microsoft.com/v1.0/me"
-    # response = request.get(graph_url, headers = headers)
-    # user = response.json()
-    
-    return redirect("http://localhost:3000/ssologin?login=success")
+    # Omdirigera användaren till hemskärmen efter lyckad inloggning
+    return redirect("http://localhost:3000/")
 
 @apartments_bp.route("/api/check-session", methods=["GET"])
 def check_session():

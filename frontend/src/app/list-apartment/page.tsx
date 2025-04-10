@@ -230,7 +230,7 @@ export default function AddApartmentPage() {
                   onClick={() => setIsModalVisible(true)}
                   className="w-full bg-blue-600 text-white py-3 rounded-lg transition-all duration-200 font-medium text-lg shadow-md hover:bg-blue-600"
                 >
-                  Submit Listing
+                  List Apartment - 10 SEK
                 </Button>
                 <p className="text-xs text-center text-gray-500 mt-4">
                   By submitting this form, you agree to our terms and conditions for apartment listings
