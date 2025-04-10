@@ -8,12 +8,17 @@ import SearchBar from "@/components/ui/search-bar";
 
 const HowItWorksPage: React.FC = () => {
   return (
-    <div className="flex min-h-screen flex-col w-full" style={{ backgroundImage: "url('/images/tvåstudenter.png')", backgroundSize: "cover", backgroundPosition: "right" }}>
+    <div className="flex min-h-screen flex-col w-full" style={{ backgroundImage: "url('/images/tvåstudenterdark.png')", backgroundSize: "cover", backgroundPosition: "right" }}>
       <main className="flex-1 p-8 space-y-16">
         <h1 className="text-4xl font-bold text-center text-white mb-4">How It Works</h1>
-        <p className="text-lg text-muted-foreground text-white text-center">
+        {/* <p className="text-lg text-muted-foreground text-white text-center">
           Here's a guide to how our website works.
-        </p>
+        </p> */}
+        <div className="border-1 border-white">
+          {/* <p className="text-lg text-white text-center">
+            Here's a guide to how our website works.
+          </p> */}
+        </div>
         {/* <hr className="border-b" /> */}
 
 
