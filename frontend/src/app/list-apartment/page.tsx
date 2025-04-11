@@ -18,7 +18,7 @@ export default function AddApartmentPage() {
     address: "",
     size: 0,
     number_of_rooms: 0,
-    location: "",
+    area: "", // Bytt från location till area
     rent_amount: 0,
     is_available: true,
     available_from: "",
@@ -179,14 +179,14 @@ export default function AddApartmentPage() {
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                     <MapPin className="h-4 w-4 text-blue-600" />
-                    Location
+                    Area
                   </label>
                   <Input
                     type="text"
-                    name="location"
-                    value={apartment.location}
+                    name="area"
+                    value={apartment.area}
                     onChange={handleChange}
-                    placeholder="Enter the location"
+                    placeholder="Enter the area"
                     className="focus:ring-blue-500 focus:border-blue-500"
                     required
                   />
