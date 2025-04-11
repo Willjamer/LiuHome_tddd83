@@ -7,6 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar } from "lucide-react";
 
+interface User {
+  sso_id: string;
+  name: string;
+  email: string;
+}
+
 interface Apartment {
   apartment_id: number;
   title: string;
@@ -19,6 +25,7 @@ interface Apartment {
   bathrooms: number;
   is_available: boolean;
   available_from?: string;
+  user?: User;
 }
 
 export default function BrowseSpecificPage() {
@@ -100,7 +107,7 @@ export default function BrowseSpecificPage() {
                     />
                   </div>
                   <div>
-                    <div className="font-medium">{apartment.title}</div>
+                    <div className="font-medium">{apartment.user?.name}</div>
                     <div className="text-sm text-muted-foreground">Student at {"liu"}</div>
                     <div className="text-xs">{apartment.address}</div>
                   </div>

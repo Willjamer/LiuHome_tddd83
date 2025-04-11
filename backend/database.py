@@ -51,6 +51,11 @@ class Apartment(db.Model):
             "rent_amount": self.rent_amount,
             "is_available": self.is_available,
             "available_from": self.available_from,
+            "user": {
+                "sso_id": self.user.sso_id,
+                "name": self.user.name,
+                "email": self.user.email
+            } if self.user else None
         }
         
 
