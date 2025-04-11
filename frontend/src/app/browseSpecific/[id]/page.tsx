@@ -133,7 +133,7 @@ export default function BrowseSpecificPage() {
                     />
                   </div>
                   <div>
-                    <div className="font-medium">{apartment.user?.sso_id}</div>
+                    <div className="font-medium">{apartment.user?.name}</div>
                     <div className="text-sm text-muted-foreground">Student at {"liu"}</div>
                     <div className="text-xs">{apartment.address}</div>
                   </div>
