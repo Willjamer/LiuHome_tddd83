@@ -153,6 +153,7 @@ def get_user_profile():
 
 @apartments_bp.route("/api/get-user/<sso_id>", methods=['GET'])
 def get_user(sso_id):
+    logging.info(sso_id)
     if request.method == 'OPTIONS':
         return _build_cors_preflight_response()
     return handler.get_user(sso_id)
