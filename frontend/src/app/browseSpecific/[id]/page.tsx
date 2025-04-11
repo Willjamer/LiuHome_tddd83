@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar } from "lucide-react";
+import { useUser } from "@/app/ssologin/page";
 
 interface User {
   sso_id: string;
@@ -33,6 +34,7 @@ export default function BrowseSpecificPage() {
   const [apartment, setApartment] = useState<Apartment | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const loggedInUser = useUser();
 
   useEffect(() => {
     async function fetchApartment() {
@@ -91,7 +93,7 @@ export default function BrowseSpecificPage() {
             style={{ height: "100%" }}
           />
         </div>
-
+  
         {/* Kort med hyresinformation */}
         <div className="w-1/3">
           <Card className="sticky top-24 h-full">
@@ -104,7 +106,7 @@ export default function BrowseSpecificPage() {
                   </div>
                   <Badge className="bg-green-500 text-white text-sm px-2 py-1">Verified Student</Badge>
                 </div>
-
+  
                 <div className="border rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-4">
                     <Calendar className="h-4 w-4" />
@@ -121,11 +123,11 @@ export default function BrowseSpecificPage() {
                     </div>
                   </div>
                 </div>
-
+  
                 <div className="flex items-center gap-4">
                   <div className="h-12 w-12 rounded-full overflow-hidden">
                     <img
-                      src={"/images/apartment2.jpg"} // BYT GREJERNA MOT REAL PROFILE
+                      src={"/images/apartment2.jpg"} // Replace with real profile picture
                       alt={apartment.title}
                       className="h-full w-full object-cover"
                     />
@@ -135,13 +137,32 @@ export default function BrowseSpecificPage() {
                     <div className="text-sm text-muted-foreground">Student at {"liu"}</div>
                     <div className="text-xs">{apartment.address}</div>
                   </div>
+  
                   <button
                     onClick={showUser}
                     className="px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm"
                   >
                     View profile
                   </button>
+  
+                  {loggedInUser?.sso_id === apartment.user?.sso_id && (
+                    <>
+                      <button
+                        onClick={() => console.log("Edit clicked")}
+                        className="px-3 py-2 bg-yellow-400 text-black rounded-md shadow-sm hover:bg-yellow-500"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => console.log("Delete clicked")}
+                        className="px-3 py-2 bg-red-600 text-white rounded-md shadow-sm hover:bg-red-700"
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
                 </div>
+  
                 <div>
                   <strong>Description:</strong> {apartment.description || "No description available"}
                 </div>
@@ -158,7 +179,7 @@ export default function BrowseSpecificPage() {
           </Card>
         </div>
       </div>
-
+  
       {/* Ny sektion för detaljerad information */}
       <div className="w-full px-16 mt-8">
         <Card className="p-6 shadow-lg">
@@ -177,26 +198,25 @@ export default function BrowseSpecificPage() {
           </div>
         </Card>
       </div>
-        {showModal && user && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
-              <button
-                onClick={() => setShowModal(false)}
-                className="absolute top-2 right-3 text-gray-500 hover:text-black"
-              >
-                ✕
-              </button>
-              <h2 className="text-xl font-semibold mb-4">User Profile</h2>
-              <div className="space-y-2">
-                <p><strong>Name:</strong> {user.name}</p>
-                <p><strong>Email:</strong> {user.email}</p>
-                <p><strong>SSO ID:</strong> {user.sso_id}</p>
-              </div>
+  
+      {showModal && user && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-2 right-3 text-gray-500 hover:text-black"
+            >
+              ✕
+            </button>
+            <h2 className="text-xl font-semibold mb-4">User Profile</h2>
+            <div className="space-y-2">
+              <p><strong>Name:</strong> {user.name}</p>
+              <p><strong>Email:</strong> {user.email}</p>
+              <p><strong>SSO ID:</strong> {user.sso_id}</p>
             </div>
           </div>
-        )}
-
+        </div>
+      )}
     </main>
   );
-}
-
+  
