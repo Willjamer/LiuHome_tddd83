@@ -15,9 +15,18 @@ class courier:
         
         return db_get_all_apartments()
 
-    def get_specific_apartment(self, json_data):
-        apartment_id = json_data.get('apartment_id')
-        return db_get_specific_apartment(apartment_id)
+    def get_specific_apartment(self, apartment_id):
+        try:
+            # Hämta lägenheten från databasen baserat på apartment_id
+            apartment = Apartment.query.get(apartment_id)
+            if not apartment:
+                return jsonify({"error": "Apartment not found"}), 404
+
+            # Returnera lägenhetsdata som JSON
+            return jsonify(apartment.serialize()), 200
+        except Exception as e:
+            print(f"Error fetching apartment: {e}")
+            return jsonify({"error": "An error occurred"}), 500
 
     def add_apartment(self, json_data): 
         print(json_data)

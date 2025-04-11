@@ -7,8 +7,8 @@ import { Badge } from "@/components/ui/badge"
 import SearchBar from "@/components/ui/search-bar";
 
 import {
-    BedDouble,
-    Bath,
+    Home, // Ny ikon för antal rum
+    MapPin, // Ny ikon för area
 } from "lucide-react"
 
 interface Apartment {
@@ -21,7 +21,6 @@ interface Apartment {
     number_of_rooms: number;
     location: string;
     rent_amount: number;
-    bathrooms: number
     is_available: boolean;
     available_from?: string;
 }
@@ -94,17 +93,22 @@ export default function BrowsePage() {
                                     <CardContent className="p-4">
                                         <h3 className="text-lg font-semibold line-clamp-1">{apt.title}</h3>
                                         <div className="flex flex-wrap gap-4 mt-3">
+                                            {/* Antal rum */}
                                             <div className="flex items-center text-sm">
-                                                <BedDouble className="h-4 w-4 mr-1" />
-                                                <span>{apt.number_of_rooms}</span>
+                                                <Home className="h-4 w-4 mr-1" />
+                                                <span>
+                                                    {apt.number_of_rooms} {apt.number_of_rooms === 1 ? "room" : "rooms"}
+                                                </span>
                                             </div>
+
+                                            {/* Area */}
                                             <div className="flex items-center text-sm">
-                                                <Bath className="h-4 w-4 mr-1" />
-                                                <span>{apt.bathrooms}</span>
+                                                <MapPin className="h-4 w-4 mr-1" />
+                                                <span>{apt.location}</span> {/* Byt till apt.area om backend använder "area" */}
                                             </div>
                                         </div>
                                         <div className="mt-3 text-sm text-muted-foreground">
-                                            Available from: {apt.available_from}
+                                            Available from: {apt.available_from ? new Date(apt.available_from).toISOString().split("T")[0] : "Not specified"}
                                         </div>
                                     </CardContent>
                                 </Card>
