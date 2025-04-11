@@ -58,12 +58,13 @@ export default function BrowseSpecificPage() {
   async function showUser() {
     try {
       const this_sso_id = apartment?.user?.sso_id
-      const response = await fetch("http://localhost:3001/get_user/${this_sso_id}", {
+      const response = await fetch('http://localhost:3001/api/get-user/${this_sso_id}', {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-        }
-      })
+        },
+        credentials: "include",
+      });
       if (!response.ok) throw new Error('Failed to fetch user information');
       const data: User = await response.json();
       setUser(data.user)

@@ -149,10 +149,12 @@ def add_appartment():
 def get_user_profile():
     if request.method == 'OPTIONS':
         return _build_cors_preflight_response()
-    return handler.get_user_profile
+    return handler.get_user_profile()
 
 @apartments_bp.route("/api/get-user/<sso_id>", methods=['GET'])
 def get_user(sso_id):
+    if request.method == 'OPTIONS':
+        return _build_cors_preflight_response()
     return handler.get_user(sso_id)
 
 @apartments_bp.route("/api/get-listing", methods=['GET'])
