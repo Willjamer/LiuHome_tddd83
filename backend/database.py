@@ -242,7 +242,8 @@ def db_filtering(rent_interval, size_interval, room_interval, locations, sort_fa
     
 def db_get_specific_apartment(this_apartment_id):
     this_apartment = Apartment.query.get(this_apartment_id)
-
+    logging.info('database getspec ok ')
+    logging.info(this_apartment)
     return jsonify({'apartment' : this_apartment.serialize()})
 
 
