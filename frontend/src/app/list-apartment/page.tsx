@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useUser } from "../ssologin/page";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,15 +12,13 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 
 export default function AddApartmentPage() {
   const router = useRouter();
-  const user = useUser();
   const [apartment, setApartment] = useState({
-    user_id: user?.user?.email || "",
     title: "",
     description: "",
     address: "",
     size: 0,
     number_of_rooms: 0,
-    location: "",
+    area: "", // Bytt från location till area
     rent_amount: 0,
     is_available: true,
     available_from: "",
@@ -34,12 +31,25 @@ export default function AddApartmentPage() {
   const [cvc, setCvc] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setApartment((prev) => ({
       ...prev,
       [name]: value,
     }));
+  };
+
+  const isFormValid = () => {
+    return (
+      apartment.title.trim() !== "" &&
+      apartment.description.trim() !== "" &&
+      apartment.address.trim() !== "" &&
+      apartment.size > 0 &&
+      apartment.number_of_rooms > 0 &&
+      apartment.area.trim() !== "" &&
+      apartment.rent_amount > 0 &&
+      apartment.available_from.trim() !== ""
+    );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -91,7 +101,7 @@ export default function AddApartmentPage() {
               List Your Apartment
             </CardTitle>
             <CardDescription className="text-gray-700 mt-2"> {/* Ändrad textfärg */}
-              Fill in the details below to list your apartment for rent
+            Please make sure to fill out all fields in the form below. All fields are required for listing your apartment.
             </CardDescription>
           </CardHeader>
           
@@ -182,17 +192,34 @@ export default function AddApartmentPage() {
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                     <MapPin className="h-4 w-4 text-blue-600" />
-                    Location
+                    Area
                   </label>
-                  <Input
-                    type="text"
-                    name="location"
-                    value={apartment.location}
+                  <select
+                    name="area"
+                    value={apartment.area}
                     onChange={handleChange}
-                    placeholder="Enter the location"
-                    className="focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required
-                  />
+                  >
+                    <option value="" disabled>
+                      Select an area
+                    </option>
+                    <option value="Ryd">Ryd</option>
+                    <option value="Colonia">Colonia</option>
+                    <option value="Valla">Valla</option>
+                    <option value="Lambohov">Lambohov</option>
+                    <option value="T1">T1</option>
+                    <option value="Irrblosset">Irrblosset</option>
+                    <option value="Vallastaden">Vallastaden</option>
+                    <option value="Ebbe Park">Ebbe Park</option>
+                    <option value="Gottfridsberg">Gottfridsberg</option>  
+                    <option value="Skäggetorp">Skäggetorp</option>
+                    <option value="Berga">Berga</option>
+                    <option value="Flamman">Flamman</option>
+                    <option value="Fjärillen">Fjärillen</option>
+                    <option value="City">City</option>
+                  
+                  </select>
                 </div>
                 
                 <div>
@@ -221,6 +248,7 @@ export default function AddApartmentPage() {
                     name="available_from"
                     value={apartment.available_from}
                     onChange={handleChange}
+                    min={new Date().toISOString().split("T")[0]} // Sätter dagens datum som minsta tillåtna datum
                     className="focus:ring-blue-500 focus:border-blue-500"
                     required
                   />
@@ -231,9 +259,12 @@ export default function AddApartmentPage() {
                 <Button
                   type="button"
                   onClick={() => setIsModalVisible(true)}
-                  className="w-full bg-blue-600 text-white py-3 rounded-lg transition-all duration-200 font-medium text-lg shadow-md hover:bg-blue-600"
+                  className={`w-full py-3 rounded-lg transition-all duration-200 font-medium text-lg shadow-md ${
+                    isFormValid() ? "bg-blue-600 text-white hover:bg-blue-700" : "bg-gray-400 text-gray-700 cursor-not-allowed"
+                  }`}
+                  disabled={!isFormValid()}
                 >
-                  List Apartment - 10 SEK
+                  {isFormValid() ? "List Apartment - 10 SEK" : "Please fill in all required information above"}
                 </Button>
                 <p className="text-xs text-center text-gray-500 mt-4">
                   By submitting this form, you agree to our terms and conditions for apartment listings
