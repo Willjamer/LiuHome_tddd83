@@ -145,8 +145,10 @@ def add_appartment():
     # json_data['user_id'] = user_id
     return handler.add_apartment(json_data)
 
-@apartments_bp.route("/api/get-user-profile", methods=['GET'])
+@apartments_bp.route("/api/get-user-profile", methods=['GET', 'OPTIONS'])
 def get_user_profile():
+    if request.method == 'OPTIONS':
+        return _build_cors_preflight_response()
     return handler.get_user_profile
 
 @apartments_bp.route("/api/get-user/<sso_id>", methods=['GET'])
