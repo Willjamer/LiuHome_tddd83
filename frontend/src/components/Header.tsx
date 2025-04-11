@@ -30,9 +30,11 @@ export default function Header() {
             <Link href="/about" className="text-sm font-medium hover:underline underline-offset-4">
               About
             </Link>
-            <Link href="/swish" className="text-sm font-medium hover:underline underline-offset-4">
+
+            {/* <Link href="/swish" className="text-sm font-medium hover:underline underline-offset-4">
               Swish
-            </Link>
+            </Link>*/}
+            
           </nav>
           <div className="flex items-center gap-4 w-1/3 justify-center">
             <Link href="/list-apartment">
