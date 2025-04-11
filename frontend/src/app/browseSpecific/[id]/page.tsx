@@ -47,7 +47,7 @@ export default function BrowseSpecificPage() {
         console.error("Error fetching apartment:", error);
       }
     }
-
+    console.log(loggedInUser)
     if (id) {
       fetchApartment();
     }
@@ -145,7 +145,7 @@ export default function BrowseSpecificPage() {
                     View profile
                   </button>
   
-                  {loggedInUser?.sso_id === apartment.user?.sso_id && (
+                  {loggedInUser?.user?.email.split("@")[0] === apartment.user?.sso_id && (
                     <>
                       <button
                         onClick={() => console.log("Edit clicked")}
@@ -219,4 +219,4 @@ export default function BrowseSpecificPage() {
       )}
     </main>
   );
-  
+}
