@@ -78,8 +78,7 @@ class courier:
 
         return db_filtering(rent_interval, size_interval, room_interval, locations, sort_factor, asc)
 
-    def get_user_profile(self, json_data):
-        sso_id = json_data.get('sso_id')
+    def get_user(self, sso_id):
         return db_get_user(sso_id)
     
     def get_logged_in_user(self, json_data):

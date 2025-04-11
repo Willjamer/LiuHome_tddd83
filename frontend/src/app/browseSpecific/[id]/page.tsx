@@ -31,6 +31,8 @@ interface Apartment {
 export default function BrowseSpecificPage() {
   const { id } = useParams(); // Hämta ID från URL:en
   const [apartment, setApartment] = useState<Apartment | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     async function fetchApartment() {
@@ -51,6 +53,26 @@ export default function BrowseSpecificPage() {
 
   if (!apartment) {
     return <div>Loading...</div>;
+  }
+
+  async function showUser() {
+    try {
+      const this_sso_id = apartment?.user?.sso_id
+      const response = await fetch("http://localhost:3001/get_user/${this_sso_id}", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+      if (!response.ok) throw new Error('Failed to fetch user information');
+      const data: User = await response.json();
+      setUser(data.user)
+      setShowModal(true);
+    } catch (error) {
+      console.error("Error fetching user:", error)
+    }
+
+
   }
 
   return (
@@ -107,10 +129,16 @@ export default function BrowseSpecificPage() {
                     />
                   </div>
                   <div>
-                    <div className="font-medium">{apartment.user?.name}</div>
+                    <div className="font-medium">{apartment.user?.sso_id}</div>
                     <div className="text-sm text-muted-foreground">Student at {"liu"}</div>
                     <div className="text-xs">{apartment.address}</div>
                   </div>
+                  <button
+                    onClick={showUser}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm"
+                  >
+                    View profile
+                  </button>
                 </div>
                 <div>
                   <strong>Description:</strong> {apartment.description || "No description available"}
@@ -147,6 +175,26 @@ export default function BrowseSpecificPage() {
           </div>
         </Card>
       </div>
+        {showModal && user && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
+              <button
+                onClick={() => setShowModal(false)}
+                className="absolute top-2 right-3 text-gray-500 hover:text-black"
+              >
+                ✕
+              </button>
+              <h2 className="text-xl font-semibold mb-4">User Profile</h2>
+              <div className="space-y-2">
+                <p><strong>Name:</strong> {user.name}</p>
+                <p><strong>Email:</strong> {user.email}</p>
+                <p><strong>SSO ID:</strong> {user.sso_id}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
     </main>
   );
 }
+

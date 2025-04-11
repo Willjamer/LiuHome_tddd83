@@ -149,9 +149,9 @@ def add_appartment():
 def get_user_profile():
     return handler.get_user_profile
 
-@apartments_bp.route("/api/get-user", methods=['GET'])
-def get_user():
-    return handler.get_user()
+@apartments_bp.route("/api/get-user/<sso_id>", methods=['GET'])
+def get_user(sso_id):
+    return handler.get_user(sso_id)
 
 @apartments_bp.route("/api/get-listing", methods=['GET'])
 def get_listing():

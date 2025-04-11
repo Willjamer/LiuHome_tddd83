@@ -74,15 +74,15 @@ class User(db.Model):
     recieved_reviews = db.relationship("Review", foreign_keys = "[Review.reviewed_user_id]", backref = "reviewed_user")
 
     def __repr__(self):
-        return f"<User {self.sso_id}: {self.name}: {self.email}: {self.apartment}>"
+        return f"<User {self.sso_id}: {self.name}: {self.email}>"
     
     def serialize(self):
         return {
             "sso_id": self.sso_id,
             "name": self.name,
             "email": self.email,
-            "apartment": self.apartment.serialize(),
-            "listing_expiry_date": self.listing_expiry_date
+            # "apartment": self.apartment.serialize(),
+            # "listing_expiry_date": self.listing_expiry_date
         }
     
     def set_password(self, password):
@@ -283,9 +283,9 @@ def db_remove_appartment(this_apartment_id):
     db.session.commit()
     return jsonify({'message': 'apartment taken down'})
 
-def db_get_user(this_sso_id):
+def db_get_user(sso_id):
     
-    this_user = User.query.get(this_sso_id)
+    this_user = User.query.get(sso_id)
     return jsonify({'user': this_user.serialize()})
 
 
