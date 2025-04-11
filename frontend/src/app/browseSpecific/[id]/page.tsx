@@ -31,7 +31,7 @@ export default function BrowseSpecificPage() {
         const response = await fetch(`http://localhost:3001/api/browseSpecific/${id}`);
         if (!response.ok) throw new Error("Failed to fetch apartment");
         const data: Apartment = await response.json();
-        setApartment(data);
+        setApartment(data.apartment);
       } catch (error) {
         console.error("Error fetching apartment:", error);
       }
