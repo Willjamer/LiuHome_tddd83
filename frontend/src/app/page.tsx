@@ -49,25 +49,27 @@ export default function Home() {
       <main className="flex-1">
 
         <section className="relative">
-          <div className="absolute inset-0" />
+          <div className="absolute" />
           <div
-            className="relative h-[500px] bg-cover bg-center"
+            className="relative h-[75vh] bg-cover bg-center"
             style={{ backgroundImage: "url('/images/Studenthuset.jpg')", backgroundPosition: "center 1%", }}
           >
-            <div className="h-full flex flex-col justify-center items-center sm:pl-8 space-y-4 backdrop-blur-md">
+            <div className="h-full flex flex-col justify-center items-center sm:pl-8 space-y-4 backdrop-blur-md ">
 
-              <h1 className="text-4xl font-bold text-black tracking-tight sm:text-5xl">Find Your Perfect Student Apartment</h1>
+              <h1 className="text-4xl  font-bold text-black tracking-tight sm:text-5xl">Find Your Perfect Student Apartment</h1>
               <p className="text-lg text-black">
                 Rent directly from other students. No middlemen, no agency fees.
               </p>
               <Button onClick={() => router.push('/browse')} variant="outline" className="whitespace-nowrap font-bold">
                 Browse Apartments
               </Button>
-
+              
             </div>
+            
           </div>
+          <div className="h-[8vh] absolute inset-0 top-[67vh] bg-gradient-to-b from-transparent to-white"></div>
         </section>
-
+        
 
         <section className="py-0 flex justify-center">
           <div className="container">
