@@ -99,12 +99,13 @@ class courier:
     def login(self, json_data):
         return db_login(json_data) 
     
-    def add_review(self, current_user_id, json_data):
+    def add_review(self, sso_id, json_data):
         content = json_data.get('content')
-        rating = json_data.get('rating')
-        reviewed_user_id = json_data.get('reviewed_user_id')
-
-        db_add_review(content, rating, current_user_id, reviewed_user_id)
+        liked = json_data.get('liked')
+        reviewed_sso_id = sso_id
+        reviwer_sso_id = json_data.get('reviewer_id')
+        logging.info('rq add review ok')
+        db_add_review(content, liked, reviwer_sso_id, reviewed_sso_id)
         return {'message': 'review added'}
     
     def edit_review(self, json_data):

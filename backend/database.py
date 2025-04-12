@@ -4,7 +4,7 @@ from extensions import db, bcrypt
 # from sqlalchemy.event import listens_for
 # from flask_mail import Mail, Message  # Assuming you're using Flask-Mail
 from flask import current_app
-import datetime
+from datetime import datetime
 import traceback
 import itertools
 import characters
@@ -70,8 +70,8 @@ class User(db.Model):
     # listing_expiry_date = db.Column(db.Date, nullable = False) # Vi vår kolla på denna. Vettefan riktigt hur vi ska styra upp det. 
 
     #Creating a relationship between users and reviews
-    created_reviews = db.relationship("Review", foreign_keys = "[Review.reviewer_id]", backref = "reviewer")
-    recieved_reviews = db.relationship("Review", foreign_keys = "[Review.reviewed_user_id]", backref = "reviewed_user")
+    created_reviews = db.relationship("Review", foreign_keys = "[Review.reviewer_sso_id]", backref = "reviewer")
+    recieved_reviews = db.relationship("Review", foreign_keys = "[Review.reviewed_sso_id]", backref = "reviewed_user")
 
     def __repr__(self):
         return f"<User {self.sso_id}: {self.name}: {self.email}>"
@@ -98,8 +98,8 @@ class Review(db.Model):
     liked      = db.Column(db.Boolean, nullable = False)
     review_date = db.Column(db.Date, nullable = False)
 
-    reviewer_id = db.Column(db.String, db.ForeignKey("user.sso_id"), nullable = False)
-    reviewed_user_id = db.Column(db.String, db.ForeignKey("user.sso_id"), nullable = False)
+    reviewer_sso_id = db.Column(db.String, db.ForeignKey("user.sso_id"), nullable = False)
+    reviewed_sso_id = db.Column(db.String, db.ForeignKey("user.sso_id"), nullable = False)
 
     def __repr__(self):
         return f"<Review {self.review_id}: {self.content}: {self.rating}: {self.review_date}>"
@@ -316,24 +316,28 @@ def db_login(json_data):
         return jsonify({'access_token': access_token})
     return jsonify({'message': 'login failed'})
 
-def db_add_review(content, rating, reviewer_id, reviewed_user_id):
+def db_add_review(content, liked, reviewer_sso_id, reviewed_sso_id):
 
-    reviewer = User.query.get(reviewer_id)
-    reviewed_user = User.query.get(reviewed_user_id)
+    reviewing_user = User.query.get(reviewer_sso_id)
+    reviewed_user = User.query.get(reviewed_sso_id)
 
-    if (reviewer and reviewed_user):
+    if (reviewing_user and reviewed_user):
         try:
             new_review = Review(
                 # review_id = review_id,
                 review_id = 1000,
                 content = content,
-                rating = rating,
+                liked = liked,
                 review_date = datetime.today(),
-                reviewer = reviewer,
-                reviewed_user = reviewed_user
+                # reviewer = reviewing_user,
+                # reviewed_user = reviewed_user
+                reviewer_sso_id = reviewer_sso_id,
+                reviewed_sso_id = reviewed_sso_id,
             )
             db.session.add(new_review)
             db.session.commit()
+            logging.info('db add review ok')
+            return jsonify({'message': 'Review added successfully'})
         except Exception as e:
             traceback.print_exc()
     else:

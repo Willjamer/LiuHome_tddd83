@@ -149,14 +149,24 @@ def add_appartment():
 def get_user_profile():
     if request.method == 'OPTIONS':
         return _build_cors_preflight_response()
-    return handler.get_user_profile()
+    elif request.method == 'GET':
+        return handler.get_user_profile()
 
-@apartments_bp.route("/api/get-user/<sso_id>", methods=['GET'])
+
+@apartments_bp.route("/api/get-user/<sso_id>", methods=['GET', 'POST'])
 def get_user(sso_id):
-    logging.info(sso_id)
     if request.method == 'OPTIONS':
         return _build_cors_preflight_response()
-    return handler.get_user(sso_id)
+    elif request.method == 'GET':
+        return handler.get_user(sso_id)
+
+    # Denna route är för att lägga till en review
+    elif request.method == 'POST':
+        json_data = request.get_json()
+        logging.info('routes add review ok')
+        return handler.add_review(sso_id, json_data)
+        
+    
 
 @apartments_bp.route("/api/get-listing", methods=['GET'])
 def get_listing():
@@ -188,6 +198,9 @@ def add_review():
     current_user = get_jwt_identity()
     json_data = request.get_json()
     return handler.add_review(current_user, json_data)
+
+
+
 
 @apartments_bp.route("/api/get-review", methods=['GET', 'PUT', 'DELETE'])
 @jwt_required()
