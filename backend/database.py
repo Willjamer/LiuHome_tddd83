@@ -79,8 +79,7 @@ class User(db.Model):
         return {
             "sso_id": self.sso_id,
             "email": self.email,
-            "first_name": self.first_name,
-            "last_name": self.last_name,
+            "name": self.name,
             "profile_picture": self.profile_picture,
             "program": self.program,
             "year": self.year,
@@ -306,7 +305,7 @@ def db_add_user(json_data):
         # FAKE SSO CREATION
         if not sso_id:
             while True:
-                sso_id = uuid.uuid4().int >> 96
+                sso_id = str(uuid.uuid4().int >> 96)
                 if not User.query.get(sso_id):
                     break
 

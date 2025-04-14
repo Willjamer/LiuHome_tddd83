@@ -37,19 +37,19 @@ class courier:
         payment_data = json_data.get('payment')
         apartment_id = apartment_data.get('apartment_id')
 
-        user_id = apartment_data.get('user_id')
+        user_id = json_data.get('sso_id')
         title = apartment_data.get('title')
         description = apartment_data.get('description')
         address = apartment_data.get('address')
         size = apartment_data.get('size')
         number_of_rooms = apartment_data.get('number_of_rooms')
-        location = apartment_data.get('location')
+        location = apartment_data.get('area')
         rent_amount = apartment_data.get('rent_amount')
 
         available_from_primary = apartment_data.get('available_from')
         logging.info('available_from:', available_from_primary)
         available_from = available_from_primary.split('-')
-
+        logging.info(user_id)
 
         # this_user = db_get_user(user_id).json
         # expiry_date = this_user['user']['listing_expiry_date']

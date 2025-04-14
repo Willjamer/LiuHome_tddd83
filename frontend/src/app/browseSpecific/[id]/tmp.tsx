@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Calendar } from "lucide-react"
+import { Calendar} from "lucide-react"
 
 interface Apartment {
   apartment_id: number;
@@ -21,7 +21,6 @@ interface Apartment {
   available_from?: string;
 }
 
-
 export default function BrowseSpecificPage() {
   const { id } = useParams(); // Hämta ID från URL:en
   const [apartment, setApartment] = useState<Apartment | null>(null);
@@ -33,8 +32,7 @@ export default function BrowseSpecificPage() {
         if (!response.ok) throw new Error('Failed to fetch apartment');
         const data: Apartment = await response.json();
         setApartment(data);
-        console.log(apartment)
-
+        
 
       } catch (error) {
         console.error('Error fetching apartment:', error);
@@ -50,7 +48,6 @@ export default function BrowseSpecificPage() {
     return <div>Loading...</div>;
   }
 
-
   return (
 
     <main className="w-min-screen">
@@ -58,7 +55,7 @@ export default function BrowseSpecificPage() {
         {/* Bildsektion */}
         <div className="w-2/3">
           <Image
-            src={`/images/${apartment.location || "apartment3"}.jpg`}
+            src={"/images/apartment2.jpg"}
             alt={apartment.title}
             width={500}
             height={300}
@@ -100,7 +97,7 @@ export default function BrowseSpecificPage() {
                 <div className="flex items-center gap-4">
                   <div className="h-12 w-12 rounded-full overflow-hidden">
                     <img
-                      src={`/images/${apartment.location || "apartment3"}.jpg`} // BYT GREJERNA MOT REAL PROFILE
+                      src={"/images/apartment2.jpg"} // BYT GREJERNA MOT REAL PROFILE
                       alt={apartment.title}
                       className="h-full w-full object-cover"
                     />
@@ -136,7 +133,6 @@ export default function BrowseSpecificPage() {
             <p><strong>Description:</strong> {apartment.description || "No description available"}</p>
             <p><strong>Address:</strong> {apartment.address || "No address provided"}</p>
             <p><strong>Rent:</strong> {apartment.rent_amount ? `${apartment.rent_amount} SEK/month` : "Rent not specified"}</p>
-            <p><strong>location:</strong> {apartment.location ? `${apartment.location}` : "location not specified"}</p>
             <p><strong>Rooms:</strong> {apartment.number_of_rooms || "N/A"}</p>
             <p>
               <strong>Available from:</strong>{" "}
