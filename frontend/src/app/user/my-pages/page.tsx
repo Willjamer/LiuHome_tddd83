@@ -84,6 +84,7 @@ export default function ProfilePage() {
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("sso_id");
+    window.dispatchEvent(new Event('authChanged'));
     router.push("/user/login");
   };
 

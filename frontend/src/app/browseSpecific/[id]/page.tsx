@@ -3,6 +3,7 @@
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -48,10 +49,12 @@ export default function BrowseSpecificPage() {
         const data: Apartment = await response.json();
         console.log(data)
         setApartment(data);
+
       } catch (error) {
         console.error("Error fetching apartment:", error);
       }
     }
+
 
     async function getLoggedInUser() {
       try {
@@ -100,14 +103,16 @@ export default function BrowseSpecificPage() {
     }
   }
 
+
   if (!apartment) return <div>Loading...</div>;
+
 
   return (
     <main className="w-min-screen">
       <div className="flex flex-row w-screen px-16 gap-8">
         <div className="w-2/3">
           <Image
-            src={"/images/apartment2.jpg"}
+            src={`/images/${apartment.location || "apartment3"}.jpg`}
             alt={apartment.title}
             width={500}
             height={300}
@@ -148,7 +153,9 @@ export default function BrowseSpecificPage() {
                 <div className="flex items-center gap-4">
                   <div className="h-12 w-12 rounded-full overflow-hidden">
                     <img
-                      src={"/images/apartment2.jpg"}
+
+                      src={`/images/${apartment.location || "apartment3"}.jpg`} // BYT GREJERNA MOT REAL PROFILE
+
                       alt={apartment.title}
                       className="h-full w-full object-cover"
                     />
@@ -204,12 +211,15 @@ export default function BrowseSpecificPage() {
 
       <div className="w-full px-16 mt-8">
         <Card className="p-6 shadow-lg">
-          <h2 className="text-2xl font-bold mb-4">Apartment Details</h2>
+          <h2 className="text-2xl font-bold mb-4">{apartment.address}</h2>
           <div className="space-y-2">
             <p><strong>Description:</strong> {apartment.description || "No description available"}</p>
-            <p><strong>Address:</strong> {apartment.address || "No address provided"}</p>
-            <p><strong>Rent:</strong> {apartment.rent_amount} SEK/month</p>
-            <p><strong>Rooms:</strong> {apartment.number_of_rooms || "N/A"}</p>
+
+            <p><strong>Rent:</strong> {apartment.rent_amount ? `${apartment.rent_amount} SEK/month` : "Rent not specified"}</p>
+            <p><strong>location:</strong> {apartment.location ? `${apartment.location}` : "location not specified"}</p>
+            <p><strong>location:</strong> {apartment.number_of_rooms ? `${apartment.number_of_rooms} Rooms` : "rooms not specified"}</p>
+            <p><strong>Size:</strong> {apartment.size ? `${apartment.size} m²` : "Size not specified"}</p>
+
             <p>
               <strong>Available from:</strong>{" "}
               {apartment.available_from

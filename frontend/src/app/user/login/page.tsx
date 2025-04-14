@@ -35,6 +35,7 @@ export default function LoginPage() {
         // Spara token, t.ex. i localStorage, och/eller hantera den i ett auth-context
         localStorage.setItem("access_token", response.data.access_token);
         localStorage.setItem("sso_id", response.data.sso_id)
+        window.dispatchEvent(new Event('authChanged'));
 
         // Omdirigera till startsidan eller en dashboard
         router.push("/");
