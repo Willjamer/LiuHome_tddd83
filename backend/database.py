@@ -31,7 +31,7 @@ class Apartment(db.Model):
     # date_added      = db.Column(db.Date, nullable = False)
     # expiry_date     = db.Column(db.Date, nullable = False)
     # Något här om images, vet ej än hur
-
+    user = db.relationship('User', back_populates='apartment')
     all_locations = ["Ryd", "Valla", "Irrblosset", "T1", "Lambohov", "Gottfridsberg"]
 
     def __repr__(self):
@@ -50,7 +50,11 @@ class Apartment(db.Model):
             "rent_amount": self.rent_amount,
             "is_available": self.is_available,
             "available_from": self.available_from,
-
+            "user": {
+                "sso_id": self.user.sso_id,
+                "name": self.user.name,
+                "email": self.user.email
+            } if self.user else None
         }
         
 #This user class is for the website without SSO-id 
@@ -68,7 +72,7 @@ class User(db.Model):
     bio = db.Column(db.Text, nullable=True)                # Kort presentation
 
     # Relationer
-    apartment = db.relationship("Apartment", backref="user", uselist=False)
+    apartment = db.relationship("Apartment", back_populates="user", uselist=False)
     created_reviews = db.relationship("Review", foreign_keys="[Review.reviewer_id]", backref="reviewer")
     recieved_reviews = db.relationship("Review", foreign_keys="[Review.reviewed_user_id]", backref="reviewed_user")
 

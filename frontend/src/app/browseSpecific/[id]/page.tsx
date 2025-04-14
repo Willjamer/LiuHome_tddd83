@@ -29,13 +29,6 @@ interface Apartment {
   user?: User;
 }
 
-interface Review {
-  like: boolean;
-  content?: string;
-  review_date: string;
-  reviewer: User;
-  reviewed: User;
-}
 
 export default function BrowseSpecificPage() {
   const { id } = useParams();
@@ -88,8 +81,8 @@ export default function BrowseSpecificPage() {
 
   async function showUser() {
     try {
-      // const this_sso_id = apartment?.user?.sso_id;
-      const this_sso_id = apartment?.user_id;
+      const this_sso_id = apartment?.user?.sso_id;
+
       console.log(this_sso_id)
       const response = await fetch(`http://localhost:3001/api/get-user/${this_sso_id}`, {
         method: "GET",
@@ -104,36 +97,6 @@ export default function BrowseSpecificPage() {
       setShowUserModal(true);
     } catch (error) {
       console.error("Error fetching user:", error);
-    }
-  }
-
-  async function leaveReview() {
-    const loggedInSSOId = loggedInUser?.email.split("@")[0];
-    const this_sso_id = apartment?.user?.sso_id;
-    if (!loggedInSSOId || !this_sso_id || liked === null) return;
-
-    const data = {
-      reviewer_id: loggedInSSOId,
-      liked,
-      content: reviewText,
-    };
-
-    try {
-      const response = await fetch(`http://localhost:3001/api/get-user/${this_sso_id}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) throw new Error("Failed to submit review");
-
-      setShowReviewModal(false);
-      setReviewText("");
-      setLiked(null);
-      alert("Review submitted");
-    } catch (error) {
-      console.error("Error submitting review:", error);
     }
   }
 
@@ -192,7 +155,7 @@ export default function BrowseSpecificPage() {
                   </div>
                   <div>
                     {/* <div className="font-medium">{apartment.user?.name}</div> */}
-                    <div className="font-medium">{user?.name}</div>
+                    <div className="font-medium">{apartment?.user?.name}</div>
                     <div className="text-sm text-muted-foreground">Student at {"liu"}</div>
                     <div className="text-xs">{apartment.address}</div>
                   </div>
@@ -272,55 +235,6 @@ export default function BrowseSpecificPage() {
               <p><strong>Email:</strong> {user.email}</p>
               <p><strong>SSO ID:</strong> {user.sso_id}</p>
             </div>
-            <button
-              onClick={() => setShowReviewModal(true)}
-              className="absolute bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded"
-            >
-              Leave a review
-            </button>
-          </div>
-        </div>
-      )}
-
-      {showReviewModal && user && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-8 w-[600px] h-[300px] relative">
-            <h2 className="text-xl font-semibold mb-4">Leave a review</h2>
-            <div className="flex items-center gap-4 mb-4">
-              <button
-                onClick={() => setShowReviewModal(false)}
-                className="absolute top-2 right-3 text-gray-500 hover:text-black"
-              >
-                ✕
-              </button>
-              <Button
-                onClick={() => setLiked(true)}
-                className={liked === true ? "bg-green-600 text-white" : ""}
-              >
-                👍 Like
-              </Button>
-              <Button
-                onClick={() => setLiked(false)}
-                className={liked === false ? "bg-red-600 text-white" : ""}
-              >
-                👎 Dislike
-              </Button>
-            </div>
-
-            <textarea
-              className="w-full border rounded p-2"
-              rows={4}
-              placeholder="Add a description"
-              value={reviewText}
-              onChange={(e) => setReviewText(e.target.value)}
-            />
-
-            <button
-              onClick={leaveReview}
-              className="absolute bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded"
-            >
-              Publish review
-            </button>
           </div>
         </div>
       )}
