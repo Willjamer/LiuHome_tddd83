@@ -84,7 +84,7 @@ export default function BrowsePage() {
                                 <Card className="overflow-hidden rounded-lg shadow-lg border-none p-0 h-full hover:shadow-xl transition-shadow group">
                                     <div className="relative w-full h-48 overflow-hidden">
                                         <img
-                                            src={"/images/apartment2.jpg"} // CHANGE THIS SO WE GET DIFF IMAGES BASED ON SOME REQ, AREA/APART
+                                            src={`/images/${apt.location || "apartment1"}.jpg`}  // CHANGE THIS SO WE GET DIFF IMAGES BASED ON SOME REQ, AREA/APART
                                             alt={apt.title}
                                             className="object-cover w-full h-full transition-transform duration-300 ease-in-out transform group-hover:scale-105"
                                         />
