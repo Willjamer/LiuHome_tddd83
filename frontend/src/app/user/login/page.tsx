@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 
+
 export default function LoginPage() {
   const router = useRouter();
   const [form, setForm] = useState({
@@ -45,6 +46,10 @@ export default function LoginPage() {
       setError(err.response?.data?.message || "Something went wrong");
     }
   };
+
+  const UserContext = createContext<{
+    user: 
+  }
 
   return (
     <div className="flex flex-col h-screen gap-8 pb-32 justify-center items-center w-full">
