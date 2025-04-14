@@ -89,6 +89,10 @@ class courier:
     def login(self, json_data):
         return db_login(json_data) 
     
+    def update_user_profile(self, json_data):
+        return db_update_user_profile(json_data)
+
+    
     def add_review(self, json_data):
         content = json_data.get('content')
         rating = json_data.get('rating')

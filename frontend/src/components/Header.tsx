@@ -1,12 +1,20 @@
+"use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import {House} from "lucide-react"
 
 export default function Header() {
-    return (
-        <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 ">
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  useEffect(() => {
+    const token = sessionStorage.getItem("access_token");
+    setIsLoggedIn(!!token);
+  }, []);
+
+    return (
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 ">
         <div className="flex h-16 items-center justify-between px-4 ">
           <Link href="/" className="flex items-center gap-2 font-bold text-xl w-1/3 justify-center">
             <House className="h-5 w-5" />
@@ -22,9 +30,11 @@ export default function Header() {
             <Link href="/about" className="text-sm font-medium hover:underline underline-offset-4">
               About
             </Link>
-            <Link href="/swish" className="text-sm font-medium hover:underline underline-offset-4">
+
+            {/* <Link href="/swish" className="text-sm font-medium hover:underline underline-offset-4">
               Swish
-            </Link>
+            </Link>*/}
+            
           </nav>
           <div className="flex items-center gap-4 w-1/3 justify-center">
             <Link href="/list-apartment">
@@ -32,13 +42,18 @@ export default function Header() {
                 List Your Place
               </Button>
             </Link>
-            <Link href="/login">
+            {isLoggedIn ? (
+            <Link href="/user/my-pages">
+              <Button size="sm">My Pages</Button>
+            </Link>
+          ) : (
+            <Link href="/user/login">
               <Button size="sm">Sign In</Button>
             </Link>
-          </div>
-
+          )}
         </div>
-      </header>
-    )
-  }
+      </div>
+    </header>
+  );
+}
   
