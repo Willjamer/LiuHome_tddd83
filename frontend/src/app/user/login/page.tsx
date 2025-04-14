@@ -48,9 +48,7 @@ export default function LoginPage() {
     }
   };
 
-  const UserContext = createContext<{
-    user: 
-  }
+  
 
   return (
     <div className="flex flex-col h-screen gap-8 pb-32 justify-center items-center w-full">
