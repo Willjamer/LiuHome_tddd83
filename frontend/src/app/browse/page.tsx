@@ -70,13 +70,14 @@ export default function BrowsePage() {
     return (
         <div className="min-h-screen flex flex-col">
             <main className="flex-1 py-8 mx-8">
+                {/* x
                 <section className="flex justify-center items-center w-full flex-col">
                     <h1 className="text-3xl font-bold text-center">Search for the perfect apartment for you!</h1>
                     <div className="bg-card rounded-lg p-4 w-full max-w-6xl mb-6">
                         <SearchBar onSearch={handleSearch} />
                     </div>
                 </section>
-
+                */}
                 <section className="flex-1 justify-center ">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-center">
                         {filteredApartments.map((apt) => (
