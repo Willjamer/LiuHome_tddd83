@@ -5,16 +5,30 @@ import axios from "axios";
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search, Calendar, House, Users } from "lucide-react"
+import { Search, Calendar, House, Users, MapPin } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
 
+interface Apartment {
+  apartment_id: number;
+  user_id: number;
+  title: string;
+  description?: string;
+  address: string;
+  size: number;
+  number_of_rooms: number;
+  location: string;
+  rent_amount: number;
+  is_available: boolean;
+  available_from?: string;
+}
 
 //TESTING COMMENT 1232323
 export default function Home() {
   const [data, setData] = useState(null);
   const router = useRouter();
+  const [apartments, setApartments] = useState<Apartment[]>([]);
 
   const featuredListings = [
     {
@@ -39,7 +53,34 @@ export default function Home() {
       imageUrl: "/images/apartment3.jpg",
     },
   ];
+  async function fetchApartments(): Promise<void> {
+    try {
+      const response = await fetch("http://localhost:3001/api/get-apartments", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
 
+      if (!response.ok) throw new Error("Failed to fetch apartments");
+
+      // OM STUB, KÖR DENNA
+      // const apartments: Apartment[] = await response.json();
+
+      // OM VANLIG (databas), KÖR DESSA TVÅ
+      const data = await response.json();
+      const apartments: Apartment[] = data.Apartments;
+      setApartments(apartments.slice(0, 3));
+      console.log("Apartments:", apartments);
+
+    } catch (error) {
+      console.error("Error:", error);
+      setApartments([]);
+    }
+  }
+  useEffect(() => {
+    fetchApartments();
+  }, []);
 
   return (
 
@@ -63,13 +104,13 @@ export default function Home() {
               <Button onClick={() => router.push('/browse')} variant="outline" className="whitespace-nowrap font-bold">
                 Browse Apartments
               </Button>
-              
+
             </div>
-            
+
           </div>
           <div className="h-[8vh] absolute inset-0 top-[67vh] bg-gradient-to-b from-transparent to-white"></div>
         </section>
-        
+
 
         <section className="py-0 flex justify-center">
           <div className="container">
@@ -82,16 +123,32 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-between px-2">
-              {featuredListings.map((listing) => (
-                <Link href={`/listings/${listing.id}`} key={listing.id}>
+              {apartments.map((apt) => (
+                <Link href={`browseSpecific/${apt.apartment_id}`} key={apt.apartment_id}>
                   <Card className="overflow-hidden rounded-lg shadow-lg border-none pt-0 group">
                     <div className="relative w-full h-56 rounded-t-lg overflow-hidden">
-                      <Image src={listing.imageUrl} alt={listing.title} width={500} height={300} className="object-cover w-full h-full transition-transform duration-300 ease-in-out transform group-hover:scale-105" />
+                      <Image src={"/images/apartment2.jpg"} alt={apt.title} width={500} height={300} className="object-cover w-full h-full transition-transform duration-300 ease-in-out transform group-hover:scale-105" />
                     </div>
                     <CardContent className="p-4">
-                      <h3 className="text-lg font-semibold">{listing.title}</h3>
-                      <p className="text-sm text-gray-500">{listing.location}</p>
-                      <p className="text-md font-bold mt-2">{listing.price}</p>
+                      <h3 className="text-lg font-semibold line-clamp-1">{apt.title}</h3>
+                      <div className="flex flex-wrap gap-4 mt-3">
+                        {/* Antal rum */}
+                        <div className="flex items-center text-sm">
+                          <House className="h-4 w-4 mr-1" />
+                          <span>
+                            {apt.number_of_rooms} {apt.number_of_rooms === 1 ? "room" : "rooms"}
+                          </span>
+                        </div>
+
+                        {/* Area */}
+                        <div className="flex items-center text-sm">
+                          <MapPin className="h-4 w-4 mr-1" />
+                          <span>{apt.location}</span> {/* Byt till apt.area om backend använder "area" */}
+                        </div>
+                      </div>
+                      <div className="mt-3 text-sm text-muted-foreground">
+                        Available from: {apt.available_from ? new Date(apt.available_from).toISOString().split("T")[0] : "Not specified"}
+                      </div>
                     </CardContent>
                   </Card>
                 </Link>
