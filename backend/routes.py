@@ -68,9 +68,12 @@ def update_user_profile():
     json_data = request.get_json()
     return handler.update_user_profile(json_data)
 
-@apartments_bp.route("/api/get-user", methods=['GET'])
-def get_user():
-    return handler.get_user()
+@apartments_bp.route("/api/get-user/<int:user_id>", methods=['GET'])
+def get_user(user_id):
+    if request.method == 'OPTIONS':
+        return _build_cors_preflight_response()
+    
+    return handler.get_user(user_id)
 
 @apartments_bp.route("/api/get-listing", methods=['GET'])
 def get_listing():
