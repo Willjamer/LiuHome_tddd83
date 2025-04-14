@@ -14,6 +14,8 @@ interface User {
   name: string;
   email: string;
   bio: string;
+  program: string;
+  year: string;
 }
 
 interface Apartment {
@@ -134,7 +136,7 @@ export default function BrowseSpecificPage() {
                   <Badge className="bg-green-500 text-white text-sm px-2 py-1">Verified Student</Badge>
                 </div>
 
-                <div className="border rounded-lg p-4">
+                <div className="border rounded-lg p-4 ">
                   <div className="flex items-center gap-2 mb-4">
                     <Calendar className="h-4 w-4" />
                     <span className="font-medium">Availability</span>
@@ -152,15 +154,22 @@ export default function BrowseSpecificPage() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                
+
                   <div>
                     {/* <div className="font-medium">{apartment.user?.name}</div> */}
                     <div className="font-medium">{apartment?.user?.name}</div>
                     <div className="text-sm text-muted-foreground">Student at {"liu"}</div>
-                    <div className="text-xs">{apartment?.user?.email}</div>
+                    {apartment?.user?.year && (
+                      <div className="text-sm text-muted-foreground">Year: {apartment.user.year}</div>
+                    )}
+
+                    {apartment?.user?.program && (
+                      <div className="text-sm text-muted-foreground">Studying: {apartment.user.program}</div>
+                    )}
+                    <div className="text-sm">{apartment?.user?.email}</div>
                   </div>
 
-                 
+
 
                   {loggedInUser?.email.split("@")[0] === apartment.user?.sso_id && (
                     <>
@@ -180,8 +189,8 @@ export default function BrowseSpecificPage() {
                   )}
                 </div>
 
-                <div className="font-medium text-muted-foreground text-sm">
-                  bio: {apartment?.user?.bio || "no biography available"}
+                <div className="font-medium text-muted-foreground text-xs">
+                  {apartment?.user?.bio || "no biography available"}
                 </div>
                 <Button
                   className="w-full"
