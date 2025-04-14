@@ -2,6 +2,8 @@ from flask import jsonify, request, Blueprint, current_app, session, redirect, u
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import logging
 from authextension import get_auth
+import requests
+
 
 # OM STUB, KÖR DENNA: 
 # from request_handler_stub import courier
@@ -15,6 +17,22 @@ handler = courier()
 oauth = get_auth()
 apartments_bp = Blueprint('apartments', __name__)
 microsoft_login = Blueprint('microsoft_login', __name__)
+
+SWISH_BASE_URL = "http://localhost:3005"
+
+apartments_bp = Blueprint('apartments', __name__)
+
+@apartments_bp.route("/api/paymentrequests", methods=['POST'])
+def initiate_payment():
+    json_data = request.get_json()
+    response = requests.post(f"{SWISH_BASE_URL}/paymentrequests", json=json_data)
+    return jsonify(response.json()), response.status_code
+
+@apartments_bp.route("/api/payment-status/<request_id>", methods=['GET'])
+def payment_status(request_id):
+    response = requests.get(f"{SWISH_BASE_URL}/paymentrequests/{request_id}")
+    return jsonify(response.json()), response.status_code
+
 
 @microsoft_login.before_app_request
 def register_oauth():
