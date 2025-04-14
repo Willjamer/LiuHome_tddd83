@@ -287,7 +287,7 @@ def db_remove_appartment(this_apartment_id):
     return jsonify({'message': 'apartment taken down'})
 
 def db_get_user(this_sso_id):
-    
+    logging.info('db getus ok')
     this_user = User.query.get(this_sso_id)
     return jsonify({'user': this_user.serialize()})
 

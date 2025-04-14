@@ -81,6 +81,7 @@ class courier:
         return db_get_user(sso_id)
     
     def get_user(user_id):
+        logging.info('hand getus ok')
         return db_get_user(user_id)
     
     def get_logged_in_user(self, json_data):
