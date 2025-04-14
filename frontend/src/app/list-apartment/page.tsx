@@ -82,6 +82,9 @@ export default function AddApartmentPage() {
       const result = await response.json();
       console.log("Apartment added:", result);
 
+      localStorage.setItem("access_token", response.data.access_token);
+      localStorage.setItem("sso_id", response.data.sso_id);
+
       // Visa framgångsmeddelande
       setIsPaymentSuccessVisible(true);
       setIsModalVisible(false);
