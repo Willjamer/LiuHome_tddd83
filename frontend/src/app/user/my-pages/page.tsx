@@ -9,7 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { House } from "lucide-react"
 
 export const UserContext = createContext<any>(null);
-export const useUser = useContext(UserContext)
+export const useUser = () => useContext(UserContext)
 
 
 export default function ProfilePage() {
