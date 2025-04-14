@@ -171,7 +171,7 @@ export default function BrowseSpecificPage() {
 
 
 
-                  {loggedInUser?.email.split("@")[0] === apartment.user?.sso_id && (
+                  {loggedInUser?.sso_id === apartment.user?.sso_id && (
                     <>
                       <button
                         onClick={() => console.log("Edit clicked")}
