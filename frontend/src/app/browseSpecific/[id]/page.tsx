@@ -37,6 +37,7 @@ interface Review {
   reviewed: User;
 }
 
+
 export default function BrowseSpecificPage() {
   const { id } = useParams(); // Hämta ID från URL:en
   const [apartment, setApartment] = useState<Apartment | null>(null);
@@ -45,9 +46,9 @@ export default function BrowseSpecificPage() {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewText, setReviewText] = useState("");
   const [liked, setLiked] = useState<boolean | null>(null);
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
-
-  const loggedInUser = useUser();
+  // const loggedInUser = useUser();
 
   useEffect(() => {
     async function fetchApartment() {
@@ -68,6 +69,27 @@ export default function BrowseSpecificPage() {
 
   if (!apartment) {
     return <div>Loading...</div>;
+  }
+
+  async function getLoggedInUser() {
+
+    try {
+      const loggedin_sso_Id = localStorage.getItem("sso_id");
+      const response = await fetch(`http://localhost:3001/api/get-user/${loggedin_sso_Id}`, {
+
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error('Failed to fetch user information');
+      const data: User = await response.json();
+      setLoggedInUser(data.user);
+    } catch (error) {
+      console.error("Error fetching user:", error)
+    }
+    }
   }
 
   async function showUser() {
