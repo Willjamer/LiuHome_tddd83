@@ -21,7 +21,6 @@ interface Apartment {
   available_from?: string;
 }
 
-
 export default function BrowseSpecificPage() {
   const { id } = useParams(); // Hämta ID från URL:en
   const [apartment, setApartment] = useState<Apartment | null>(null);
