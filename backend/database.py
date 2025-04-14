@@ -302,7 +302,7 @@ def db_add_user(json_data):
         # FAKE SSO CREATION
         if not sso_id:
             while True:
-                sso_id = uuid.uuid4().int >> 96
+                sso_id = str(uuid.uuid4().int >> 96)
                 if not User.query.get(sso_id):
                     break
 
