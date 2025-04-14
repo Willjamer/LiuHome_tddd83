@@ -11,7 +11,7 @@ app.config['JWT_SECRET_KEY'] = "Kursen TDDD83 är en av de i särklass sämsta k
 db.init_app(app)
 bcrypt.init_app(app)
 jwt.init_app(app)
-CORS(app, origins=["http://localhost:3000"]) 
+CORS(app, origins=["http://localhost:3000"], supports_credentials = True) 
 app.register_blueprint(apartments_bp)
 
 

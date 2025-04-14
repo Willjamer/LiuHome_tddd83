@@ -1,11 +1,19 @@
 "use client";
-import { useRouter, useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+
+import { useRouter, useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Calendar } from "lucide-react"
+
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Calendar } from "lucide-react";
+
+interface User {
+  sso_id: string;
+  name: string;
+  email: string;
+}
 
 interface Apartment {
   apartment_id: number;
@@ -19,43 +27,89 @@ interface Apartment {
   bathrooms: number;
   is_available: boolean;
   available_from?: string;
+  user?: User;
 }
 
 
 export default function BrowseSpecificPage() {
-  const { id } = useParams(); // Hämta ID från URL:en
+  const { id } = useParams();
   const [apartment, setApartment] = useState<Apartment | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+  const [showUserModal, setShowUserModal] = useState(false);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [reviewText, setReviewText] = useState("");
+  const [liked, setLiked] = useState<boolean | null>(null);
 
   useEffect(() => {
     async function fetchApartment() {
       try {
         const response = await fetch(`http://localhost:3001/api/browseSpecific/${id}`);
-        if (!response.ok) throw new Error('Failed to fetch apartment');
+        if (!response.ok) throw new Error("Failed to fetch apartment");
         const data: Apartment = await response.json();
+        console.log(data)
         setApartment(data);
-        console.log(apartment)
-
 
       } catch (error) {
-        console.error('Error fetching apartment:', error);
+        console.error("Error fetching apartment:", error);
+      }
+    }
+
+
+    async function getLoggedInUser() {
+      try {
+        const loggedin_sso_Id = localStorage.getItem("sso_id");
+        if (!loggedin_sso_Id) return;
+
+        const response = await fetch(`http://localhost:3001/api/get-user/${loggedin_sso_Id}`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+
+        if (!response.ok) throw new Error("Failed to fetch logged-in user");
+
+        const data: { user: User } = await response.json();
+        setLoggedInUser(data.user);
+      } catch (error) {
+        console.error("Error fetching logged-in user:", error);
       }
     }
 
     if (id) {
       fetchApartment();
+      getLoggedInUser();
     }
   }, [id]);
 
-  if (!apartment) {
-    return <div>Loading...</div>;
+  async function showUser() {
+    try {
+      const this_sso_id = apartment?.user?.sso_id;
+
+      console.log(this_sso_id)
+      const response = await fetch(`http://localhost:3001/api/get-user/${this_sso_id}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch user information");
+      const data: { user: User } = await response.json();
+      console.log(data)
+      setUser(data.user);
+      setShowUserModal(true);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    }
   }
 
 
-  return (
+  if (!apartment) return <div>Loading...</div>;
 
+
+  return (
     <main className="w-min-screen">
       <div className="flex flex-row w-screen px-16 gap-8">
-        {/* Bildsektion */}
         <div className="w-2/3">
           <Image
             src={`/images/${apartment.location || "apartment3"}.jpg`}
@@ -63,11 +117,10 @@ export default function BrowseSpecificPage() {
             width={500}
             height={300}
             className="object-cover w-full h-full rounded-lg overflow-hidden"
-            style={{ height: "100%" }} // Gör att bilden fyller hela höjden
+            style={{ height: "100%" }}
           />
         </div>
 
-        {/* Kort med hyresinformation */}
         <div className="w-1/3">
           <Card className="sticky top-24 h-full">
             <CardContent className="p-6">
@@ -100,25 +153,53 @@ export default function BrowseSpecificPage() {
                 <div className="flex items-center gap-4">
                   <div className="h-12 w-12 rounded-full overflow-hidden">
                     <img
+
                       src={`/images/${apartment.location || "apartment3"}.jpg`} // BYT GREJERNA MOT REAL PROFILE
+
                       alt={apartment.title}
                       className="h-full w-full object-cover"
                     />
                   </div>
                   <div>
-                    <div className="font-medium">{apartment.title}</div>
+                    {/* <div className="font-medium">{apartment.user?.name}</div> */}
+                    <div className="font-medium">{apartment?.user?.name}</div>
                     <div className="text-sm text-muted-foreground">Student at {"liu"}</div>
                     <div className="text-xs">{apartment.address}</div>
                   </div>
+
+                  <button
+                    onClick={showUser}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm"
+                  >
+                    View profile
+                  </button>
+
+                  {loggedInUser?.email.split("@")[0] === apartment.user?.sso_id && (
+                    <>
+                      <button
+                        onClick={() => console.log("Edit clicked")}
+                        className="px-3 py-2 bg-yellow-400 text-black rounded-md shadow-sm hover:bg-yellow-500"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => console.log("Delete clicked")}
+                        className="px-3 py-2 bg-red-600 text-white rounded-md shadow-sm hover:bg-red-700"
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
                 </div>
+
                 <div>
                   <strong>Description:</strong> {apartment.description || "No description available"}
                 </div>
                 <Button
                   className="w-full"
-                  onClick={() => {
-                    window.location.href = `mailto:jimmy.cool@gmail.com?subject=LiuHome - Hyra lägenhet&body=Hej, jag är intresserad av att hyra din lägenhet.`; // Ändra till riktig email sen
-                  }}
+                  onClick={() =>
+                    window.location.href = `mailto:${apartment.user?.email}?subject=LiuHome - Hyra lägenhet&body=Hej, jag är intresserad av att hyra din lägenhet.`
+                  }
                 >
                   Send email
                 </Button>
@@ -128,16 +209,17 @@ export default function BrowseSpecificPage() {
         </div>
       </div>
 
-      {/* Ny sektion för detaljerad information */}
       <div className="w-full px-16 mt-8">
         <Card className="p-6 shadow-lg">
           <h2 className="text-2xl font-bold mb-4">{apartment.address}</h2>
           <div className="space-y-2">
             <p><strong>Description:</strong> {apartment.description || "No description available"}</p>
+
             <p><strong>Rent:</strong> {apartment.rent_amount ? `${apartment.rent_amount} SEK/month` : "Rent not specified"}</p>
             <p><strong>location:</strong> {apartment.location ? `${apartment.location}` : "location not specified"}</p>
             <p><strong>location:</strong> {apartment.number_of_rooms ? `${apartment.number_of_rooms} Rooms` : "rooms not specified"}</p>
             <p><strong>Size:</strong> {apartment.size ? `${apartment.size} m²` : "Size not specified"}</p>
+
             <p>
               <strong>Available from:</strong>{" "}
               {apartment.available_from
@@ -147,6 +229,25 @@ export default function BrowseSpecificPage() {
           </div>
         </Card>
       </div>
+
+      {showUserModal && user && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-8 w-[600px] h-[600px] relative">
+            <button
+              onClick={() => setShowUserModal(false)}
+              className="absolute top-2 right-3 text-gray-500 hover:text-black"
+            >
+              ✕
+            </button>
+            <h2 className="text-xl font-semibold mb-4">User Profile</h2>
+            <div className="space-y-2">
+              <p><strong>Name:</strong> {user.name}</p>
+              <p><strong>Email:</strong> {user.email}</p>
+              <p><strong>SSO ID:</strong> {user.sso_id}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

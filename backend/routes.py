@@ -28,9 +28,10 @@ def get_apartments():
 
 def _build_cors_preflight_response():
     response = jsonify({'message': 'CORS preflight'})
-    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
+    response.headers.add("Access-Control-Allow-Credentials", "true")
     response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
-    response.headers.add("Access-Control-Allow-Methods", "GET,OPTIONS")
+    response.headers.add("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
     return response
 
 
@@ -68,9 +69,15 @@ def update_user_profile():
     json_data = request.get_json()
     return handler.update_user_profile(json_data)
 
-@apartments_bp.route("/api/get-user", methods=['GET'])
-def get_user():
-    return handler.get_user()
+@apartments_bp.route("/api/get-user/<user_id>", methods=['GET', 'OPTIONS'])
+def get_user(user_id):
+    if request.method == 'OPTIONS':
+        return _build_cors_preflight_response()
+    
+    logging.info('routes getus ok')
+    logging.info(user_id)
+    tmp = user_id
+    return handler.get_user(user_id)
 
 @apartments_bp.route("/api/get-listing", methods=['GET'])
 def get_listing():

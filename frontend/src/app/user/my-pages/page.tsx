@@ -1,12 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext, useContext } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { House } from "lucide-react"
+
+export const UserContext = createContext<any>(null);
+export const useUser = () => useContext(UserContext)
+
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -88,8 +92,8 @@ export default function ProfilePage() {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-
-    <div className="flex flex-col h-screen gap-8 pb-32 justify-center items-center w-full">
+    <UserContext.Provider value = {{ user: profile, setUser: setProfile}}>
+      <div className="flex flex-col h-screen gap-8 pb-32 justify-center items-center w-full">
       <img
         src={"/images/liu-logga.png"} 
         alt={"YOOOOOO"}
@@ -164,5 +168,7 @@ export default function ProfilePage() {
         </Card>
       </div>
     </div>
+    </UserContext.Provider>
+    
   );
 }
