@@ -79,8 +79,7 @@ class User(db.Model):
         return {
             "sso_id": self.sso_id,
             "email": self.email,
-            "first_name": self.first_name,
-            "last_name": self.last_name,
+            "name": self.name,
             "profile_picture": self.profile_picture,
             "program": self.program,
             "year": self.year,
