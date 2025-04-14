@@ -158,7 +158,7 @@ export default function BrowseSpecificPage() {
                   <div>
                     {/* <div className="font-medium">{apartment.user?.name}</div> */}
                     <div className="font-medium">{apartment?.user?.name}</div>
-                    <div className="text-sm text-muted-foreground">Student at {"liu"}</div>
+                   {/* <div className="text-sm text-muted-foreground">Student at {"liu"}</div>*/}
                     {apartment?.user?.year && (
                       <div className="text-sm text-muted-foreground">Year: {apartment.user.year}</div>
                     )}
