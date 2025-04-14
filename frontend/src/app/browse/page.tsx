@@ -54,7 +54,7 @@ export default function BrowsePage() {
 
             // OM VANLIG (databas), KÖR DESSA TVÅ
             const data = await response.json();
-            const apartments: Apartment[] = data.Apartments;  
+            const apartments: Apartment[] = data.Apartments;
 
             setApartments(apartments)
         } catch (error) {
@@ -91,13 +91,14 @@ export default function BrowsePage() {
                                         <Badge className="absolute top-2 right-2">{apt.rent_amount} SEK/month</Badge>
                                     </div>
                                     <CardContent className="p-4">
-                                        <h3 className="text-lg font-semibold line-clamp-1">{apt.title}</h3>
+                                        <h3 className="text-lg font-semibold line-clamp-1">{apt.address}</h3>
                                         <div className="flex flex-wrap gap-4 mt-3">
                                             {/* Antal rum */}
                                             <div className="flex items-center text-sm">
                                                 <Home className="h-4 w-4 mr-1" />
                                                 <span>
-                                                    {apt.number_of_rooms} {apt.number_of_rooms === 1 ? "room" : "rooms"}
+                                                    {apt.number_of_rooms} {apt.number_of_rooms === 1 ? "room, " : "rooms, "}
+                                                    {apt.size ? `${apt.size} m²` : ""}
                                                 </span>
                                             </div>
 
@@ -118,7 +119,7 @@ export default function BrowsePage() {
                 </section>
             </main>
 
-        
+
             {/* 
             <div className="container mx-auto py-10">
                 <h1 className="text-3xl font-bold mb-6">Available Apartments</h1>

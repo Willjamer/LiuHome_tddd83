@@ -130,13 +130,13 @@ export default function BrowseSpecificPage() {
       {/* Ny sektion för detaljerad information */}
       <div className="w-full px-16 mt-8">
         <Card className="p-6 shadow-lg">
-          <h2 className="text-2xl font-bold mb-4">Apartment Details</h2>
+          <h2 className="text-2xl font-bold mb-4">{apartment.address}</h2>
           <div className="space-y-2">
             <p><strong>Description:</strong> {apartment.description || "No description available"}</p>
-            <p><strong>Address:</strong> {apartment.address || "No address provided"}</p>
             <p><strong>Rent:</strong> {apartment.rent_amount ? `${apartment.rent_amount} SEK/month` : "Rent not specified"}</p>
             <p><strong>location:</strong> {apartment.location ? `${apartment.location}` : "location not specified"}</p>
-            <p><strong>Rooms:</strong> {apartment.number_of_rooms || "N/A"}</p>
+            <p><strong>location:</strong> {apartment.number_of_rooms ? `${apartment.number_of_rooms} Rooms` : "rooms not specified"}</p>
+            <p><strong>Size:</strong> {apartment.size ? `${apartment.size} m²` : "Size not specified"}</p>
             <p>
               <strong>Available from:</strong>{" "}
               {apartment.available_from

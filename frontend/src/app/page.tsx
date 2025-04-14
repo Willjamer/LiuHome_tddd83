@@ -130,13 +130,14 @@ export default function Home() {
                       <Image  src={`/images/${apt.location || "apartment1"}.jpg`}  alt={apt.title} width={500} height={300} className="object-cover w-full h-full transition-transform duration-300 ease-in-out transform group-hover:scale-105" />
                     </div>
                     <CardContent className="p-4">
-                      <h3 className="text-lg font-semibold line-clamp-1">{apt.title}</h3>
+                      <h3 className="text-lg font-semibold line-clamp-1">{apt.address}</h3>
                       <div className="flex flex-wrap gap-4 mt-3">
                         {/* Antal rum */}
                         <div className="flex items-center text-sm">
                           <House className="h-4 w-4 mr-1" />
                           <span>
-                            {apt.number_of_rooms} {apt.number_of_rooms === 1 ? "room" : "rooms"}
+                            {apt.number_of_rooms} {apt.number_of_rooms === 1 ? "room, " : "rooms, "}
+                            {apt.size ? `${apt.size} m²` : ""}
                           </span>
                         </div>
 
