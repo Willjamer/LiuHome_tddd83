@@ -54,7 +54,7 @@ export default function AddApartmentPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const sso_id = localStorage.get("sso_id");
+    const sso_id = localStorage.getItem("sso_id");
 
     const payload = {
       sso_id,
