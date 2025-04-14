@@ -11,8 +11,7 @@ import Link from "next/link"
 export default function SignUpPage() {
   const router = useRouter()
   const [form, setForm] = useState({
-    first_name: "",
-    last_name: "",
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -34,8 +33,7 @@ export default function SignUpPage() {
 
     try {
       const response = await axios.post("http://localhost:3001/sign-up", {
-        first_name: form.first_name,
-        last_name: form.last_name,
+        name: form.name,
         email: form.email,
         password: form.password,
       })
@@ -64,8 +62,7 @@ export default function SignUpPage() {
           <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <Input placeholder="First name" name="first_name" value={form.first_name} onChange={handleChange} required />
-            <Input placeholder="Last name" name="last_name" value={form.last_name} onChange={handleChange} required />
+            <Input placeholder="Name" name="name" value={form.name} onChange={handleChange} required />
             <Input placeholder="Email" name="email" value={form.email} onChange={handleChange} type="email" required />
             <Input placeholder="Password" name="password" value={form.password} onChange={handleChange} type="password" required />
             <Input placeholder="Confirm Password" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} type="password" required />

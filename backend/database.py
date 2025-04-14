@@ -58,8 +58,8 @@ class User(db.Model):
     sso_id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
-    first_name = db.Column(db.String, nullable=False)
-    last_name = db.Column(db.String, nullable=False)
+    name = db.Column(db.String, nullable=False)
+    
     
     # Valfria fält – kan uppdateras efter kontoskapandet
     profile_picture = db.Column(db.String, nullable=True)  # Ex. URL till bilden
@@ -295,8 +295,7 @@ def db_get_user(this_sso_id):
 def db_add_user(json_data):
     try:
         sso_id = json_data.get('sso_id')
-        first_name = json_data.get('first_name')
-        last_name = json_data.get('last_name')
+        name = json_data.get('name')
         email = json_data.get('email')
         password = json_data.get('password')
 
@@ -314,8 +313,7 @@ def db_add_user(json_data):
 
         new_user = User(
             sso_id=sso_id,
-            first_name=first_name,
-            last_name=last_name,
+            name=name,
             email=email
         )
         new_user.set_password(password)
