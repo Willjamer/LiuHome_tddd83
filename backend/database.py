@@ -113,13 +113,13 @@ class Review(db.Model):
     def __repr__(self):
         return f"<Review {self.review_id}: {self.content}: {self.rating}: {self.review_date}>"
     
-    def serialize(self): 
+    def serialize(self, factor): 
         return {
             "review_id": self.review_id,
             "content": self.content,
             "rating": self.rating,
             "review_date": self.review_date,
-        }
+        } 
     
 
 
