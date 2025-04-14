@@ -80,7 +80,7 @@ class courier:
         sso_id = json_data.get('sso_id')
         return db_get_user(sso_id)
     
-    def get_user(user_id):
+    def get_user(self, user_id):
         logging.info('hand getus ok')
         return db_get_user(user_id)
     

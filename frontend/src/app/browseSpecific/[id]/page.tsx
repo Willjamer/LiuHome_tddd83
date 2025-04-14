@@ -53,7 +53,8 @@ export default function BrowseSpecificPage() {
         const response = await fetch(`http://localhost:3001/api/browseSpecific/${id}`);
         if (!response.ok) throw new Error("Failed to fetch apartment");
         const data: Apartment = await response.json();
-        setApartment(data.apartment);
+        console.log(data)
+        setApartment(data);
       } catch (error) {
         console.error("Error fetching apartment:", error);
       }
@@ -87,7 +88,9 @@ export default function BrowseSpecificPage() {
 
   async function showUser() {
     try {
-      const this_sso_id = apartment?.user?.sso_id;
+      // const this_sso_id = apartment?.user?.sso_id;
+      const this_sso_id = apartment?.user_id;
+      console.log(this_sso_id)
       const response = await fetch(`http://localhost:3001/api/get-user/${this_sso_id}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -96,6 +99,7 @@ export default function BrowseSpecificPage() {
 
       if (!response.ok) throw new Error("Failed to fetch user information");
       const data: { user: User } = await response.json();
+      console.log(data)
       setUser(data.user);
       setShowUserModal(true);
     } catch (error) {
@@ -187,7 +191,8 @@ export default function BrowseSpecificPage() {
                     />
                   </div>
                   <div>
-                    <div className="font-medium">{apartment.user?.name}</div>
+                    {/* <div className="font-medium">{apartment.user?.name}</div> */}
+                    <div className="font-medium">{user?.name}</div>
                     <div className="text-sm text-muted-foreground">Student at {"liu"}</div>
                     <div className="text-xs">{apartment.address}</div>
                   </div>
