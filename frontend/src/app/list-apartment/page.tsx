@@ -218,7 +218,7 @@ export default function AddApartmentPage() {
                     <option value="Skäggetorp">Skäggetorp</option>
                     <option value="Berga">Berga</option>
                     <option value="Flamman">Flamman</option>
-                    <option value="Fjärillen">Fjärillen</option>
+                    <option value="Fjärillen">Fjärilen</option>
                     <option value="City">City</option>
                   
                   </select>
