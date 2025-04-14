@@ -13,6 +13,7 @@ interface User {
   sso_id: string;
   name: string;
   email: string;
+  bio: string;
 }
 
 interface Apartment {
@@ -151,28 +152,15 @@ export default function BrowseSpecificPage() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-full overflow-hidden">
-                    <img
-
-                      src={`/images/${apartment.location || "apartment3"}.jpg`} // BYT GREJERNA MOT REAL PROFILE
-
-                      alt={apartment.title}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
+                
                   <div>
                     {/* <div className="font-medium">{apartment.user?.name}</div> */}
                     <div className="font-medium">{apartment?.user?.name}</div>
                     <div className="text-sm text-muted-foreground">Student at {"liu"}</div>
-                    <div className="text-xs">{apartment.address}</div>
+                    <div className="text-xs">{apartment?.user?.email}</div>
                   </div>
 
-                  <button
-                    onClick={showUser}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm"
-                  >
-                    View profile
-                  </button>
+                 
 
                   {loggedInUser?.email.split("@")[0] === apartment.user?.sso_id && (
                     <>
@@ -192,8 +180,8 @@ export default function BrowseSpecificPage() {
                   )}
                 </div>
 
-                <div>
-                  <strong>Description:</strong> {apartment.description || "No description available"}
+                <div className="font-medium text-muted-foreground text-sm">
+                  bio: {apartment?.user?.bio || "no biography available"}
                 </div>
                 <Button
                   className="w-full"
