@@ -127,7 +127,7 @@ export default function Home() {
                 <Link href={`browseSpecific/${apt.apartment_id}`} key={apt.apartment_id}>
                   <Card className="overflow-hidden rounded-lg shadow-lg border-none pt-0 group">
                     <div className="relative w-full h-56 rounded-t-lg overflow-hidden">
-                      <Image src={"/images/apartment2.jpg"} alt={apt.title} width={500} height={300} className="object-cover w-full h-full transition-transform duration-300 ease-in-out transform group-hover:scale-105" />
+                      <Image  src={`/images/${apt.location || "apartment1"}.jpg`}  alt={apt.title} width={500} height={300} className="object-cover w-full h-full transition-transform duration-300 ease-in-out transform group-hover:scale-105" />
                     </div>
                     <CardContent className="p-4">
                       <h3 className="text-lg font-semibold line-clamp-1">{apt.title}</h3>
