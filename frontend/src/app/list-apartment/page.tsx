@@ -213,7 +213,7 @@ export default function AddApartmentPage() {
                     <option value="T1">T1</option>
                     <option value="Irrblosset">Irrblosset</option>
                     <option value="Vallastaden">Vallastaden</option>
-                    <option value="Ebbe Park">Ebbe Park</option>
+                    <option value="Ebbepark">Ebbepark</option>
                     <option value="Gottfridsberg">Gottfridsberg</option>  
                     <option value="Skäggetorp">Skäggetorp</option>
                     <option value="Berga">Berga</option>
