@@ -1,4 +1,5 @@
 "use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { House } from "lucide-react"
@@ -53,9 +54,9 @@ export default function Header() {
                   List Your Place
                 </Button>
               </Link>
-              <div className="text-sm text-muted-foreground">
-                Welcome, {user.first_name || user.name}!
-              </div>
+              <Link href="/user">
+                <Button size="sm">My Pages</Button>
+              </Link>
               <Button
                 onClick={logout}
                 variant="ghost"

@@ -171,13 +171,17 @@ def get_user_profile():
         return handler.get_user_profile()
 
 
-@apartments_bp.route("/api/get-user/<sso_id>", methods=['GET', 'POST'])
+@apartments_bp.route("/api/get-user/<sso_id>", methods=['GET', 'PUT', 'POST'])
 def get_user(sso_id):
     if request.method == 'OPTIONS':
         return _build_cors_preflight_response()
+    
     elif request.method == 'GET':
         return handler.get_user(sso_id)
-
+    # Denna route är för att uppdatera profilen
+    elif request.method == 'PUT':
+        json_data = request.get_json()
+        return handler.update_user_profile(json_data)
     # Denna route är för att lägga till en review
     elif request.method == 'POST':
         json_data = request.get_json()

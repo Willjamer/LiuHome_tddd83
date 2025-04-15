@@ -54,7 +54,10 @@ class Apartment(db.Model):
             "user": {
                 "sso_id": self.user.sso_id,
                 "name": self.user.name,
-                "email": self.user.email
+                "email": self.user.email,
+                "bio": self.user.bio,
+                "program": self.user.program,
+                "year": self.user.year,
             } if self.user else None
         }
         
@@ -66,10 +69,13 @@ class User(db.Model):
     password  = db.Column(db.String, nullable = True)
     name      = db.Column(db.String, nullable = False)
     email     = db.Column(db.String, nullable = False)
-    apartment = db.relationship("Apartment", back_populates = "user", uselist = False)
-    # listing_expiry_date = db.Column(db.Date, nullable = False) # Vi vår kolla på denna. Vettefan riktigt hur vi ska styra upp det. 
 
-    #Creating a relationship between users and reviews
+    profile_picture = db.Column(db.String, nullable=True)  # Ex. URL till bilden
+    program = db.Column(db.String, nullable=True)          # Ex. "Industriell Ekonomi"
+    year = db.Column(db.Integer, nullable=True)            # Årskurs
+    bio = db.Column(db.Text, nullable=True)                # Kort presentation
+
+    apartment = db.relationship("Apartment", back_populates = "user", uselist = False)
     created_reviews = db.relationship("Review", foreign_keys = "[Review.reviewer_sso_id]", backref = "reviewer")
     recieved_reviews = db.relationship("Review", foreign_keys = "[Review.reviewed_sso_id]", backref = "reviewed_user")
 
@@ -79,10 +85,13 @@ class User(db.Model):
     def serialize(self):
         return {
             "sso_id": self.sso_id,
-            "name": self.name,
             "email": self.email,
-            # "apartment": self.apartment.serialize(),
-            # "listing_expiry_date": self.listing_expiry_date
+            "name": self.name,
+            "profile_picture": self.profile_picture,
+            "program": self.program,
+            "year": self.year,
+            "bio": self.bio,
+            "apartment": self.apartment.serialize() if self.apartment else None
         }
     
     def set_password(self, password):
@@ -349,6 +358,37 @@ def db_get_review(review_id):
     if this_review:
         return jsonify({'review': this_review.serialize()}), 200
 
+def db_update_user_profile(json_data):
+    try:
+        logging.info('db updus ok')
+        sso_id = json_data.get('sso_id')
+        this_user = User.query.get(sso_id)
+        if not this_user:
+            return jsonify({'error': 'User not found'}), 404
+
+        if 'first_name' in json_data:
+            this_user.first_name = json_data.get('first_name')
+        if 'last_name' in json_data:
+            this_user.last_name = json_data.get('last_name')
+        if 'profile_picture' in json_data:
+            this_user.profile_picture = json_data.get('profile_picture')
+        if 'program' in json_data:
+            this_user.program = json_data.get('program')
+        if json_data.get('year'):
+            try:
+                logging.info(json_data.get('year'))
+                this_user.year = int(json_data.get('year'))
+            except ValueError:
+                pass
+        if 'bio' in json_data:
+            this_user.bio = json_data.get('bio')
+
+        db.session.commit()
+        return jsonify({'message': 'User profile updated successfully', 'user': this_user.serialize()})
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({'error': 'Internal server error'}), 500
+    
 # All edit functions are thought to be redone but this should work for now. 
 def db_edit_review(review_id, content, rating):
     

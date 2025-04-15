@@ -1,4 +1,4 @@
-from database import * # Temporary
+from database import * 
 from flask import jsonify
 from datetime import date
 import logging
@@ -95,7 +95,11 @@ class courier:
         password = json_data.get('password')
         logging.info(password)
         return db_add_user(sso_id, name, password, email)
-
+    
+    def update_user_profile(self, json_data):
+        logging.info('rh updus ok')
+        return db_update_user_profile(json_data)
+    
     def login(self, json_data):
         return db_login(json_data) 
     

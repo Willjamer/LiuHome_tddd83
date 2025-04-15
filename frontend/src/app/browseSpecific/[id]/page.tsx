@@ -12,6 +12,9 @@ interface User {
   sso_id: string;
   name: string;
   email: string;
+  program: string;
+  year: number;
+  bio: string;
 }
 
 interface Apartment {
@@ -215,7 +218,7 @@ export default function BrowseSpecificPage() {
                 <Button
                   className="w-full"
                   onClick={() => {
-                    window.location.href = `mailto:jimmy.cool@gmail.com?subject=LiuHome - Hyra lägenhet&body=Hej, jag är intresserad av att hyra din lägenhet.`; // Ändra till riktig email sen
+                    window.location.href = `mailto:${apartment.user?.email}?subject=LiuHome - Hyra lägenhet&body=Hej, jag är intresserad av att hyra din lägenhet.` 
                   }}
                 >
                   Send email
@@ -258,7 +261,11 @@ export default function BrowseSpecificPage() {
             <div className="space-y-">
               <p><strong>Name:</strong> {user.name}</p>
               <p><strong>Email:</strong> {user.email}</p>
-              <p><strong>SSO ID:</strong> {user.sso_id}</p>
+              <p><strong>Studies:</strong> {user.program}</p>
+              <p><strong>Year:</strong> {user.year}</p>
+              <p><strong>Bio:</strong> {user.bio}</p>
+
+
             </div>
             <button
               onClick={() => setShowReviewModal(true)}
@@ -266,7 +273,7 @@ export default function BrowseSpecificPage() {
             >
               Leave a review
             </button>
-            <h2 className="text-xl font-semibold mb-4">User Profile</h2>
+            {/* <h2 className="text-xl font-semibold mb-4">User Profile</h2> */}
             <div className="space-y-"></div>
           </div>
         </div>
