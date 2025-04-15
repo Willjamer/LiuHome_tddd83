@@ -62,7 +62,8 @@ class courier:
         return {'message': 'apartment added successfully'}
     
     def remove_apartment(self, json_data):
-        apartment_id = json_data.get('apartment_id')
+        logging.info(json_data)
+        apartment_id = json_data
         return db_remove_appartment(apartment_id)
     
     def filter_apartment(self, json_data):

@@ -288,8 +288,9 @@ def db_add_apartment(apartment_id, user_id, title, description, address, size, n
     
 def db_remove_appartment(this_apartment_id):
     this_apartment = Apartment.query.get(this_apartment_id)
+    logging.info(this_apartment)
     if (this_apartment):
-        db.session.remove(this_apartment)
+        db.session.delete(this_apartment)
         db.session.commit()
         return jsonify({'message': 'apartment taken down'})
     else:
