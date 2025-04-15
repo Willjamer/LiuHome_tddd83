@@ -53,7 +53,8 @@ class Apartment(db.Model):
             "user": {
                 "sso_id": self.user.sso_id,
                 "name": self.user.name,
-                "email": self.user.email
+                "email": self.user.email,
+                "bio": self.user.bio
             } if self.user else None
         }
         
