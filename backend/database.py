@@ -3,8 +3,8 @@ from flask_jwt_extended import create_access_token
 from extensions import db, bcrypt
 # from sqlalchemy.event import listens_for
 # from flask_mail import Mail, Message  # Assuming you're using Flask-Mail
-# from flask import current_app
-import datetime
+from flask import current_app
+from datetime import datetime
 import traceback
 import itertools
 import characters
@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 class Apartment(db.Model):
     apartment_id    = db.Column(db.Integer, primary_key = True)
-    user_id         = db.Column(db.Integer, db.ForeignKey("user.sso_id"), unique = True, nullable = False)
+    user_id         = db.Column(db.String, db.ForeignKey("user.sso_id"), unique = True)
     title           = db.Column(db.String, nullable = False)
     description     = db.Column(db.String, nullable = True)
     address         = db.Column(db.String, nullable = False)
@@ -27,6 +27,8 @@ class Apartment(db.Model):
     rent_amount     = db.Column(db.Integer, nullable = False)
     is_available    = db.Column(db.Boolean, nullable = False, default = True)
     available_from  = db.Column(db.Date, nullable = True)
+
+    user = db.relationship('User', back_populates='apartment')
     # date_added      = db.Column(db.Date, nullable = False)
     # expiry_date     = db.Column(db.Date, nullable = False)
     # Något här om images, vet ej än hur
@@ -49,32 +51,38 @@ class Apartment(db.Model):
             "rent_amount": self.rent_amount,
             "is_available": self.is_available,
             "available_from": self.available_from,
-
+            "user": {
+                "sso_id": self.user.sso_id,
+                "name": self.user.name,
+                "email": self.user.email
+            } if self.user else None
         }
         
-#This user class is for the website without SSO-id 
+
+# First version user class 
+
 class User(db.Model):
-    sso_id    = db.Column(db.Integer, primary_key = True)
-    password  = db.Column(db.String, nullable = False)
+    sso_id    = db.Column(db.String, primary_key = True)
+    password  = db.Column(db.String, nullable = True)
     name      = db.Column(db.String, nullable = False)
     email     = db.Column(db.String, nullable = False)
-    apartment = db.relationship("Apartment", backref = "user", uselist = False)
+    apartment = db.relationship("Apartment", back_populates = "user", uselist = False)
     # listing_expiry_date = db.Column(db.Date, nullable = False) # Vi vår kolla på denna. Vettefan riktigt hur vi ska styra upp det. 
 
     #Creating a relationship between users and reviews
-    created_reviews = db.relationship("Review", foreign_keys = "[Review.reviewer_id]", backref = "reviewer")
-    recieved_reviews = db.relationship("Review", foreign_keys = "[Review.reviewed_user_id]", backref = "reviewed_user")
+    created_reviews = db.relationship("Review", foreign_keys = "[Review.reviewer_sso_id]", backref = "reviewer")
+    recieved_reviews = db.relationship("Review", foreign_keys = "[Review.reviewed_sso_id]", backref = "reviewed_user")
 
     def __repr__(self):
-        return f"<User {self.sso_id}: {self.name}: {self.email}: {self.apartment}>"
+        return f"<User {self.sso_id}: {self.name}: {self.email}>"
     
     def serialize(self):
         return {
             "sso_id": self.sso_id,
             "name": self.name,
             "email": self.email,
-            "apartment": self.apartment.serialize(),
-            "listing_expiry_date": self.listing_expiry_date
+            # "apartment": self.apartment.serialize(),
+            # "listing_expiry_date": self.listing_expiry_date
         }
     
     def set_password(self, password):
@@ -83,16 +91,15 @@ class User(db.Model):
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
 
-# Not implemented until after first user test
 
 class Review(db.Model):
     review_id   = db.Column(db.Integer, primary_key = True)
     content     = db.Column(db.String, nullable = True)
-    rating      = db.Column(db.Integer, nullable = False)
+    liked      = db.Column(db.Boolean, nullable = False)
     review_date = db.Column(db.Date, nullable = False)
 
-    reviewer_id = db.Column(db.Integer, db.ForeignKey("user.sso_id"), nullable = False)
-    reviewed_user_id = db.Column(db.Integer, db.ForeignKey("user.sso_id"), nullable = False)
+    reviewer_sso_id = db.Column(db.String, db.ForeignKey("user.sso_id"), nullable = False)
+    reviewed_sso_id = db.Column(db.String, db.ForeignKey("user.sso_id"), nullable = False)
 
     def __repr__(self):
         return f"<Review {self.review_id}: {self.content}: {self.rating}: {self.review_date}>"
@@ -141,8 +148,6 @@ def generate_unique_id(determinator):
 
     unique_strings = set("".join(p) for p in itertools.permutations(characters, 3))
 
-
-
 def db_get_all_available_apartments():
     apartments = Apartment.query.filter_by(is_available=True).all()
     if apartments: 
@@ -156,6 +161,9 @@ def db_get_all_apartments():
     if apartments:
         logging.info("apartments ok")
         return jsonify({'Apartments': [apartment.serialize() for apartment in apartments]}) 
+
+    return jsonify({'message': 'No available apartments', 'Apartments': []}) 
+
     
 def db_filter_by_rent(arrange):
     
@@ -239,9 +247,8 @@ def db_filtering(rent_interval, size_interval, room_interval, locations, sort_fa
     
 def db_get_specific_apartment(this_apartment_id):
     this_apartment = Apartment.query.get(this_apartment_id)
-
-    new_apartment = Apartment(apartment_id = 9999, user_id = 2, title = "jontes testlägga", description= "en fin lägenhet i linköping", address = "Vallavägen 4B", size = 40, number_of_rooms = 2, location = "Irrblosset", rent_amount = 6000, is_available = True, available_from = datetime.date(2025, 4, 15))
-
+    logging.info('database getspec ok ')
+    logging.info(this_apartment)
     return jsonify({'apartment' : this_apartment.serialize()})
 
 
@@ -276,25 +283,24 @@ def db_remove_appartment(this_apartment_id):
     db.session.commit()
     return jsonify({'message': 'apartment taken down'})
 
-def db_get_user(this_sso_id):
+def db_get_user(sso_id):
     
-    this_user = User.query.get(this_sso_id)
+    this_user = User.query.get(sso_id)
     return jsonify({'user': this_user.serialize()})
 
-def db_add_user(json_data):
+
+def db_add_user(sso_id, name, password, email):
     
     try:
-        sso_id = json_data.get('sso_id')
-        name = json_data.get('name')
-        email = json_data.get('email')
 
         new_user = User(
             sso_id = sso_id,
             name = name,
-            email = email,
+            email = email
         )
-        
-        new_user.set_password(json_data.get('password'))
+        if password is not None:
+            new_user.set_password(password)
+
         db.session.add(new_user)
         db.session.commit()
         return jsonify({'message': 'user created successfully'})
@@ -310,33 +316,52 @@ def db_login(json_data):
         return jsonify({'access_token': access_token})
     return jsonify({'message': 'login failed'})
 
-def db_add_review(content, rating, review_date, reviewer, reviewed_user):
-    try:
-        new_review = Review(
-            # review_id = review_id,
-            review_id = 1000,
-            content = content,
-            rating = rating,
-            review_date = review_date,
-            reviewer = reviewer,
-            reviewed_user = reviewed_user
-        )
-        db.session.add(new_review)
-        db.session.commit()
-    except Exception as e:
-        traceback.print_exc()
+def db_add_review(content, liked, reviewer_sso_id, reviewed_sso_id):
+
+    reviewing_user = User.query.get(reviewer_sso_id)
+    reviewed_user = User.query.get(reviewed_sso_id)
+
+    if (reviewing_user and reviewed_user):
+        try:
+            new_review = Review(
+                # review_id = review_id,
+                review_id = 1000,
+                content = content,
+                liked = liked,
+                review_date = datetime.today(),
+                # reviewer = reviewing_user,
+                # reviewed_user = reviewed_user
+                reviewer_sso_id = reviewer_sso_id,
+                reviewed_sso_id = reviewed_sso_id,
+            )
+            db.session.add(new_review)
+            db.session.commit()
+            logging.info('db add review ok')
+            return jsonify({'message': 'Review added successfully'})
+        except Exception as e:
+            traceback.print_exc()
+    else:
+        return jsonify({'error': 'user not found'}), 423
+
+def db_get_review(review_id):
+    this_review = Review.query.get(review_id)
+    
+    if this_review:
+        return jsonify({'review': this_review.serialize()}), 200
 
 # All edit functions are thought to be redone but this should work for now. 
-def db_edit_review(review_id, content, rating, review_date):
+def db_edit_review(review_id, content, rating):
     
     this_review = Review.query.get(review_id)
-
-    this_review.content = content
-    this_review.rating = rating
-    this_review.review_date = review_date
-    db.session.commit()
-    return jsonify({'message': 'review editet successfully'})
-
+    if this_review:
+        this_review.content = content
+        this_review.rating = rating
+        this_review.review_date = datetime.today()
+        db.session.commit()
+        return jsonify({'message': 'review editet successfully'})
+    else:
+        return jsonify({'error': 'review editet unsuccessfully'})
+        
 def db_delete_review(review_id):
     
     this_review = Review.query.get(review_id)
@@ -392,3 +417,27 @@ def mark_expired_apartments():
 #             body=f"Hello,\n\nYour apartment '{apartment_title}' is now marked as unavailable.\n\nBest,\nYour Website Team"
 #         )
 #         mail.send(msg)
+
+def db_check_SSO_user(email):
+    this_sso_id = email.split('@')[0]
+    if User.query.get(this_sso_id):
+        return True
+    return False
+
+def db_add_SSO_user(email, name):
+    try:
+        logging.info("db add user")
+        sso_id = email.split('@')[0]
+        new_SSO_user = User(
+            sso_id = sso_id,
+            email = email,
+            name = name
+        )
+        db.session.add(new_SSO_user)
+        db.session.commit()
+        logging.info("db add ok")
+    except Exception as e:
+        traceback.print_exc()
+    return jsonify({'message': 'user added with sso successfully'}), 200
+
+
