@@ -77,7 +77,7 @@ class User(db.Model):
     recieved_reviews = db.relationship("Review", foreign_keys="[Review.reviewed_user_id]", backref="reviewed_user")
 
     def __repr__(self):
-        return f"<User {self.sso_id}: {self.first_name} {self.last_name}, {self.email}>"
+        return f"<User {self.sso_id}: {self.name}: {self.email}>"
     
     def serialize(self):
         return {
@@ -292,6 +292,7 @@ def db_remove_appartment(this_apartment_id):
 
 def db_get_user(this_sso_id):
     logging.info('db getus ok')
+    logging.info(this_sso_id)
     this_user = User.query.get(this_sso_id)
     logging.info("1")
     logging.info(this_user)
