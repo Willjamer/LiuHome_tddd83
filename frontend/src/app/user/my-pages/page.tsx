@@ -17,8 +17,7 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState({
     sso_id: "",
     email: "",
-    first_name: "",
-    last_name: "",
+    name: "",
     profile_picture: "",
     program: "",
     year: "",
@@ -110,16 +109,9 @@ export default function ProfilePage() {
             />
             <form onSubmit={handleSubmit} className="space-y-4">
               <Input
-                placeholder="First Name"
-                name="first_name"
-                value={profile.first_name}
-                onChange={handleChange}
-                required
-              />
-              <Input
-                placeholder="Last Name"
+                placeholder="Name"
                 name="last_name"
-                value={profile.last_name}
+                value={profile.name}
                 onChange={handleChange}
                 required
               />
