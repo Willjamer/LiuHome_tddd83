@@ -166,8 +166,26 @@ export default function AddApartmentPage() {
                     <Input
                       type="number"
                       name="size"
-                      value={apartment.size}
-                      onChange={handleChange}
+                      value={apartment.size || ""} // Ingen autofill av 0
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === "" || (!isNaN(parseInt(value, 10)) && parseInt(value, 10) >= 0)) {
+                          handleChange(e);
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        // Tillåt endast siffror, Backspace, Delete, Tab, piltangenter
+                        if (
+                          !/^[0-9]$/.test(e.key) &&
+                          e.key !== "Backspace" &&
+                          e.key !== "Delete" &&
+                          e.key !== "ArrowLeft" &&
+                          e.key !== "ArrowRight" &&
+                          e.key !== "Tab"
+                        ) {
+                          e.preventDefault();
+                        }
+                      }}
                       placeholder="Enter the size"
                       className="focus:ring-blue-500 focus:border-blue-500"
                       required
@@ -182,8 +200,26 @@ export default function AddApartmentPage() {
                     <Input
                       type="number"
                       name="number_of_rooms"
-                      value={apartment.number_of_rooms}
-                      onChange={handleChange}
+                      value={apartment.number_of_rooms || ""} // Ingen autofill av 0
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === "" || (!isNaN(parseInt(value, 10)) && parseInt(value, 10) >= 0)) {
+                          handleChange(e);
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        // Tillåt endast siffror, Backspace, Delete, Tab, piltangenter
+                        if (
+                          !/^[0-9]$/.test(e.key) &&
+                          e.key !== "Backspace" &&
+                          e.key !== "Delete" &&
+                          e.key !== "ArrowLeft" &&
+                          e.key !== "ArrowRight" &&
+                          e.key !== "Tab"
+                        ) {
+                          e.preventDefault();
+                        }
+                      }}
                       placeholder="Enter the number of rooms"
                       className="focus:ring-blue-500 focus:border-blue-500"
                       required
@@ -232,8 +268,26 @@ export default function AddApartmentPage() {
                   <Input
                     type="number"
                     name="rent_amount"
-                    value={apartment.rent_amount}
-                    onChange={handleChange}
+                    value={apartment.rent_amount || ""} // Ingen autofill av 0
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value === "" || (!isNaN(parseInt(value, 10)) && parseInt(value, 10) >= 0)) {
+                        handleChange(e);
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      // Tillåt endast siffror, Backspace, Delete, Tab, piltangenter
+                      if (
+                        !/^[0-9]$/.test(e.key) &&
+                        e.key !== "Backspace" &&
+                        e.key !== "Delete" &&
+                        e.key !== "ArrowLeft" &&
+                        e.key !== "ArrowRight" &&
+                        e.key !== "Tab"
+                      ) {
+                        e.preventDefault();
+                      }
+                    }}
                     placeholder="Enter the rent amount"
                     className="focus:ring-blue-500 focus:border-blue-500"
                     required
