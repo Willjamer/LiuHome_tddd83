@@ -54,8 +54,10 @@ export default function Home() {
     },
   ];
   async function fetchApartments(): Promise<void> {
-    // localStorage.clear();
     try {
+      // Kör denna 1 gång om tokens etc knasar:
+      localStorage.clear()
+      // Den kommer köras så fort ni går in på home. Uppdatera sedan sidan, starta om servern och starta om hemsidan
       const response = await fetch("http://localhost:3001/api/get-apartments", {
         method: "GET",
         headers: {
