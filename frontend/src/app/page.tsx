@@ -54,6 +54,7 @@ export default function Home() {
     },
   ];
   async function fetchApartments(): Promise<void> {
+    // localStorage.clear();
     try {
       const response = await fetch("http://localhost:3001/api/get-apartments", {
         method: "GET",
