@@ -15,41 +15,25 @@ class courier:
         
         return db_get_all_apartments()
 
-    def get_specific_apartment(self, apartment_id):
-        try:
-            # Använd apartment_id direkt
-            apartment = db.session.query(Apartment).filter_by(apartment_id=apartment_id).first()
-            if not apartment:
-                logging.info('rq get specifik ej ok')
-                
-                return jsonify({"error": "Apartment not found"}), 404
-            logging.info('rq get specifik ok')
-            return db_get_specific_apartment(apartment_id)
-            # return jsonify(apartment.serialize()), 200
-        except Exception as e:
-            logging.error(f"Error in get_specific_apartment: {e}")
-            return jsonify({"error": str(e)}), 500
+    def get_specific_apartment(self, json_data):
+        apartment_id = json_data.get('apartment_id')
+        return db_get_specific_apartment(apartment_id)
 
     def add_apartment(self, json_data): 
-        print(json_data)
-        logging.info(json_data)
+        
         # This one  is temporary
+        apartment_id = json_data.get('apartment_id')
 
-        apartment_data = json_data.get('apartment')
-        payment_data = json_data.get('payment')
-        apartment_id = apartment_data.get('apartment_id')
+        user_id = json_data.get('user_id')
+        title = json_data.get('title')
+        description = json_data.get('description')
+        address = json_data.get('address')
+        size = json_data.get('size')
+        number_of_rooms = json_data.get('number_of_rooms')
+        location = json_data.get('location')
+        rent_amount = json_data.get('rent_amount')
 
-        user_id = apartment_data.get('user_id').split('@')[0]
-        logging.info(user_id)
-        title = apartment_data.get('title')
-        description = apartment_data.get('description')
-        address = apartment_data.get('address')
-        size = apartment_data.get('size')
-        number_of_rooms = apartment_data.get('number_of_rooms')
-        location = apartment_data.get('location')
-        rent_amount = apartment_data.get('rent_amount')
-
-        available_from_primary = apartment_data.get('available_from')
+        available_from_primary = json_data.get('available_from').split('T')[0]
         available_from = available_from_primary.split('-')
 
 
@@ -78,42 +62,33 @@ class courier:
 
         return db_filtering(rent_interval, size_interval, room_interval, locations, sort_factor, asc)
 
-    def get_user(self, sso_id):
+    def get_user_profile(self, json_data):
+        sso_id = json_data.get('sso_id')
         return db_get_user(sso_id)
     
     def get_logged_in_user(self, json_data):
         return json_data
 
     def add_user(self, json_data):
-        logging.info('json_data', json_data)
-        email = str(json_data.get('email'))
-        logging.info(email)
-        sso_id = str(email.split('@')[0])
-        logging.info(sso_id)
-        name = str(json_data.get('name'))
-        logging.info(name)
-        password = json_data.get('password')
-        logging.info(password)
-        return db_add_user(sso_id, name, password, email)
-
+        return db_add_user(json_data)
+        
     def login(self, json_data):
         return db_login(json_data) 
     
-    def add_review(self, sso_id, json_data):
+    def add_review(self, json_data):
         content = json_data.get('content')
-        liked = json_data.get('liked')
-        reviewed_sso_id = sso_id
-        reviwer_sso_id = json_data.get('reviewer_id')
-        logging.info('rq add review ok')
-        db_add_review(content, liked, reviwer_sso_id, reviewed_sso_id)
+        rating = json_data.get('rating')
+        review_date = json_data.get('review_date')
+
+        db_add_review(content, rating, review_date)
         return {'message': 'review added'}
     
     def edit_review(self, json_data):
-        review_id = json_data.get('review_id')
         content = json_data.get('content')
         rating = json_data.get('rating')
+        review_date = json_data.get('review_date')
 
-        db_edit_review(review_id, content, rating)
+        db_edit_review(content, rating, review_date)
         return {'message': 'review edited'}
     
     def delete_review(self, json_data):
@@ -122,12 +97,3 @@ class courier:
         db_delete_review(review_id)
 
         return {'message': 'review deleted.'}
-
-    def get_review(self, json_data):
-        review_id = json_data.get('review_id')
-
-        return db_get_review(review_id)
-
-    def check_user(self, email):
-        return db_check_SSO_user(email)
-
