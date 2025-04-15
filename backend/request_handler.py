@@ -47,7 +47,7 @@ class courier:
         rent_amount = apartment_data.get('rent_amount')
 
         available_from_primary = apartment_data.get('available_from')
-        logging.info('available_from:', available_from_primary)
+        # logging.info('available_from:', available_from_primary)
         available_from = available_from_primary.split('-')
         logging.info(user_id)
 

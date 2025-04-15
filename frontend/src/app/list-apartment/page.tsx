@@ -41,7 +41,7 @@ export default function AddApartmentPage() {
 
   const isFormValid = () => {
     return (
-      apartment.title.trim() !== "" &&
+      // apartment.title.trim() !== "" &&
       apartment.description.trim() !== "" &&
       apartment.address.trim() !== "" &&
       apartment.size > 0 &&
@@ -110,7 +110,7 @@ export default function AddApartmentPage() {
           <CardContent className="p-8">
             <form id="apartmentForm" className="space-y-6">
               <div className="space-y-4">
-                <div>
+                {/* <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                     <AlignJustify className="h-4 w-4 text-blue-600" />
                     Title
@@ -124,7 +124,7 @@ export default function AddApartmentPage() {
                     className="focus:ring-blue-500 focus:border-blue-500"
                     required
                   />
-                </div>
+                </div> */}
                 
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
