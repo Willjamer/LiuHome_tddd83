@@ -214,7 +214,7 @@ export default function BrowseSpecificPage() {
 
             <p><strong>Rent:</strong> {apartment.rent_amount ? `${apartment.rent_amount} SEK/month` : "Rent not specified"}</p>
             <p><strong>Location:</strong> {apartment.location ? `${apartment.location}` : "location not specified"}</p>
-            <p><strong>Number of rooms:</strong> {apartment.number_of_rooms ? `${apartment.number_of_rooms} Rooms` : "rooms not specified"}</p>
+            <p><strong>Number of rooms:</strong> {apartment.number_of_rooms ? `${apartment.number_of_rooms} ` : "rooms not specified"}</p>
             <p><strong>Size:</strong> {apartment.size ? `${apartment.size} m²` : "Size not specified"}</p>
 
             <p>
