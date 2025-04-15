@@ -66,7 +66,9 @@ def get_user_profile():
 
 @apartments_bp.route("/api/update-user-profile", methods=['POST'])
 def update_user_profile():
+    logging.info('rt updus ok')
     json_data = request.get_json()
+    logging.info(json_data)
     return handler.update_user_profile(json_data)
 
 @apartments_bp.route("/api/get-user/<user_id>", methods=['GET', 'OPTIONS'])

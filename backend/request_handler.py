@@ -94,6 +94,7 @@ class courier:
         return db_login(json_data) 
     
     def update_user_profile(self, json_data):
+        logging.info('rh updus ok')
         return db_update_user_profile(json_data)
 
     

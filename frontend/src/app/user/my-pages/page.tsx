@@ -38,6 +38,7 @@ export default function ProfilePage() {
 
     const fetchProfile = async () => {
       try {
+        console.log(ssoId)
         const response = await axios.get("http://localhost:3001/api/get-user-profile", {
           params: { sso_id: ssoId },
           headers: { Authorization: `Bearer ${token}` }
@@ -110,10 +111,11 @@ export default function ProfilePage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <Input
                 placeholder="Name"
-                name="last_name"
+                name="name"
                 value={profile.name}
                 onChange={handleChange}
                 required
+                disabled
               />
               <Input
                 placeholder="Email"

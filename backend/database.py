@@ -294,15 +294,19 @@ def db_get_user(this_sso_id):
     logging.info('db getus ok')
     logging.info(this_sso_id)
     this_user = User.query.get(this_sso_id)
-    logging.info("1")
-    logging.info(this_user)
-    logging.info("2")
+    if this_user:
+        logging.info("1")
+        logging.info(this_user)
+        logging.info("2")
 
-    return jsonify({'user': this_user.serialize()})
+        return jsonify({'user': this_user.serialize()})
+    else:
+        return jsonify({'message': 'user not found', 'User': []})
 
 def db_add_user(json_data):
     try:
         sso_id = json_data.get('sso_id')
+        logging.info(sso_id)
         name = json_data.get('name')
         email = json_data.get('email')
         password = json_data.get('password')
@@ -335,6 +339,7 @@ def db_add_user(json_data):
 
 def db_update_user_profile(json_data):
     try:
+        logging.info('db updus ok')
         sso_id = json_data.get('sso_id')
         this_user = User.query.get(sso_id)
         if not this_user:
@@ -348,8 +353,9 @@ def db_update_user_profile(json_data):
             this_user.profile_picture = json_data.get('profile_picture')
         if 'program' in json_data:
             this_user.program = json_data.get('program')
-        if 'year' in json_data:
+        if json_data.get('year'):
             try:
+                logging.info(json_data.get('year'))
                 this_user.year = int(json_data.get('year'))
             except ValueError:
                 pass
