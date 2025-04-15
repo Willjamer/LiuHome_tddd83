@@ -54,7 +54,9 @@ class Apartment(db.Model):
                 "sso_id": self.user.sso_id,
                 "name": self.user.name,
                 "email": self.user.email,
-                "bio": self.user.bio
+                "bio": self.user.bio,
+                "program": self.user.program,
+                "year": self.user.year,
             } if self.user else None
         }
         
@@ -286,10 +288,12 @@ def db_add_apartment(apartment_id, user_id, title, description, address, size, n
     
 def db_remove_appartment(this_apartment_id):
     this_apartment = Apartment.query.get(this_apartment_id)
-
-    db.session.remove(this_apartment)
-    db.session.commit()
-    return jsonify({'message': 'apartment taken down'})
+    if (this_apartment):
+        db.session.remove(this_apartment)
+        db.session.commit()
+        return jsonify({'message': 'apartment taken down'})
+    else:
+        return jsonify({'message': 'Apartment not found'})
 
 def db_get_user(this_sso_id):
     logging.info('db getus ok')
