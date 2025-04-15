@@ -63,8 +63,7 @@ class courier:
     
     def remove_apartment(self, json_data):
         apartment_id = json_data.get('apartment_id')
-        db_remove_appartment(apartment_id)
-        return {'message': 'apartment successfully taken down'}
+        return db_remove_appartment(apartment_id)
     
     def filter_apartment(self, json_data):
         rent_interval = (json_data.get('min_rent'), json_data.get('max_rent'))

@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar } from "lucide-react";
+import { Router } from "../../../../node_modules/lucide-react/dist/lucide-react";
 
 interface User {
   sso_id: string;
@@ -43,6 +44,7 @@ export default function BrowseSpecificPage() {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewText, setReviewText] = useState("");
   const [liked, setLiked] = useState<boolean | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchApartment() {
@@ -105,6 +107,29 @@ export default function BrowseSpecificPage() {
       console.error("Error fetching user:", error);
     }
   }
+
+  async function removeApartment() {
+    const confirmed = window.confirm("Are you sure you want to delete this apartment?");
+    if (!confirmed) return;
+
+    try {
+      const apartment_id = apartment?.apartment_id
+
+      const response = await fetch('http://localhost:3001/api/remove-apartment', {
+        method: "POST",
+        headers: { "Content-Type": "application/json",
+        },
+        body: JSON.stringify(apartment_id),
+        credentials: "include",
+      });
+
+
+      if (!response.ok) throw new Error("Failed to remove apartment");
+      router.push('/')
+    } catch (error) {
+      console.error("Error:", error)
+    }
+  };
 
 
   if (!apartment) return <div>Loading...</div>;
@@ -180,7 +205,7 @@ export default function BrowseSpecificPage() {
                         Edit
                       </button>
                       <button
-                        onClick={() => console.log("Delete clicked")}
+                        onClick={removeApartment}
                         className="px-3 py-2 bg-red-600 text-white rounded-md shadow-sm hover:bg-red-700"
                       >
                         Delete

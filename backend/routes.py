@@ -92,11 +92,13 @@ def get_specific_apartment(apartment_id):
     return handler.get_specific_apartment(apartment_id)
 
 
-@apartments_bp.route("/api/remove-item", methods=['POST'])
-@jwt_required()
+@apartments_bp.route("/api/remove-apartment", methods=['POST'])
 def remove_item():
+    if request.method == 'OPTIONS':
+        return _build_cors_preflight_response()
+    
     json_data = request.get_json()
-    return handler.remove_item(json_data)
+    return handler.remove_apartment(json_data)
 
 @apartments_bp.route("/api/edit-item", methods=['POST'])
 @jwt_required()
