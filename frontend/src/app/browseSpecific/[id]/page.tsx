@@ -133,7 +133,7 @@ export default function BrowseSpecificPage() {
                     {apartment.rent_amount} SEK
                     <span className="text-base font-normal text-muted-foreground">/month</span>
                   </div>
-                  <Badge className="bg-green-500 text-white text-sm px-2 py-1">Verified Student</Badge>
+                  {/* <Badge className="bg-green-500 text-white text-sm px-2 py-1">Verified Student</Badge> */}
                 </div>
 
                 <div className="border rounded-lg p-4 ">
@@ -213,8 +213,8 @@ export default function BrowseSpecificPage() {
             <p><strong>Description:</strong> {apartment.description || "No description available"}</p>
 
             <p><strong>Rent:</strong> {apartment.rent_amount ? `${apartment.rent_amount} SEK/month` : "Rent not specified"}</p>
-            <p><strong>location:</strong> {apartment.location ? `${apartment.location}` : "location not specified"}</p>
-            <p><strong>location:</strong> {apartment.number_of_rooms ? `${apartment.number_of_rooms} Rooms` : "rooms not specified"}</p>
+            <p><strong>Location:</strong> {apartment.location ? `${apartment.location}` : "location not specified"}</p>
+            <p><strong>Number of rooms:</strong> {apartment.number_of_rooms ? `${apartment.number_of_rooms} Rooms` : "rooms not specified"}</p>
             <p><strong>Size:</strong> {apartment.size ? `${apartment.size} m²` : "Size not specified"}</p>
 
             <p>
