@@ -31,12 +31,12 @@ export default function LoginPage() {
       });
 
       if (response.data.access_token) {
-        // Spara token, t.ex. i localStorage, och/eller hantera den i ett auth-context
+       
         localStorage.setItem("access_token", response.data.access_token);
         localStorage.setItem("sso_id", response.data.sso_id)
         window.dispatchEvent(new Event('authChanged'));
 
-        // Omdirigera till startsidan eller en dashboard
+        
         router.push("/");
         router.refresh();
       } else {
