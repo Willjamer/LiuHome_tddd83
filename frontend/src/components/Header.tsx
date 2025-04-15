@@ -31,27 +31,36 @@ export default function Header() {
           <span>liuHome</span>
         </Link>
         <nav className="hidden md:flex gap-6 w-1/3 justify-center">
-          <Link href="/browse" className="text-sm font-medium hover:underline underline-offset-4">
-            Browse
-          </Link>
+          {isLoggedIn ? (
+            <Link href="/browse" className="text-sm font-medium hover:underline underline-offset-4">
+              Browse
+            </Link>
+          ) : (
+            <Link href="/user/login" className="text-sm font-medium hover:underline underline-offset-4">
+              Browse
+            </Link>
+          )}
           <Link href="/how-it-works" className="text-sm font-medium hover:underline underline-offset-4">
             How It Works
           </Link>
           <Link href="/about" className="text-sm font-medium hover:underline underline-offset-4">
             About
           </Link>
-
-          {/* <Link href="/swish" className="text-sm font-medium hover:underline underline-offset-4">
-              Swish
-            </Link>*/}
-
         </nav>
         <div className="flex items-center gap-4 w-1/3 justify-center">
-          <Link href="/list-apartment">
-            <Button variant="outline" size="sm">
-              List Your Place
-            </Button>
-          </Link>
+          {isLoggedIn ? (
+            <Link href="/list-apartment">
+              <Button variant="outline" size="sm">
+                List Your Place
+              </Button>
+            </Link>
+          ) : (
+            <Link href="/user/login">
+              <Button variant="outline" size="sm">
+                List Your Place
+              </Button>
+            </Link>
+          )}
           {isLoggedIn ? (
             <Link href="/user/my-pages">
               <Button size="sm">My Pages</Button>
