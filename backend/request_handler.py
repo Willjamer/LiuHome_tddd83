@@ -15,27 +15,41 @@ class courier:
         
         return db_get_all_apartments()
 
-    def get_specific_apartment(self, json_data):
-        apartment_id = json_data.get('apartment_id')
-        return db_get_specific_apartment(apartment_id)
+    def get_specific_apartment(self, apartment_id):
+        try:
+            # Hämta lägenheten från databasen baserat på apartment_id
+            apartment = Apartment.query.get(apartment_id)
+            if not apartment:
+                return jsonify({"error": "Apartment not found"}), 404
+
+            # Returnera lägenhetsdata som JSON
+            return jsonify(apartment.serialize()), 200
+        except Exception as e:
+            print(f"Error fetching apartment: {e}")
+            return jsonify({"error": "An error occurred"}), 500
 
     def add_apartment(self, json_data): 
-        
+        print(json_data)
+        logging.info(json_data)
         # This one  is temporary
-        apartment_id = json_data.get('apartment_id')
 
-        user_id = json_data.get('user_id')
-        title = json_data.get('title')
-        description = json_data.get('description')
-        address = json_data.get('address')
-        size = json_data.get('size')
-        number_of_rooms = json_data.get('number_of_rooms')
-        location = json_data.get('location')
-        rent_amount = json_data.get('rent_amount')
+        apartment_data = json_data.get('apartment')
+        payment_data = json_data.get('payment')
+        apartment_id = apartment_data.get('apartment_id')
 
-        available_from_primary = json_data.get('available_from').split('T')[0]
+        user_id = json_data.get('sso_id')
+        title = apartment_data.get('title')
+        description = apartment_data.get('description')
+        address = apartment_data.get('address')
+        size = apartment_data.get('size')
+        number_of_rooms = apartment_data.get('number_of_rooms')
+        location = apartment_data.get('area')
+        rent_amount = apartment_data.get('rent_amount')
+
+        available_from_primary = apartment_data.get('available_from')
+        # logging.info('available_from:', available_from_primary)
         available_from = available_from_primary.split('-')
-
+        logging.info(user_id)
 
         # this_user = db_get_user(user_id).json
         # expiry_date = this_user['user']['listing_expiry_date']
@@ -48,9 +62,9 @@ class courier:
         return {'message': 'apartment added successfully'}
     
     def remove_apartment(self, json_data):
-        apartment_id = json_data.get('apartment_id')
-        db_remove_appartment(apartment_id)
-        return {'message': 'apartment successfully taken down'}
+        logging.info(json_data)
+        apartment_id = json_data
+        return db_remove_appartment(apartment_id)
     
     def filter_apartment(self, json_data):
         rent_interval = (json_data.get('min_rent'), json_data.get('max_rent'))
@@ -66,6 +80,10 @@ class courier:
         sso_id = json_data.get('sso_id')
         return db_get_user(sso_id)
     
+    def get_user(self, user_id):
+        logging.info('hand getus ok')
+        return db_get_user(user_id)
+    
     def get_logged_in_user(self, json_data):
         return json_data
 
@@ -74,6 +92,11 @@ class courier:
         
     def login(self, json_data):
         return db_login(json_data) 
+    
+    def update_user_profile(self, json_data):
+        logging.info('rh updus ok')
+        return db_update_user_profile(json_data)
+
     
     def add_review(self, json_data):
         content = json_data.get('content')

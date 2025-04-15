@@ -1,0 +1,7 @@
+.hover-scale {
+  transition: transform 0.3s ease-in-out; /* Smooth transition */
+}
+
+.hover-scale:hover {
+  transform: scale(1.1); /* Gör elementet 10% större vid hover */
+}
