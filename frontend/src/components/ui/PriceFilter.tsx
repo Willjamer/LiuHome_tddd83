@@ -56,8 +56,8 @@ const PriceFilter: React.FC<{
         value={localPriceRange}
         onChange={handleSliderChange}
         valueLabelDisplay="auto"
-        min={200}
-        max={1000000}
+        min={500}
+        max={20000}
         sx={{
           "& .MuiSlider-thumb": {
             backgroundColor: "#1976d2",

@@ -38,12 +38,12 @@ export default function BrowsePage() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isPriceDropdownOpen, setIsPriceDropdownOpen] = useState(false);
   const [priceRange, setPriceRange] = useState<[number, number]>([
-    200, 1000000,
+    200, 20000,
   ]); // Declare and initialize the priceRange variable
 
   const [sortOption, setSortOption] = useState<string>("priceLowToHigh");
 
-  const [sizeRange, setSizeRange] = useState<[number, number]>([10, 500]); // Storleksintervall
+  const [sizeRange, setSizeRange] = useState<[number, number]>([10, 200]); // Storleksintervall
 
   const [isSizeDropdownOpen, setIsSizeDropdownOpen] = useState(false);
   const [isAreaDropdownOpen, setIsAreaDropdownOpen] = useState(false);
