@@ -92,8 +92,8 @@ class User(db.Model):
             "year": self.year,
             "bio": self.bio,
             "apartment": self.apartment.serialize() if self.apartment else None,
-            "created_reviews": [review.serialize('created') for review in self.created_revies],
-            "recieved_reviews": [review.serialize('received')for review in self.created_revies],
+            "created_reviews": [review.serialize('created') for review in self.created_reviews],
+            "recieved_reviews": [review.serialize('received')for review in self.recieved_reviews],
         } 
     
     def set_password(self, password):
@@ -126,7 +126,7 @@ class Review(db.Model):
         if context == 'created':
             base["reviewed_user"] = {
                 "sso_id": self.reviewed_user.sso_id,
-                "name": self.reviwed_user.name,
+                "name": self.reviewed_user.name,
             }
         elif context == 'received':
             base["reviewer"] = {
