@@ -159,6 +159,7 @@ def add_new_user():
 def add_appartment():
     logging.info("addapt route ok")
     json_data = request.get_json()
+    logging.info(json_data)
     # user_id = get_jwt_identity()
     # json_data['user_id'] = user_id
     return handler.add_apartment(json_data)

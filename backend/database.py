@@ -263,7 +263,7 @@ def db_get_specific_apartment(this_apartment_id):
 
 # def db_add_apartment(user_id, title, description, address, size, number_of_rooms, location, rent_amount, available_from):
 def db_add_apartment(apartment_id, user_id, title, description, address, size, number_of_rooms, location, rent_amount, available_from):
-    
+    logging.info(apartment_id)
     try:
         new_apartment = Apartment(
             # apartment_id = 1000, # Temporary
