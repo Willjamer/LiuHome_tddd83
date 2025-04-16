@@ -7,6 +7,8 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import PriceFilter from "@/components/ui/PriceFilter";
 import SizeFilter from "@/components/ui/SizeFilter";
+import { Button } from "@/components/ui/button";
+import { Search, Calendar, House, Users } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

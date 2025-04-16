@@ -52,14 +52,6 @@ const PriceFilter: React.FC<{
           sx={{ width: "45%" }}
         />
       </Box>
-      <Box
-        sx={{
-          height: 50,
-          background: "linear-gradient(to right, #e0e0e0, #c0c0c0)",
-          borderRadius: 2,
-          marginBottom: 2,
-        }}
-      ></Box>
       <Slider
         value={localPriceRange}
         onChange={handleSliderChange}
