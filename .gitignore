@@ -7,4 +7,6 @@ backend/venv/
 # Other unnecessary files
 __pycache__/
 *.pyc
-*.pyo
+*.py
+
+.DS_Store
