@@ -91,8 +91,10 @@ class User(db.Model):
             "program": self.program,
             "year": self.year,
             "bio": self.bio,
-            "apartment": self.apartment.serialize() if self.apartment else None
-        }
+            "apartment": self.apartment.serialize() if self.apartment else None,
+            "created_reviews": [review.serialize('created') for review in self.created_revies],
+            "recieved_reviews": [review.serialize('received')for review in self.created_revies],
+        } 
     
     def set_password(self, password):
         self.password = bcrypt.generate_password_hash(password).decode('utf8')
@@ -113,13 +115,26 @@ class Review(db.Model):
     def __repr__(self):
         return f"<Review {self.review_id}: {self.content}: {self.rating}: {self.review_date}>"
     
-    def serialize(self, factor): 
-        return {
+    def serialize(self, context=None): 
+        base = {
             "review_id": self.review_id,
             "content": self.content,
-            "rating": self.rating,
+            "liked": self.liked,
             "review_date": self.review_date,
-        } 
+        }
+
+        if context == 'created':
+            base["reviewed_user"] = {
+                "sso_id": self.reviewed_user.sso_id,
+                "name": self.reviwed_user.name,
+            }
+        elif context == 'received':
+            base["reviewer"] = {
+                "sso_id": self.reviewer.sso_id,
+                "name": self.reviewer.name,
+            }
+    
+        return base
     
 
 

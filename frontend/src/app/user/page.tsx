@@ -20,7 +20,10 @@ export default function ProfilePage() {
     program: "",
     year: "",
     bio: "",
+    created_reviews: [],
+    recieved_reviews: [],
   });
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [updateMessage, setUpdateMessage] = useState("");
@@ -185,6 +188,43 @@ export default function ProfilePage() {
               </div>
 
             </form>
+
+                        {/* Created Reviews */}
+            <div className="w-full max-w-md mt-8">
+              <h2 className="text-xl font-bold mb-2">Created Reviews</h2>
+              {profile.created_reviews.length === 0 ? (
+                <p className="text-gray-500">You haven't written any reviews yet.</p>
+              ) : (
+                profile.created_reviews.map((review: any) => (
+                  <Card key={review.review_id} className="mb-2">
+                    <CardContent className="p-4">
+                      <p className="font-semibold text-sm text-gray-600">To: {review.reviewed_user?.name || review.reviewed_sso_id}</p>
+                      <p className="text-sm">{review.content}</p>
+                      <p className="text-xs text-gray-400">{new Date(review.review_date).toLocaleDateString()}</p>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+
+            {/* Received Reviews */}
+            <div className="w-full max-w-md mt-8">
+              <h2 className="text-xl font-bold mb-2">Received Reviews</h2>
+              {profile.recieved_reviews.length === 0 ? (
+                <p className="text-gray-500">You haven't received any reviews yet.</p>
+              ) : (
+                profile.recieved_reviews.map((review: any) => (
+                  <Card key={review.review_id} className="mb-2">
+                    <CardContent className="p-4">
+                      <p className="font-semibold text-sm text-gray-600">From: {review.reviewer?.name || review.reviewer_sso_id}</p>
+                      <p className="text-sm">{review.content}</p>
+                      <p className="text-xs text-gray-400">{new Date(review.review_date).toLocaleDateString()}</p>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+
           </CardContent>
         </Card>
       </div>
