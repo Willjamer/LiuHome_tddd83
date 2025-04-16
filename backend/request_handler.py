@@ -39,7 +39,7 @@ class courier:
         payment_data = json_data.get('payment')
         apartment_id = apartment_data.get('apartment_id')
 
-        user_id = apartment_data.get('user_id').split('@')[0]
+        user_id = json_data.get('sso_id')
         logging.info(user_id)
         title = apartment_data.get('title')
         description = apartment_data.get('description')

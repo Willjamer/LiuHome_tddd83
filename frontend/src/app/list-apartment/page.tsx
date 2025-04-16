@@ -9,6 +9,7 @@ import { AlignJustify, Calendar, Home, House, MapPin, Maximize, SquareUser } fro
 import { Textarea } from "@/components/ui/textarea"; // Adjusted path to match the correct location
 import { DollarSign } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { useUser } from "../ssologin/page";
 
 export default function AddApartmentPage() {
   const router = useRouter();
@@ -30,7 +31,7 @@ export default function AddApartmentPage() {
   const [cardNumber, setCardNumber] = useState("");
   const [cvc, setCvc] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
-
+  const loggedInUser = useUser();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setApartment((prev) => ({
@@ -53,8 +54,10 @@ export default function AddApartmentPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    console.log(apartment)
+    const sso_id = loggedInUser?.user?.email.split("@")[0];
     const payload = {
+      sso_id,
       apartment,
       payment: {
         name,
@@ -143,7 +146,7 @@ export default function AddApartmentPage() {
                     <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                       <Maximize className="h-4 w-4 text-blue-600" />
                       Size (sqm)
-                    </label>
+                    </label> 
                     <Input
                       type="number"
                       name="size"
