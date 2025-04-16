@@ -334,7 +334,7 @@ def db_add_review(content, liked, reviewer_sso_id, reviewed_sso_id):
         try:
             new_review = Review(
                 # review_id = review_id,
-                review_id = 1000,
+                # review_id = 1000,
                 content = content,
                 liked = liked,
                 review_date = datetime.today(),
