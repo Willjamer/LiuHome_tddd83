@@ -220,7 +220,7 @@ def db_filtering(rent_interval, size_interval, room_interval, locations, sort_fa
     min_size, max_size = size_interval[0], size_interval[1]
     min_rooms, max_rooms = room_interval[0], room_interval[1]
 
-    if locations is None:
+    if locations == []:
         locations = Apartment.all_locations
 
     apartments = Apartment.query.filter(Apartment.rent_amount >= min_rent, 
@@ -231,7 +231,7 @@ def db_filtering(rent_interval, size_interval, room_interval, locations, sort_fa
                                  Apartment.number_of_rooms <= max_rooms,
                                  Apartment.location.in_(locations))
 
-    if sort_factor:
+    if sort_factor != '':
         apartments = db_sort_apartments(apartments, sort_factor, asc)
     
     apartments_list = apartments if isinstance(apartments, list) else apartments.all()

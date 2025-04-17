@@ -55,6 +55,61 @@ export default function BrowsePage() {
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false); // Hanterar om sorteringsdropdownen är öppen
   const [sortOrder, setSortOrder] = useState<string>(""); // Håller reda på vald sorteringsordning
 
+  async function applyFilters(): Promise<void> {
+      console.log(selectedAreas);
+      console.log(priceRange);
+      console.log(sizeRange);
+      console.log(selectedRooms);
+      console.log(sortOrder);
+
+    const numericRooms = selectedRooms.map(Number);
+    const minRooms = numericRooms.length > 0 ? Math.min(...numericRooms) : 1;
+    let maxRooms = numericRooms.length > 0 ? Math.max(...numericRooms): 8;
+
+    if (maxRooms == 4) {
+      maxRooms = 8;
+    }
+
+    const roomRange = [minRooms, maxRooms]
+
+    console.log(roomRange)
+
+    const filterLoad = {
+      priceRange,
+      sizeRange,
+      selectedAreas,
+      roomRange,
+      sortOrder,
+    }
+
+    console.log(filterLoad)
+
+    try {
+      const response = await fetch("http://localhost:3001/api/get-apartments", {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(filterLoad)
+      });
+      if (!response.ok) throw new Error("Failed to fetch apartments");
+
+      const data = await response.json();
+      const apartments: Apartment[] = data.Apartments;
+
+      setApartments(apartments);
+    } catch (error) {
+      console.error("Error:", error);
+      setApartments([]);
+    }
+  }
+  // const applyFilters = () => {
+  //   console.log(selectedAreas);
+  //   console.log(priceRange);
+  //   console.log(sizeRange);
+  //   console.log(selectedRooms);
+  //   console.log(sortOrder);
+  // }
   const toggleAreaSelection = (area: string) => {
     setSelectedAreas(
       (prev) =>
@@ -366,6 +421,8 @@ export default function BrowsePage() {
                         }`}
                         onClick={() => {
                           setSortOption("priceLowToHigh");
+                          handleSort(sortOption)
+                          console.log(sortOption)
                           setIsSortDropdownOpen(false); // Stäng dropdownen
                         }}
                       >
@@ -421,6 +478,12 @@ export default function BrowsePage() {
                 </div>
               )}
             </div>
+            <button
+              onClick={applyFilters}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition min-w-[140px] text-center"
+            >
+              Apply Filters
+            </button>
           </div>
         </section>
 
