@@ -54,8 +54,10 @@ export default function AddApartmentPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const sso_id = localStorage.getItem("sso_id");
 
     const payload = {
+      sso_id,
       apartment,
       payment: {
         name,
@@ -211,12 +213,12 @@ export default function AddApartmentPage() {
                     <option value="T1">T1</option>
                     <option value="Irrblosset">Irrblosset</option>
                     <option value="Vallastaden">Vallastaden</option>
-                    <option value="Ebbe Park">Ebbe Park</option>
+                    <option value="Ebbepark">Ebbepark</option>
                     <option value="Gottfridsberg">Gottfridsberg</option>  
                     <option value="Skäggetorp">Skäggetorp</option>
                     <option value="Berga">Berga</option>
                     <option value="Flamman">Flamman</option>
-                    <option value="Fjärillen">Fjärillen</option>
+                    <option value="Fjärilen">Fjärilen</option>
                     <option value="City">City</option>
                   
                   </select>

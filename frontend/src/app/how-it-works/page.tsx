@@ -11,15 +11,10 @@ const HowItWorksPage: React.FC = () => {
     <div className="flex min-h-screen flex-col w-full" style={{ backgroundImage: "url('/images/tvåstudenterdark.png')", backgroundSize: "cover", backgroundPosition: "right" }}>
       <main className="flex-1 p-8 space-y-16">
         <h1 className="text-4xl font-bold text-center text-white mb-4">How It Works</h1>
-        {/* <p className="text-lg text-muted-foreground text-white text-center">
+        {/* <p className="text-lg text-muted-foreground text-center">
           Here's a guide to how our website works.
         </p> */}
-        <div className="border-1 border-white">
-          {/* <p className="text-lg text-white text-center">
-            Here's a guide to how our website works.
-          </p> */}
-        </div>
-        {/* <hr className="border-b" /> */}
+        <hr className="border-b" />
 
 
         <Card className="mb-8 bg-transparent border-4 border-white">

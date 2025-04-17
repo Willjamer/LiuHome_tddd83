@@ -9,7 +9,7 @@ import SearchBar from "@/components/ui/search-bar";
 import {
     Home, // Ny ikon för antal rum
     MapPin, // Ny ikon för area
-} from "lucide-react";
+} from "lucide-react"
 
 interface Apartment {
     apartment_id: number;
@@ -66,36 +66,36 @@ export default function BrowsePage() {
     return (
         <div className="min-h-screen flex flex-col">
             <main className="flex-1 py-8 mx-8">
-                {/* Söksektion */}
+                {/* x
                 <section className="flex justify-center items-center w-full flex-col">
                     <h1 className="text-3xl font-bold text-center">Search for the perfect apartment for you!</h1>
                     <div className="bg-card rounded-lg p-4 w-full max-w-6xl mb-6">
                         <SearchBar onSearch={handleSearch} />
                     </div>
                 </section>
-
-                {/* Lägenhetskort */}
-                <section className="flex-1 justify-center">
+                */}
+                <section className="flex-1 justify-center ">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-center">
                         {filteredApartments.map((apt) => (
                             <Link href={`/browseSpecific/${apt.apartment_id}`} key={apt.apartment_id}>
                                 <Card className="overflow-hidden rounded-lg shadow-lg border-none p-0 h-full hover:shadow-xl transition-shadow group">
                                     <div className="relative w-full h-48 overflow-hidden">
                                         <img
-                                            src={"/images/apartment2.jpg"} // Ändra till dynamiska bilder om möjligt
+                                            src={`/images/${apt.location || "apartment1"}.jpg`}  // CHANGE THIS SO WE GET DIFF IMAGES BASED ON SOME REQ, AREA/APART
                                             alt={apt.title}
                                             className="object-cover w-full h-full transition-transform duration-300 ease-in-out transform group-hover:scale-105"
                                         />
                                         <Badge className="absolute top-2 right-2">{apt.rent_amount} SEK/month</Badge>
                                     </div>
                                     <CardContent className="p-4">
-                                        <h3 className="text-lg font-semibold line-clamp-1">{apt.title}</h3>
+                                        <h3 className="text-lg font-semibold line-clamp-1">{apt.address}</h3>
                                         <div className="flex flex-wrap gap-4 mt-3">
                                             {/* Antal rum */}
                                             <div className="flex items-center text-sm">
                                                 <Home className="h-4 w-4 mr-1" />
                                                 <span>
-                                                    {apt.number_of_rooms} {apt.number_of_rooms === 1 ? "room" : "rooms"}
+                                                    {apt.number_of_rooms} {apt.number_of_rooms === 1 ? "room, " : "rooms, "}
+                                                    {apt.size ? `${apt.size} m²` : ""}
                                                 </span>
                                             </div>
 
@@ -106,10 +106,7 @@ export default function BrowsePage() {
                                             </div>
                                         </div>
                                         <div className="mt-3 text-sm text-muted-foreground">
-                                            Available from:{" "}
-                                            {apt.available_from
-                                                ? new Date(apt.available_from).toISOString().split("T")[0]
-                                                : "Not specified"}
+                                            Available from: {apt.available_from ? new Date(apt.available_from).toISOString().split("T")[0] : "Not specified"}
                                         </div>
                                     </CardContent>
                                 </Card>
@@ -118,6 +115,25 @@ export default function BrowsePage() {
                     </div>
                 </section>
             </main>
+
+
+            {/* 
+            <div className="container mx-auto py-10">
+                <h1 className="text-3xl font-bold mb-6">Available Apartments</h1>
+                {apartments.length > 0 ? (
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {apartments.map((apt) => (
+                            <li key={apt.apartment_id} className="border p-4 rounded-lg shadow-md">
+                                <h3 className="text-lg font-semibold">{apt.title}</h3>
+                                <p>{apt.location} - {apt.rent_amount} SEK/month</p>
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>No apartments found.</p>
+                )}
+            </div>
+            */}
         </div>
     );
 }

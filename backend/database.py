@@ -9,6 +9,7 @@ import traceback
 import itertools
 import characters
 import logging
+import uuid
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -32,7 +33,7 @@ class Apartment(db.Model):
     # date_added      = db.Column(db.Date, nullable = False)
     # expiry_date     = db.Column(db.Date, nullable = False)
     # Något här om images, vet ej än hur
-
+    user = db.relationship('User', back_populates='apartment')
     all_locations = ["Ryd", "Valla", "Irrblosset", "T1", "Lambohov", "Gottfridsberg"]
 
     def __repr__(self):
@@ -62,16 +63,22 @@ class Apartment(db.Model):
 # First version user class 
 
 class User(db.Model):
-    sso_id    = db.Column(db.String, primary_key = True)
-    password  = db.Column(db.String, nullable = True)
-    name      = db.Column(db.String, nullable = False)
-    email     = db.Column(db.String, nullable = False)
-    apartment = db.relationship("Apartment", back_populates = "user", uselist = False)
-    # listing_expiry_date = db.Column(db.Date, nullable = False) # Vi vår kolla på denna. Vettefan riktigt hur vi ska styra upp det. 
+    sso_id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String, nullable=False, unique=True)
+    password = db.Column(db.String, nullable=False)
+    name = db.Column(db.String, nullable=False)
+    
+    
+    # Valfria fält – kan uppdateras efter kontoskapandet
+    profile_picture = db.Column(db.String, nullable=True)  # Ex. URL till bilden
+    program = db.Column(db.String, nullable=True)          # Ex. "Industriell Ekonomi"
+    year = db.Column(db.Integer, nullable=True)            # Årskurs
+    bio = db.Column(db.Text, nullable=True)                # Kort presentation
 
-    #Creating a relationship between users and reviews
-    created_reviews = db.relationship("Review", foreign_keys = "[Review.reviewer_sso_id]", backref = "reviewer")
-    recieved_reviews = db.relationship("Review", foreign_keys = "[Review.reviewed_sso_id]", backref = "reviewed_user")
+    # Relationer
+    apartment = db.relationship("Apartment", back_populates="user", uselist=False)
+    created_reviews = db.relationship("Review", foreign_keys="[Review.reviewer_id]", backref="reviewer")
+    recieved_reviews = db.relationship("Review", foreign_keys="[Review.reviewed_user_id]", backref="reviewed_user")
 
     def __repr__(self):
         return f"<User {self.sso_id}: {self.name}: {self.email}>"
@@ -79,10 +86,13 @@ class User(db.Model):
     def serialize(self):
         return {
             "sso_id": self.sso_id,
-            "name": self.name,
             "email": self.email,
-            # "apartment": self.apartment.serialize(),
-            # "listing_expiry_date": self.listing_expiry_date
+            "name": self.name,
+            "profile_picture": self.profile_picture,
+            "program": self.program,
+            "year": self.year,
+            "bio": self.bio,
+            "apartment": self.apartment.serialize() if self.apartment else None
         }
     
     def set_password(self, password):
@@ -283,38 +293,98 @@ def db_remove_appartment(this_apartment_id):
     db.session.commit()
     return jsonify({'message': 'apartment taken down'})
 
-def db_get_user(sso_id):
-    
-    this_user = User.query.get(sso_id)
-    return jsonify({'user': this_user.serialize()})
+def db_get_user(this_sso_id):
+    logging.info('db getus ok')
+    logging.info(this_sso_id)
+    this_user = User.query.get(this_sso_id)
+    if this_user:
+        logging.info("1")
+        logging.info(this_user)
+        logging.info("2")
 
+        return jsonify({'user': this_user.serialize()})
+    else:
+        return jsonify({'message': 'user not found', 'User': []})
 
-def db_add_user(sso_id, name, password, email):
-    
+def db_add_user(json_data):
     try:
+        sso_id = json_data.get('sso_id')
+        logging.info(sso_id)
+        name = json_data.get('name')
+        email = json_data.get('email')
+        password = json_data.get('password')
+
+        # FAKE SSO CREATION
+        if not sso_id:
+            while True:
+                sso_id = str(uuid.uuid4().int >> 96)
+                if not User.query.get(sso_id):
+                    break
+
+        # Check for existing email
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            return jsonify({'error': 'Email already registered'}), 409
 
         new_user = User(
-            sso_id = sso_id,
-            name = name,
-            email = email
+            sso_id=sso_id,
+            name=name,
+            email=email
         )
-        if password is not None:
-            new_user.set_password(password)
-
+        new_user.set_password(password)
         db.session.add(new_user)
         db.session.commit()
-        return jsonify({'message': 'user created successfully'})
+        return jsonify({'message': 'user created successfully', 'sso_id': sso_id})
+
     except Exception as e:
         traceback.print_exc()
+        return jsonify({'error': 'Internal server error'}), 500
+
+def db_update_user_profile(json_data):
+    try:
+        logging.info('db updus ok')
+        sso_id = json_data.get('sso_id')
+        this_user = User.query.get(sso_id)
+        if not this_user:
+            return jsonify({'error': 'User not found'}), 404
+
+        if 'first_name' in json_data:
+            this_user.first_name = json_data.get('first_name')
+        if 'last_name' in json_data:
+            this_user.last_name = json_data.get('last_name')
+        if 'profile_picture' in json_data:
+            this_user.profile_picture = json_data.get('profile_picture')
+        if 'program' in json_data:
+            this_user.program = json_data.get('program')
+        if json_data.get('year'):
+            try:
+                logging.info(json_data.get('year'))
+                this_user.year = int(json_data.get('year'))
+            except ValueError:
+                pass
+        if 'bio' in json_data:
+            this_user.bio = json_data.get('bio')
+
+        db.session.commit()
+        return jsonify({'message': 'User profile updated successfully', 'user': this_user.serialize()})
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({'error': 'Internal server error'}), 500
+
 
 def db_login(json_data):
     email = json_data.get('email')
-    this_user = User.query.filter_by(email = email).first() #assuming that a user logs in with the email
+    this_user = User.query.filter_by(email=email).first()
 
     if this_user and this_user.check_password(json_data.get('password')):
-        access_token = create_access_token(identity = this_user.sso_id)
-        return jsonify({'access_token': access_token})
-    return jsonify({'message': 'login failed'})
+        access_token = create_access_token(identity=this_user.sso_id)
+        return jsonify({
+            'access_token': access_token,
+            'sso_id': this_user.sso_id
+        })
+    
+    return jsonify({'message': 'login failed'}), 401
+
 
 def db_add_review(content, liked, reviewer_sso_id, reviewed_sso_id):
 
