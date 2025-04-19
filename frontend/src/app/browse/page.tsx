@@ -37,9 +37,7 @@ export default function BrowsePage() {
   const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isPriceDropdownOpen, setIsPriceDropdownOpen] = useState(false);
-  const [priceRange, setPriceRange] = useState<[number, number]>([
-    200, 20000,
-  ]); // Declare and initialize the priceRange variable
+  const [priceRange, setPriceRange] = useState<[number, number]>([200, 20000]); // Declare and initialize the priceRange variable
 
   const [sortOption, setSortOption] = useState<string>("priceLowToHigh");
 
@@ -56,23 +54,23 @@ export default function BrowsePage() {
   const [sortOrder, setSortOrder] = useState<string>(""); // Håller reda på vald sorteringsordning
 
   async function applyFilters(): Promise<void> {
-      console.log(selectedAreas);
-      console.log(priceRange);
-      console.log(sizeRange);
-      console.log(selectedRooms);
-      console.log(sortOrder);
+    console.log(selectedAreas);
+    console.log(priceRange);
+    console.log(sizeRange);
+    console.log(selectedRooms);
+    console.log(sortOrder);
 
     const numericRooms = selectedRooms.map(Number);
     const minRooms = numericRooms.length > 0 ? Math.min(...numericRooms) : 1;
-    let maxRooms = numericRooms.length > 0 ? Math.max(...numericRooms): 8;
+    let maxRooms = numericRooms.length > 0 ? Math.max(...numericRooms) : 8;
 
     if (maxRooms == 4) {
       maxRooms = 8;
     }
 
-    const roomRange = [minRooms, maxRooms]
+    const roomRange = [minRooms, maxRooms];
 
-    console.log(roomRange)
+    console.log(roomRange);
 
     const filterLoad = {
       priceRange,
@@ -80,17 +78,17 @@ export default function BrowsePage() {
       selectedAreas,
       roomRange,
       sortOrder,
-    }
+    };
 
-    console.log(filterLoad)
+    console.log(filterLoad);
 
     try {
       const response = await fetch("http://localhost:3001/api/get-apartments", {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(filterLoad)
+        body: JSON.stringify(filterLoad),
       });
       if (!response.ok) throw new Error("Failed to fetch apartments");
 
@@ -206,12 +204,24 @@ export default function BrowsePage() {
 
         <section className="flex flex-col items-center w-full mb-6">
           {/* Sökfältet */}
-          <div className="w-full max-w-6xl mb-4">
-            <SearchBar onSearch={handleSearch} />
+          <div className="flex items-center w-full max-w-6xl gap-4">
+            <div className="flex-grow">
+              <SearchBar onSearch={handleSearch} />
+            </div>
+
+            <div className="flex-shrink-0">
+              <Button
+                variant="outline"
+                className="whitespace-nowrap h-full flex items-center"
+              >
+                <Calendar className="h-4 w-4 mr-2" />
+                Dates
+              </Button>
+            </div>
           </div>
 
           {/* Dropdown-knappar */}
-          <div className="flex justify-center items-center w-full max-w-6xl gap-4">
+          <div className="flex justify-center items-center w-full max-w-6xl gap-4 mt-4">
             <div className="relative w-full max-w-xs">
               <button
                 className="px-4 py-2 bg-white text-black rounded-lg shadow-md flex items-center justify-between w-full hover:shadow-lg transition-shadow"
@@ -421,8 +431,8 @@ export default function BrowsePage() {
                         }`}
                         onClick={() => {
                           setSortOption("priceLowToHigh");
-                          handleSort(sortOption)
-                          console.log(sortOption)
+                          handleSort(sortOption);
+                          console.log(sortOption);
                           setIsSortDropdownOpen(false); // Stäng dropdownen
                         }}
                       >

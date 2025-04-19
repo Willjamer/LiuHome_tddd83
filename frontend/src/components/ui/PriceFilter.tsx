@@ -34,6 +34,7 @@ const PriceFilter: React.FC<{
         justifyContent="space-between"
         alignItems="center"
         mb={2}
+        gap={2}
       >
         <TextField
           label="Minimum"
