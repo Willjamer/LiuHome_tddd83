@@ -330,13 +330,14 @@ export default function BrowseSpecificPage() {
                 </div>
               )}
             </div>
-
+            <div>
               <button
                 onClick={() => setShowReviewModal(true)}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition-colors duration-200"
               >
                 Leave a Review
               </button>
+            </div>
             </div>
           </div>
         </div>
