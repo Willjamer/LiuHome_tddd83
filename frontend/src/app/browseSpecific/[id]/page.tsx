@@ -92,8 +92,8 @@ export default function BrowseSpecificPage() {
       console.log(data.user.recieved_reviews)
       setUser(data.user)
       setShowUserModal(true);
-      
-      const recieved_reviews : Review[] = data.user.recieved_reviews;
+
+      const recieved_reviews: Review[] = data.user.recieved_reviews;
     } catch (error) {
       console.error("Error fetching user:", error)
     }
@@ -121,7 +121,7 @@ export default function BrowseSpecificPage() {
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) throw new Error ("Failed to submit review")
+      if (!response.ok) throw new Error("Failed to submit review")
 
       setShowReviewModal(false);
       setReviewText("");
@@ -139,7 +139,7 @@ export default function BrowseSpecificPage() {
         {/* Bildsektion */}
         <div className="w-2/3">
           <Image
-            src={"/images/apartment2.jpg"}
+            src={`/images/${apartment.location || "apartment3"}.jpg`}
             alt={apartment.title}
             width={500}
             height={300}
@@ -147,7 +147,7 @@ export default function BrowseSpecificPage() {
             style={{ height: "100%" }}
           />
         </div>
-  
+
         {/* Kort med hyresinformation */}
         <div className="w-1/3">
           <Card className="sticky top-24 h-full">
@@ -159,22 +159,22 @@ export default function BrowseSpecificPage() {
                     <span className="text-base font-normal text-muted-foreground">/month</span>
                   </div>
                   {/* <Badge className="bg-green-500 text-white text-sm px-2 py-1">Verified Student</Badge> */}
-                    <Badge 
-                      className="gl-button btn btn-block btn-md btn-default gl-mt-5 gl-px-4 gl-text-center gl-display-flex gl-flex-direction-column gl-gap-2"
-                      style={{
-                        backgroundColor: '#54d8e0',
-                        color: 'white',
-                        fontWeight: 'bold',
-                        fontSize: '11pt',            
-                        borderRadius: '10px',          
-                        border: '1.5px solid #d3d3d3', 
-                        padding: '6px 14px',           
-                      }}
-                    >
-                      <span className="gl-button-text">Verified</span>
-                    </Badge>
-                  </div>
-  
+                  <Badge
+                    className="gl-button btn btn-block btn-md btn-default gl-mt-5 gl-px-4 gl-text-center gl-display-flex gl-flex-direction-column gl-gap-2"
+                    style={{
+                      backgroundColor: '#54d8e0',
+                      color: 'white',
+                      fontWeight: 'bold',
+                      fontSize: '11pt',
+                      borderRadius: '10px',
+                      border: '1.5px solid #d3d3d3',
+                      padding: '6px 14px',
+                    }}
+                  >
+                    <span className="gl-button-text">Verified</span>
+                  </Badge>
+                </div>
+
                 <div className="border rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-4">
                     <Calendar className="h-4 w-4" />
@@ -191,7 +191,7 @@ export default function BrowseSpecificPage() {
                     </div>
                   </div>
                 </div>
-  
+
                 <div className="flex items-center gap-4">
                   <div className="h-12 w-12 rounded-full overflow-hidden">
                     <img
@@ -204,15 +204,23 @@ export default function BrowseSpecificPage() {
                     <div className="font-medium">{apartment.user?.name}</div>
                     {/* <div className="text-sm text-muted-foreground">Student at {"LiU"}</div> */}
                     {/* <div className="text-xs">{apartment.address}</div> */}
+                    {apartment?.user?.year && (
+                      <div className="text-sm text-muted-foreground">Year: {apartment.user.year}</div>
+                    )}
+
+                    {apartment?.user?.program && (
+                      <div className="text-sm text-muted-foreground">Studying: {apartment.user.program}</div>
+                    )}
+                    <div className="text-sm">{apartment?.user?.email}</div>
                   </div>
-  
+
                   <button
                     onClick={showUser}
                     className="px-4 py-2 bg-blue-600 text-white rounded-md shadow-sm"
                   >
                     View profile
                   </button>
-  
+
                   {loggedInUser?.user?.email.split("@")[0] === apartment.user?.sso_id && (
                     <>
                       <button
@@ -234,7 +242,7 @@ export default function BrowseSpecificPage() {
                   <strong>Description:</strong> {apartment.description || "No description available"}
                 </div> */}
 
-                
+
                 {/* <Button
                   className="w-full"
                   onClick={() => {
@@ -243,7 +251,7 @@ export default function BrowseSpecificPage() {
                 >
                   Send email
                 </Button> */}
-                
+
                 <Button
                   className="w-full"
                   onClick={() => {
@@ -262,16 +270,19 @@ export default function BrowseSpecificPage() {
           </Card>
         </div>
       </div>
-  
+
       {/* Ny sektion för detaljerad information */}
       <div className="w-full px-16 mt-8">
         <Card className="p-6 shadow-lg">
-          <h2 className="text-2xl font-bold mb-4">Apartment Details</h2>
+          <h2 className="text-2xl font-bold mb-4">{apartment.address}</h2>
           <div className="space-y-2">
             <p><strong>Description:</strong> {apartment.description || "No description available"}</p>
-            <p><strong>Address:</strong> {apartment.address || "No address provided"}</p>
+
             <p><strong>Rent:</strong> {apartment.rent_amount ? `${apartment.rent_amount} SEK/month` : "Rent not specified"}</p>
-            <p><strong>Rooms:</strong> {apartment.number_of_rooms || "N/A"}</p>
+            <p><strong>Location:</strong> {apartment.location ? `${apartment.location}` : "location not specified"}</p>
+            <p><strong>Number of rooms:</strong> {apartment.number_of_rooms ? `${apartment.number_of_rooms} ` : "rooms not specified"}</p>
+            <p><strong>Size:</strong> {apartment.size ? `${apartment.size} m²` : "Size not specified"}</p>
+
             <p>
               <strong>Available from:</strong>{" "}
               {apartment.available_from
@@ -377,21 +388,19 @@ export default function BrowseSpecificPage() {
             <div className="flex justify-center gap-6 mb-4">
               <Button
                 onClick={() => setLiked(true)}
-                className={`px-6 py-2 rounded-md transition-all ${
-                  liked === true
+                className={`px-6 py-2 rounded-md transition-all ${liked === true
                     ? "bg-green-600 text-white shadow-md"
                     : "bg-gray-100 text-gray-700 hover:bg-green-100"
-                }`}
+                  }`}
               >
                 👍 Approve
               </Button>
               <Button
                 onClick={() => setLiked(false)}
-                className={`px-6 py-2 rounded-md transition-all ${
-                  liked === false
+                className={`px-6 py-2 rounded-md transition-all ${liked === false
                     ? "bg-red-600 text-white shadow-md"
                     : "bg-gray-100 text-gray-700 hover:bg-red-100"
-                }`}
+                  }`}
               >
                 👎 Disapprove
               </Button>
