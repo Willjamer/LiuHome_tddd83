@@ -50,7 +50,6 @@ export default function BrowseSpecificPage() {
   const [reviewText, setReviewText] = useState("");
   const [liked, setLiked] = useState<boolean | null>(null);
 
-
   const loggedInUser = useUser();
 
   useEffect(() => {
@@ -65,6 +64,7 @@ export default function BrowseSpecificPage() {
       }
     }
     console.log(loggedInUser)
+
     if (id) {
       fetchApartment();
     }
@@ -88,8 +88,11 @@ export default function BrowseSpecificPage() {
       });
       if (!response.ok) throw new Error('Failed to fetch user information');
       const data: User = await response.json();
+
+      console.log(data.user.recieved_reviews)
       setUser(data.user)
       setShowUserModal(true);
+      
     } catch (error) {
       console.error("Error fetching user:", error)
     }
@@ -100,7 +103,7 @@ export default function BrowseSpecificPage() {
     const loggedInSSOId = loggedInUser?.user?.email.split("@")[0];
     const this_sso_id = apartment?.user?.sso_id
     if (!loggedInSSOId || !this_sso_id || liked === null) return;
-    console.log(user)
+
     const data = {
       reviewer_id: loggedInSSOId,
       liked,
