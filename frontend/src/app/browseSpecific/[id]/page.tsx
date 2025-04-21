@@ -233,14 +233,30 @@ export default function BrowseSpecificPage() {
                 {/* <div>
                   <strong>Description:</strong> {apartment.description || "No description available"}
                 </div> */}
-                <Button
+
+                
+                {/* <Button
                   className="w-full"
                   onClick={() => {
                     window.location.href = `mailto:${apartment.user?.email}?subject=LiuHome - Hyra lägenhet&body=Hej, jag är intresserad av att hyra din lägenhet.` 
                   }}
                 >
                   Send email
+                </Button> */}
+                
+                <Button
+                  className="w-full"
+                  onClick={() => {
+                    const email = apartment.user?.email;
+                    const subject = encodeURIComponent("LiuHome - Hyra lägenhet");
+                    const body = encodeURIComponent("Hej, jag är intresserad av att hyra din lägenhet.");
+                    const outlookUrl = `https://outlook.office.com/mail/deeplink/compose?to=${email}&subject=${subject}&body=${body}`;
+                    window.open(outlookUrl, "_blank");
+                  }}
+                >
+                  Send email
                 </Button>
+
               </div>
             </CardContent>
           </Card>
