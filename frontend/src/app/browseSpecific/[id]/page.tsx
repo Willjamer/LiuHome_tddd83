@@ -34,7 +34,7 @@ interface Apartment {
 }
 
 interface Review {
-  like: boolean;
+  liked: boolean;
   content?: string;
   review_date: string;
   reviewer: User;
@@ -267,7 +267,8 @@ export default function BrowseSpecificPage() {
       </div>
       {showUserModal && user && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 transition-opacity duration-300">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 w-[600px] h-[600px] relative flex flex-col justify-between">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 w-[600px] h-[600px] relative flex flex-col">
+            {/* Close Button */}
             <button
               onClick={() => setShowUserModal(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-black text-xl"
@@ -275,18 +276,20 @@ export default function BrowseSpecificPage() {
             >
               ✕
             </button>
-            <div className="flex items-center gap-4 mb-6">
-              <img
-                src="/images/Icon.png"
-                alt="User Icon"
-                className="w-16 h-16 rounded-full border border-gray-300"
-              />
-              <div>
-                <h2 className="text-2xl font-bold">{user.name}</h2>
-                <p className="text-gray-500 text-sm">{user.email}</p>
+
+            {/* User Info (non-scrollable) */}
+            <div className="mb-4">
+              <div className="flex items-center gap-4 mb-4">
+                <img
+                  src="/images/Icon.png"
+                  alt="User Icon"
+                  className="w-16 h-16 rounded-full border border-gray-300"
+                />
+                <div>
+                  <h2 className="text-2xl font-bold">{user.name}</h2>
+                  <p className="text-gray-500 text-sm">{user.email}</p>
+                </div>
               </div>
-            </div>
-            <div className="space-y-4 text-gray-700 overflow-y-auto">
               <p>
                 <strong className="text-gray-900">Studies:</strong> {user.program}
               </p>
@@ -300,19 +303,20 @@ export default function BrowseSpecificPage() {
                 </p>
               </div>
             </div>
-            <div className="flex justify-end mt-6">
-            <div className="mt-6">
+
+            {/* Scrollable Reviews */}
+            <div className="flex-1 overflow-y-auto pr-2">
               <h3 className="text-lg font-semibold text-gray-800 mb-2">Reviews</h3>
               {user.recieved_reviews.length === 0 ? (
                 <p className="text-sm text-gray-500">No reviews yet.</p>
               ) : (
-                <div className="space-y-4 overflow-y-auto max-h-60 pr-2">
+                <div className="space-y-4">
                   {user.recieved_reviews.map((review, index) => (
                     <div key={index} className="border rounded-lg p-4 shadow-sm bg-gray-50">
                       <div className="flex justify-between items-center mb-2">
                         <span className="font-medium text-gray-900">{review.reviewer.name}</span>
-                        <span className={`text-sm font-medium ${review.like ? "text-green-600" : "text-red-600"}`}>
-                          {review.like ? "Liked 👍" : "Disliked 👎"}
+                        <span className={`text-sm font-medium ${review.liked ? "text-green-600" : "text-red-600"}`}>
+                          {review.liked ? "Approved 👍" : "Disapproved 👎"}
                         </span>
                       </div>
                       {review.content && (
@@ -330,14 +334,15 @@ export default function BrowseSpecificPage() {
                 </div>
               )}
             </div>
-            <div>
+
+            {/* Bottom Right Button */}
+            <div className="mt-4 flex justify-end">
               <button
                 onClick={() => setShowReviewModal(true)}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition-colors duration-200"
               >
                 Leave a Review
               </button>
-            </div>
             </div>
           </div>
         </div>
@@ -362,7 +367,7 @@ export default function BrowseSpecificPage() {
                     : "bg-gray-100 text-gray-700 hover:bg-green-100"
                 }`}
               >
-                👍 Like
+                👍 Approve
               </Button>
               <Button
                 onClick={() => setLiked(false)}
@@ -372,7 +377,7 @@ export default function BrowseSpecificPage() {
                     : "bg-gray-100 text-gray-700 hover:bg-red-100"
                 }`}
               >
-                👎 Dislike
+                👎 Disapprove
               </Button>
             </div>
             <textarea
