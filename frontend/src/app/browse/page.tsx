@@ -67,12 +67,12 @@ export default function BrowsePage() {
         <div className="min-h-screen flex flex-col">
             <main className="flex-1 py-8 mx-8">
                 {/* Söksektion */}
-                <section className="flex justify-center items-center w-full flex-col">
+                {/* <section className="flex justify-center items-center w-full flex-col">
                     <h1 className="text-3xl font-bold text-center">Search for the perfect apartment for you!</h1>
                     <div className="bg-card rounded-lg p-4 w-full max-w-6xl mb-6">
                         <SearchBar onSearch={handleSearch} />
                     </div>
-                </section>
+                </section> */}
 
                 {/* Lägenhetskort */}
                 <section className="flex-1 justify-center">
@@ -89,13 +89,14 @@ export default function BrowsePage() {
                                         <Badge className="absolute top-2 right-2">{apt.rent_amount} SEK/month</Badge>
                                     </div>
                                     <CardContent className="p-4">
-                                        <h3 className="text-lg font-semibold line-clamp-1">{apt.title}</h3>
+                                        <h3 className="text-lg font-semibold line-clamp-1">{apt.address}</h3>
                                         <div className="flex flex-wrap gap-4 mt-3">
                                             {/* Antal rum */}
                                             <div className="flex items-center text-sm">
                                                 <Home className="h-4 w-4 mr-1" />
                                                 <span>
-                                                    {apt.number_of_rooms} {apt.number_of_rooms === 1 ? "room" : "rooms"}
+                                                    {apt.number_of_rooms} {apt.number_of_rooms === 1 ? "room, " : "rooms, "}
+                                                    {apt.size ? `${apt.size} m²` : ""}
                                                 </span>
                                             </div>
 
