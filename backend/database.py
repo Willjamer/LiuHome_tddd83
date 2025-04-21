@@ -4,7 +4,8 @@ from extensions import db, bcrypt
 # from sqlalchemy.event import listens_for
 # from flask_mail import Mail, Message  # Assuming you're using Flask-Mail
 from flask import current_app
-from datetime import datetime
+# from datetime import datetime
+import datetime
 import traceback
 import itertools
 import characters
@@ -294,6 +295,7 @@ def db_add_apartment(apartment_id, user_id, title, description, address, size, n
             is_available = True,
             available_from = datetime.date(int(available_from[0]), int(available_from[1]), int(available_from[2]))
         )
+
         db.session.add(new_apartment)
         db.session.commit()
 

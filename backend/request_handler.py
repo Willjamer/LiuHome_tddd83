@@ -46,7 +46,7 @@ class courier:
         address = apartment_data.get('address')
         size = apartment_data.get('size')
         number_of_rooms = apartment_data.get('number_of_rooms')
-        location = apartment_data.get('location')
+        location = apartment_data.get('area')
         rent_amount = apartment_data.get('rent_amount')
 
         available_from_primary = apartment_data.get('available_from')
