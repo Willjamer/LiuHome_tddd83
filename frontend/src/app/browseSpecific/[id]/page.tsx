@@ -93,6 +93,7 @@ export default function BrowseSpecificPage() {
       setUser(data.user)
       setShowUserModal(true);
       
+      const recieved_reviews : Review[] = data.user.recieved_reviews;
     } catch (error) {
       console.error("Error fetching user:", error)
     }
@@ -300,6 +301,36 @@ export default function BrowseSpecificPage() {
               </div>
             </div>
             <div className="flex justify-end mt-6">
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">Reviews</h3>
+              {user.recieved_reviews.length === 0 ? (
+                <p className="text-sm text-gray-500">No reviews yet.</p>
+              ) : (
+                <div className="space-y-4 overflow-y-auto max-h-60 pr-2">
+                  {user.recieved_reviews.map((review, index) => (
+                    <div key={index} className="border rounded-lg p-4 shadow-sm bg-gray-50">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="font-medium text-gray-900">{review.reviewer.name}</span>
+                        <span className={`text-sm font-medium ${review.like ? "text-green-600" : "text-red-600"}`}>
+                          {review.like ? "Liked 👍" : "Disliked 👎"}
+                        </span>
+                      </div>
+                      {review.content && (
+                        <p className="text-sm text-gray-700 mb-1">{review.content}</p>
+                      )}
+                      <p className="text-xs text-gray-400">
+                        {new Date(review.review_date).toLocaleDateString("sv-SE", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
               <button
                 onClick={() => setShowReviewModal(true)}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition-colors duration-200"
