@@ -193,13 +193,7 @@ export default function BrowseSpecificPage() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-full overflow-hidden">
-                    <img
-                      src={"/images/apartment2.jpg"} // Replace with real profile picture
-                      alt={apartment.title}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
+                 
                   <div>
                     <div className="font-medium">{apartment.user?.name}</div>
                     {/* <div className="text-sm text-muted-foreground">Student at {"LiU"}</div> */}
@@ -307,11 +301,7 @@ export default function BrowseSpecificPage() {
             {/* User Info (non-scrollable) */}
             <div className="mb-4">
               <div className="flex items-center gap-4 mb-4">
-                <img
-                  src="/images/Icon.png"
-                  alt="User Icon"
-                  className="w-16 h-16 rounded-full border border-gray-300"
-                />
+               
                 <div>
                   <h2 className="text-2xl font-bold">{user.name}</h2>
                   <p className="text-gray-500 text-sm">{user.email}</p>
