@@ -15,6 +15,7 @@ interface User {
   program: string;
   year: number;
   bio: string;
+  recieved_reviews: Review[];
 }
 
 interface Apartment {
@@ -99,7 +100,7 @@ export default function BrowseSpecificPage() {
     const loggedInSSOId = loggedInUser?.user?.email.split("@")[0];
     const this_sso_id = apartment?.user?.sso_id
     if (!loggedInSSOId || !this_sso_id || liked === null) return;
-
+    console.log(user)
     const data = {
       reviewer_id: loggedInSSOId,
       liked,
