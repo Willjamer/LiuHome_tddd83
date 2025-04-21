@@ -247,7 +247,60 @@ export default function BrowseSpecificPage() {
           </div>
         </Card>
       </div>
-  
+      {showUserModal && user && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 transition-opacity duration-300">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 w-[600px] h-[600px] relative flex flex-col justify-between">
+            <button
+              onClick={() => setShowUserModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-black text-xl"
+              aria-label="Close modal"
+            >
+              ✕
+            </button>
+
+            {/* Header */}
+            <div className="flex items-center gap-4 mb-6">
+              <img
+                src="/images/Icon.png"
+                alt="User Icon"
+                className="w-16 h-16 rounded-full border border-gray-300"
+              />
+              <div>
+                <h2 className="text-2xl font-bold">{user.name}</h2>
+                <p className="text-gray-500 text-sm">{user.email}</p>
+              </div>
+            </div>
+
+            {/* Profile Info */}
+            <div className="space-y-4 text-gray-700 overflow-y-auto">
+              <p>
+                <strong className="text-gray-900">Studies:</strong> {user.program}
+              </p>
+              <p>
+                <strong className="text-gray-900">Year:</strong> {user.year}
+              </p>
+              <div>
+                <strong className="text-gray-900">Bio:</strong>
+                <p className="mt-1 text-sm text-gray-600 whitespace-pre-line">
+                  {user.bio || "No bio provided."}
+                </p>
+              </div>
+            </div>
+
+            {/* Bottom Button */}
+            <div className="flex justify-end mt-6">
+              <button
+                onClick={() => setShowReviewModal(true)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition-colors duration-200"
+              >
+                Leave a Review
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+{/*   
       {showUserModal && user && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white rounded-lg shadow-lg p-8 w-[600px] h-[600px] relative">
@@ -274,10 +327,10 @@ export default function BrowseSpecificPage() {
               Leave a review
             </button>
             {/* <h2 className="text-xl font-semibold mb-4">User Profile</h2> */}
-            <div className="space-y-"></div>
+            {/* <div className="space-y-"></div>
           </div>
         </div>
-      )}
+      )} */} 
 
       {showReviewModal && user && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
