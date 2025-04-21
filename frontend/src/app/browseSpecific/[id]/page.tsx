@@ -257,8 +257,6 @@ export default function BrowseSpecificPage() {
             >
               ✕
             </button>
-
-            {/* Header */}
             <div className="flex items-center gap-4 mb-6">
               <img
                 src="/images/Icon.png"
@@ -270,8 +268,6 @@ export default function BrowseSpecificPage() {
                 <p className="text-gray-500 text-sm">{user.email}</p>
               </div>
             </div>
-
-            {/* Profile Info */}
             <div className="space-y-4 text-gray-700 overflow-y-auto">
               <p>
                 <strong className="text-gray-900">Studies:</strong> {user.program}
@@ -286,8 +282,6 @@ export default function BrowseSpecificPage() {
                 </p>
               </div>
             </div>
-
-            {/* Bottom Button */}
             <div className="flex justify-end mt-6">
               <button
                 onClick={() => setShowReviewModal(true)}
@@ -299,72 +293,54 @@ export default function BrowseSpecificPage() {
           </div>
         </div>
       )}
-
-{/*   
-      {showUserModal && user && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-8 w-[600px] h-[600px] relative">
-            <button
-              onClick={() => setShowUserModal(false)}
-              className="absolute top-2 right-3 text-gray-500 hover:text-black"
-            >
-              ✕
-            </button>
-            <h2 className="text-xl font-semibold mb-4">User Profile</h2>
-            <div className="space-y-">
-              <p><strong>Name:</strong> {user.name}</p>
-              <p><strong>Email:</strong> {user.email}</p>
-              <p><strong>Studies:</strong> {user.program}</p>
-              <p><strong>Year:</strong> {user.year}</p>
-              <p><strong>Bio:</strong> {user.bio}</p>
-
-
-            </div>
-            <button
-              onClick={() => setShowReviewModal(true)}
-              className="absolute bottom-4 right-4 bg-blue-600 text-white"
-            >
-              Leave a review
-            </button>
-            {/* <h2 className="text-xl font-semibold mb-4">User Profile</h2> */}
-            {/* <div className="space-y-"></div>
-          </div>
-        </div>
-      )} */} 
-
       {showReviewModal && user && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-8 w-[600px] h-[300px] relative">
-          <h2 className="text-xl font-semibold mb-4">Leave a review</h2>
-          <div className="flex items-center gap-4 mb-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 transition-opacity duration-300">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-xl relative">
             <button
               onClick={() => setShowReviewModal(false)}
-              className="absolute top-2 right-3 text-gray-500 hover:text-black"
+              className="absolute top-3 right-4 text-gray-400 hover:text-black text-xl"
+              aria-label="Close modal"
             >
               ✕
             </button>
-            <Button
-              onClick={() => setLiked(true)}
-              className={liked === true ? "bg-green-600 text-white" : ""}
-            >
-              👍 Like
-            </Button>  
-            <Button
-              onClick={() => setLiked(false)}
-              className={liked === false ? "bg-red-600 text-white" : ""}
-            >
-              👎 Dislike
-            </Button>
-          </div>
-          
-          <textarea className="w-full border rounded p-2" rows={4} placeholder="Add a description" value={reviewText} onChange={(e) => setReviewText(e.target.value)} />
-
-          <button
-            onClick={leaveReview}
-            className="absolute bottom-4 right-4 bg-blue-600 hover: bg-blue-700 text-white px-4 py-2 rounded-md transition-colors duration-200"
-          >
-              Publish review
-          </button>
+            <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">Leave {user.name.split(' ')} a Review!</h2>
+            <div className="flex justify-center gap-6 mb-4">
+              <Button
+                onClick={() => setLiked(true)}
+                className={`px-6 py-2 rounded-md transition-all ${
+                  liked === true
+                    ? "bg-green-600 text-white shadow-md"
+                    : "bg-gray-100 text-gray-700 hover:bg-green-100"
+                }`}
+              >
+                👍 Like
+              </Button>
+              <Button
+                onClick={() => setLiked(false)}
+                className={`px-6 py-2 rounded-md transition-all ${
+                  liked === false
+                    ? "bg-red-600 text-white shadow-md"
+                    : "bg-gray-100 text-gray-700 hover:bg-red-100"
+                }`}
+              >
+                👎 Dislike
+              </Button>
+            </div>
+            <textarea
+              className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
+              rows={4}
+              placeholder="Write a short message about your experience..."
+              value={reviewText}
+              onChange={(e) => setReviewText(e.target.value)}
+            />
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={leaveReview}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2 rounded-md transition duration-200"
+              >
+                Publish Review
+              </button>
+            </div>
           </div>
         </div>
       )}
