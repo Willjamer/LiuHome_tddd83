@@ -1,14 +1,11 @@
 from flask import jsonify
 from flask_jwt_extended import create_access_token
 from extensions import db, bcrypt
-# from sqlalchemy.event import listens_for
-# from flask_mail import Mail, Message  # Assuming you're using Flask-Mail
 from flask import current_app
 # from datetime import datetime
 import datetime
 import traceback
 import itertools
-import characters
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
@@ -30,11 +27,10 @@ class Apartment(db.Model):
     available_from  = db.Column(db.Date, nullable = True)
 
     user = db.relationship('User', back_populates='apartment')
-    # date_added      = db.Column(db.Date, nullable = False)
-    # expiry_date     = db.Column(db.Date, nullable = False)
-    # Något här om images, vet ej än hur
 
-    all_locations = ["Ryd", "Valla", "Irrblosset", "T1", "Lambohov", "Gottfridsberg"]
+    # expiry_date     = db.Column(db.Date, nullable = False)
+    
+    all_locations = ["Ryd", "Colonia", "Valla", "Lambohov", "T1", "Irrblosset", "Vallastaden", "Ebbepark", "Gottfridsberg", "Skäggetorp", "Berga", "Flamman", "Fjärilen", "City"]
 
     def __repr__(self):
         return f"<Apartment {self.apartment_id}: {self.title}: {self.description}: {self.address}: {self.size}: {self.number_of_rooms}: {self.location}: {self.rent_amount}: {self.available_from}>"
@@ -155,24 +151,6 @@ class Payment(db.Model):
             "payment_date": self.payment_date,
         }
 
-
-# Nevermind this
-def generate_unique_id(determinator):
-    
-    match determinator:
-        case "user":
-            first = "A"
-        case "apartment":
-            first = "B"
-        case "review":
-            first = "C"
-        case "payment":
-            first = "D"
-
-    characters = characters.get_characters()
-
-    unique_strings = set("".join(p) for p in itertools.permutations(characters, 3))
-
 def db_get_all_available_apartments():
     apartments = Apartment.query.filter_by(is_available=True).all()
     if apartments: 
@@ -182,52 +160,10 @@ def db_get_all_available_apartments():
 
 def db_get_all_apartments():
     apartments = Apartment.query.all()
-    logging.info("db get ok")
     if apartments:
-        logging.info("apartments ok")
         return jsonify({'Apartments': [apartment.serialize() for apartment in apartments]}) 
 
     return jsonify({'message': 'No available apartments', 'Apartments': []}) 
-
-    
-def db_filter_by_rent(arrange):
-    
-    order = Apartment.rent_amount if arrange == "asc" else Apartment.rent_amount.desc()
-    apartments = Apartment.query.order_by(order).all()
-
-    if apartments:
-        return jsonify({'Apartments': [apartment.serialize() for apartment in apartments]})
-    return jsonify({'message': 'No apartments match your preferences', 'Apartments': []})
-
-
-def db_filter_by_location(locations):
-    apartments = Apartment.query.filter(Apartment.location.in_(locations)).all()    
-
-    if apartments:
-        return jsonify({'Apartments': [apartment.serialize() for apartment in apartments]})
-    return jsonify({'message': 'No apartments match your preferences', 'Apartments': []})
-
-
-def db_filter_by_size(min, max):
-    min = min if min else 0.0
-    max = max if max else 1000
-
-    apartments = Apartment.query.filter(Apartment.size >= min, Apartment.size <= max).all()
-
-    if apartments:
-        return jsonify({'Apartments': [apartment.serialize() for apartment in apartments]})
-    return jsonify({'message': 'No apartments match your preferences', 'Apartments': []})
-
-
-def db_filter_by_rooms(min, max):
-    min = min if min else 0
-    max = max if max else 15
-
-    apartments = Apartment.query.filter(Apartment.number_of_rooms >= min, Apartment.number_of_rooms <= max).all()
-
-    if apartments:
-        return jsonify({'Apartments': [apartment.serialize() for apartment in apartments]})
-    return jsonify({'message': 'No apartments match your preferences', 'Apartments': []})
 
 
 def db_sort_apartments(apartments, sort_factor, asc):
