@@ -314,7 +314,7 @@ export default function BrowseSpecificPage() {
                 <strong className="text-gray-900">Year:</strong> {user.year}
               </p>
               <div>
-                <strong className="text-gray-900">Bio:</strong>
+                <strong className="text-gray-900">About me:</strong>
                 <p className="mt-1 text-sm text-gray-600 whitespace-pre-line">
                   {user.bio || "No bio provided."}
                 </p>
