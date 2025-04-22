@@ -66,22 +66,29 @@ export default function BrowsePage() {
     return (
         <div className="min-h-screen flex flex-col">
             <main className="flex-1 py-8 mx-8">
-                {/* x
-                <section className="flex justify-center items-center w-full flex-col">
+
+                {/* Söksektion */}
+                {/* <section className="flex justify-center items-center w-full flex-col">
+
                     <h1 className="text-3xl font-bold text-center">Search for the perfect apartment for you!</h1>
                     <div className="bg-card rounded-lg p-4 w-full max-w-6xl mb-6">
                         <SearchBar onSearch={handleSearch} />
                     </div>
-                </section>
-                */}
-                <section className="flex-1 justify-center ">
+
+                </section> */}
+
+                {/* Lägenhetskort */}
+                <section className="flex-1 justify-center">
+
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-center">
                         {filteredApartments.map((apt) => (
                             <Link href={`/browseSpecific/${apt.apartment_id}`} key={apt.apartment_id}>
                                 <Card className="overflow-hidden rounded-lg shadow-lg border-none p-0 h-full hover:shadow-xl transition-shadow group">
                                     <div className="relative w-full h-48 overflow-hidden">
                                         <img
-                                            src={`/images/${apt.location || "apartment1"}.jpg`}  // CHANGE THIS SO WE GET DIFF IMAGES BASED ON SOME REQ, AREA/APART
+
+                                            src={`/images/${apt.location || "apartment1"}.jpg`} // Ändra till dynamiska bilder om möjligt
+
                                             alt={apt.title}
                                             className="object-cover w-full h-full transition-transform duration-300 ease-in-out transform group-hover:scale-105"
                                         />

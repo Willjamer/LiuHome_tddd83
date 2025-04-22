@@ -1,4 +1,5 @@
 import React from 'react';
+import '@/styles/hover-scale.css'; // Importera CSS-filen
 
 const AboutPage: React.FC = () => {
   return (

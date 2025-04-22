@@ -1,13 +1,11 @@
 from flask import jsonify
 from flask_jwt_extended import create_access_token
 from extensions import db, bcrypt
-# from sqlalchemy.event import listens_for
-# from flask_mail import Mail, Message  # Assuming you're using Flask-Mail
 from flask import current_app
-from datetime import datetime
+# from datetime import datetime
+import datetime
 import traceback
 import itertools
-import characters
 import logging
 import uuid
 
@@ -30,11 +28,12 @@ class Apartment(db.Model):
     available_from  = db.Column(db.Date, nullable = True)
 
     user = db.relationship('User', back_populates='apartment')
-    # date_added      = db.Column(db.Date, nullable = False)
+
+
     # expiry_date     = db.Column(db.Date, nullable = False)
-    # Något här om images, vet ej än hur
-    user = db.relationship('User', back_populates='apartment')
-    all_locations = ["Ryd", "Valla", "Irrblosset", "T1", "Lambohov", "Gottfridsberg"]
+    
+    all_locations = ["Ryd", "Colonia", "Valla", "Lambohov", "T1", "Irrblosset", "Vallastaden", "Ebbepark", "Gottfridsberg", "Skäggetorp", "Berga", "Flamman", "Fjärilen", "City"]
+
 
     def __repr__(self):
         return f"<Apartment {self.apartment_id}: {self.title}: {self.description}: {self.address}: {self.size}: {self.number_of_rooms}: {self.location}: {self.rent_amount}: {self.available_from}>"
@@ -55,7 +54,10 @@ class Apartment(db.Model):
             "user": {
                 "sso_id": self.user.sso_id,
                 "name": self.user.name,
-                "email": self.user.email
+                "email": self.user.email,
+                "bio": self.user.bio,
+                "program": self.user.program,
+                "year": self.user.year,
             } if self.user else None
         }
         
@@ -63,22 +65,19 @@ class Apartment(db.Model):
 # First version user class 
 
 class User(db.Model):
-    sso_id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String, nullable=False, unique=True)
-    password = db.Column(db.String, nullable=False)
-    name = db.Column(db.String, nullable=False)
-    
-    
-    # Valfria fält – kan uppdateras efter kontoskapandet
+
+    sso_id    = db.Column(db.String, primary_key = True)
+    password  = db.Column(db.String, nullable = True)
+    name      = db.Column(db.String, nullable = False)
+    email     = db.Column(db.String, nullable = False
     profile_picture = db.Column(db.String, nullable=True)  # Ex. URL till bilden
     program = db.Column(db.String, nullable=True)          # Ex. "Industriell Ekonomi"
     year = db.Column(db.Integer, nullable=True)            # Årskurs
     bio = db.Column(db.Text, nullable=True)                # Kort presentation
 
-    # Relationer
-    apartment = db.relationship("Apartment", back_populates="user", uselist=False)
-    created_reviews = db.relationship("Review", foreign_keys="[Review.reviewer_id]", backref="reviewer")
-    recieved_reviews = db.relationship("Review", foreign_keys="[Review.reviewed_user_id]", backref="reviewed_user")
+    apartment = db.relationship("Apartment", back_populates = "user", uselist = False)
+    created_reviews = db.relationship("Review", foreign_keys = "[Review.reviewer_sso_id]", backref = "reviewer")
+    recieved_reviews = db.relationship("Review", foreign_keys = "[Review.reviewed_sso_id]", backref = "reviewed_user")
 
     def __repr__(self):
         return f"<User {self.sso_id}: {self.name}: {self.email}>"
@@ -92,8 +91,11 @@ class User(db.Model):
             "program": self.program,
             "year": self.year,
             "bio": self.bio,
-            "apartment": self.apartment.serialize() if self.apartment else None
-        }
+            "apartment": self.apartment.serialize() if self.apartment else None,
+            "created_reviews": [review.serialize('created') for review in self.created_reviews],
+            "recieved_reviews": [review.serialize('received')for review in self.recieved_reviews],
+        } 
+
     
     def set_password(self, password):
         self.password = bcrypt.generate_password_hash(password).decode('utf8')
@@ -114,13 +116,26 @@ class Review(db.Model):
     def __repr__(self):
         return f"<Review {self.review_id}: {self.content}: {self.rating}: {self.review_date}>"
     
-    def serialize(self): 
-        return {
+    def serialize(self, context=None): 
+        base = {
             "review_id": self.review_id,
             "content": self.content,
-            "rating": self.rating,
+            "liked": self.liked,
             "review_date": self.review_date,
         }
+
+        if context == 'created':
+            base["reviewed_user"] = {
+                "sso_id": self.reviewed_user.sso_id,
+                "name": self.reviewed_user.name,
+            }
+        elif context == 'received':
+            base["reviewer"] = {
+                "sso_id": self.reviewer.sso_id,
+                "name": self.reviewer.name,
+            }
+    
+        return base
     
 
 
@@ -140,24 +155,6 @@ class Payment(db.Model):
             "payment_date": self.payment_date,
         }
 
-
-# Nevermind this
-def generate_unique_id(determinator):
-    
-    match determinator:
-        case "user":
-            first = "A"
-        case "apartment":
-            first = "B"
-        case "review":
-            first = "C"
-        case "payment":
-            first = "D"
-
-    characters = characters.get_characters()
-
-    unique_strings = set("".join(p) for p in itertools.permutations(characters, 3))
-
 def db_get_all_available_apartments():
     apartments = Apartment.query.filter_by(is_available=True).all()
     if apartments: 
@@ -167,52 +164,10 @@ def db_get_all_available_apartments():
 
 def db_get_all_apartments():
     apartments = Apartment.query.all()
-    logging.info("db get ok")
     if apartments:
-        logging.info("apartments ok")
         return jsonify({'Apartments': [apartment.serialize() for apartment in apartments]}) 
 
     return jsonify({'message': 'No available apartments', 'Apartments': []}) 
-
-    
-def db_filter_by_rent(arrange):
-    
-    order = Apartment.rent_amount if arrange == "asc" else Apartment.rent_amount.desc()
-    apartments = Apartment.query.order_by(order).all()
-
-    if apartments:
-        return jsonify({'Apartments': [apartment.serialize() for apartment in apartments]})
-    return jsonify({'message': 'No apartments match your preferences', 'Apartments': []})
-
-
-def db_filter_by_location(locations):
-    apartments = Apartment.query.filter(Apartment.location.in_(locations)).all()    
-
-    if apartments:
-        return jsonify({'Apartments': [apartment.serialize() for apartment in apartments]})
-    return jsonify({'message': 'No apartments match your preferences', 'Apartments': []})
-
-
-def db_filter_by_size(min, max):
-    min = min if min else 0.0
-    max = max if max else 1000
-
-    apartments = Apartment.query.filter(Apartment.size >= min, Apartment.size <= max).all()
-
-    if apartments:
-        return jsonify({'Apartments': [apartment.serialize() for apartment in apartments]})
-    return jsonify({'message': 'No apartments match your preferences', 'Apartments': []})
-
-
-def db_filter_by_rooms(min, max):
-    min = min if min else 0
-    max = max if max else 15
-
-    apartments = Apartment.query.filter(Apartment.number_of_rooms >= min, Apartment.number_of_rooms <= max).all()
-
-    if apartments:
-        return jsonify({'Apartments': [apartment.serialize() for apartment in apartments]})
-    return jsonify({'message': 'No apartments match your preferences', 'Apartments': []})
 
 
 def db_sort_apartments(apartments, sort_factor, asc):
@@ -264,7 +219,7 @@ def db_get_specific_apartment(this_apartment_id):
 
 # def db_add_apartment(user_id, title, description, address, size, number_of_rooms, location, rent_amount, available_from):
 def db_add_apartment(apartment_id, user_id, title, description, address, size, number_of_rooms, location, rent_amount, available_from):
-    
+    logging.info(apartment_id)
     try:
         new_apartment = Apartment(
             # apartment_id = 1000, # Temporary
@@ -280,6 +235,7 @@ def db_add_apartment(apartment_id, user_id, title, description, address, size, n
             is_available = True,
             available_from = datetime.date(int(available_from[0]), int(available_from[1]), int(available_from[2]))
         )
+
         db.session.add(new_apartment)
         db.session.commit()
 
@@ -395,7 +351,7 @@ def db_add_review(content, liked, reviewer_sso_id, reviewed_sso_id):
         try:
             new_review = Review(
                 # review_id = review_id,
-                review_id = 1000,
+                # review_id = 1000,
                 content = content,
                 liked = liked,
                 review_date = datetime.today(),
@@ -419,6 +375,37 @@ def db_get_review(review_id):
     if this_review:
         return jsonify({'review': this_review.serialize()}), 200
 
+def db_update_user_profile(json_data):
+    try:
+        logging.info('db updus ok')
+        sso_id = json_data.get('sso_id')
+        this_user = User.query.get(sso_id)
+        if not this_user:
+            return jsonify({'error': 'User not found'}), 404
+
+        if 'first_name' in json_data:
+            this_user.first_name = json_data.get('first_name')
+        if 'last_name' in json_data:
+            this_user.last_name = json_data.get('last_name')
+        if 'profile_picture' in json_data:
+            this_user.profile_picture = json_data.get('profile_picture')
+        if 'program' in json_data:
+            this_user.program = json_data.get('program')
+        if json_data.get('year'):
+            try:
+                logging.info(json_data.get('year'))
+                this_user.year = int(json_data.get('year'))
+            except ValueError:
+                pass
+        if 'bio' in json_data:
+            this_user.bio = json_data.get('bio')
+
+        db.session.commit()
+        return jsonify({'message': 'User profile updated successfully', 'user': this_user.serialize()})
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({'error': 'Internal server error'}), 500
+    
 # All edit functions are thought to be redone but this should work for now. 
 def db_edit_review(review_id, content, rating):
     

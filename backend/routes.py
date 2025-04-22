@@ -160,6 +160,7 @@ def add_new_user():
 def add_appartment():
     logging.info("addapt route ok")
     json_data = request.get_json()
+    logging.info(json_data)
     # user_id = get_jwt_identity()
     # json_data['user_id'] = user_id
     return handler.add_apartment(json_data)
@@ -178,10 +179,24 @@ def update_user_profile():
     logging.info(json_data)
     return handler.update_user_profile(json_data)
 
-@apartments_bp.route("/api/get-user/<user_id>", methods=['GET', 'OPTIONS'])
-def get_user(user_id):
+
+@apartments_bp.route("/api/get-user/<sso_id>", methods=['GET', 'PUT', 'POST'])
+def get_user(sso_id):
     if request.method == 'OPTIONS':
         return _build_cors_preflight_response()
+    
+    elif request.method == 'GET':
+        return handler.get_user(sso_id)
+    # Denna route är för att uppdatera profilen
+    elif request.method == 'PUT':
+        json_data = request.get_json()
+        return handler.update_user_profile(json_data)
+    # Denna route är för att lägga till en review
+    elif request.method == 'POST':
+        json_data = request.get_json()
+        logging.info('routes add review ok')
+        return handler.add_review(sso_id, json_data)
+    
     
     logging.info('routes getus ok')
     logging.info(user_id)

@@ -1,6 +1,7 @@
-"use client";
 
-import { useState, useEffect } from "react";
+"use client"
+
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { House } from "lucide-react"
@@ -43,15 +44,27 @@ export default function Header() {
 
         </nav>
         <div className="flex items-center gap-4 w-1/3 justify-center">
-          <Link href="/list-apartment">
-            <Button variant="outline" size="sm">
-              List Your Place
-            </Button>
-          </Link>
-          {isLoggedIn ? (
-            <Link href="/user/my-pages">
-              <Button size="sm">My Pages</Button>
-            </Link>
+
+          {user ? (
+            <>
+              <Link href="/list-apartment">
+                <Button variant="outline" size="sm">
+                  List Your Place
+                </Button>
+              </Link>
+              <Link href="/user">
+                <Button size="sm">My Pages</Button>
+              </Link>
+              <Button
+                onClick={logout}
+                variant="ghost"
+                size="sm"
+                className="text-xs text-red-600 hover:text-red-700"
+              >
+                Logout
+              </Button>
+            </>
+
           ) : (
             <Link href="/user/login">
               <Button size="sm">Sign In</Button>
