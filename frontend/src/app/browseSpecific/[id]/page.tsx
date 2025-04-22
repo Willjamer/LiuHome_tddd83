@@ -158,21 +158,22 @@ export default function BrowseSpecificPage() {
                     {apartment.rent_amount} SEK
                     <span className="text-base font-normal text-muted-foreground">/month</span>
                   </div>
-                  {/* <Badge className="bg-green-500 text-white text-sm px-2 py-1">Verified Student</Badge> */}
-                  <Badge
-                    className="gl-button btn btn-block btn-md btn-default gl-mt-5 gl-px-4 gl-text-center gl-display-flex gl-flex-direction-column gl-gap-2"
-                    style={{
-                      backgroundColor: '#54d8e0',
-                      color: 'white',
-                      fontWeight: 'bold',
-                      fontSize: '11pt',
-                      borderRadius: '10px',
-                      border: '1.5px solid #d3d3d3',
-                      padding: '6px 14px',
-                    }}
-                  >
-                    <span className="gl-button-text">Verified</span>
-                  </Badge>
+                  {apartment.user?.email?.endsWith("@student.liu.se") && (
+                    <Badge
+                      className="gl-button btn btn-block btn-md btn-default gl-mt-5 gl-px-4 gl-text-center gl-display-flex gl-flex-direction-column gl-gap-2"
+                      style={{
+                        backgroundColor: '#54d8e0',
+                        color: 'white',
+                        fontWeight: 'bold',
+                        fontSize: '11pt',
+                        borderRadius: '10px',
+                        border: '1.5px solid #d3d3d3',
+                        padding: '6px 14px',
+                      }}
+                    >
+                      <span className="gl-button-text">Verified</span>
+                    </Badge>
+                  )}
                 </div>
 
                 <div className="border rounded-lg p-4">

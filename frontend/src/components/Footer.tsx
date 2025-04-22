@@ -12,7 +12,7 @@ export default function Footer() {
                     <span>liuHome</span>
                 </div>
                 <p className="text-sm text-muted-foreground w-1/3 justify-center flex">
-                    © 2030 liuHome. All rights reserved.
+                    © 2025 liuHome. All rights reserved.
                 </p>
                 <div className="flex gap-4 mt-4 md:mt-0 w-1/3 justify-center">
                     <Link href="/about#terms" className="text-sm text-muted-foreground hover:underline">
