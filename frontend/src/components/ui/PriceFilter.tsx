@@ -20,8 +20,16 @@ const PriceFilter: React.FC<{
   ) => {
     const newValue = Number(event.target.value);
     const updatedRange = [...localPriceRange] as [number, number];
-    updatedRange[index] = newValue;
+
+    // Validera att Minimum inte är större än Maximum och vice versa
+    if (index === 0) {
+      updatedRange[0] = Math.min(newValue, localPriceRange[1]);
+    } else {
+      updatedRange[1] = Math.max(newValue, localPriceRange[0]);
+    }
+
     setLocalPriceRange(updatedRange);
+    onPriceChange(updatedRange); // Uppdatera previewn
   };
 
   return (

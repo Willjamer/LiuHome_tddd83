@@ -341,9 +341,11 @@ export default function BrowsePage() {
                 className="px-4 py-2 bg-white text-black rounded-lg shadow-md flex items-center justify-between w-full hover:shadow-lg transition-shadow"
                 onClick={() => setIsRoomsDropdownOpen(!isRoomsDropdownOpen)}
               >
-                {selectedRooms.length > 0
-                  ? selectedRooms.join(", ") + " Rooms" // Visa valda rum
-                  : "Number of Rooms"}{" "}
+                {selectedRooms.length === 0
+                  ? "Any rooms"
+                  : selectedRooms.includes("4")
+                  ? "4+ rooms"
+                  : `${selectedRooms.join(", ")} rooms`}
                 {/* Standardtext om inget är valt */}
                 <span
                   className={`ml-2 transform ${
