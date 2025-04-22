@@ -1,7 +1,6 @@
+"use client";
 
-"use client"
-
-
+import { useState, useEffect } from "react";
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { House } from "lucide-react"
@@ -32,39 +31,40 @@ export default function Header() {
           <span>liuHome</span>
         </Link>
         <nav className="hidden md:flex gap-6 w-1/3 justify-center">
-          <Link href="/browse" className="text-sm font-medium hover:underline underline-offset-4">
-            Browse
-          </Link>
+          {isLoggedIn ? (
+            <Link href="/browse" className="text-sm font-medium hover:underline underline-offset-4">
+              Browse
+            </Link>
+          ) : (
+            <Link href="/user/login" className="text-sm font-medium hover:underline underline-offset-4">
+              Browse
+            </Link>
+          )}
           <Link href="/how-it-works" className="text-sm font-medium hover:underline underline-offset-4">
             How It Works
           </Link>
           <Link href="/about" className="text-sm font-medium hover:underline underline-offset-4">
             About
           </Link>
-
         </nav>
         <div className="flex items-center gap-4 w-1/3 justify-center">
-
-          {user ? (
-            <>
-              <Link href="/list-apartment">
-                <Button variant="outline" size="sm">
-                  List Your Place
-                </Button>
-              </Link>
-              <Link href="/user">
-                <Button size="sm">My Pages</Button>
-              </Link>
-              <Button
-                onClick={logout}
-                variant="ghost"
-                size="sm"
-                className="text-xs text-red-600 hover:text-red-700"
-              >
-                Logout
+          {isLoggedIn ? (
+            <Link href="/list-apartment">
+              <Button variant="outline" size="sm">
+                List Your Place
               </Button>
-            </>
-
+            </Link>
+          ) : (
+            <Link href="/user/login">
+              <Button variant="outline" size="sm">
+                List Your Place
+              </Button>
+            </Link>
+          )}
+          {isLoggedIn ? (
+            <Link href="/user/my-pages">
+              <Button size="sm">My Pages</Button>
+            </Link>
           ) : (
             <Link href="/user/login">
               <Button size="sm">Sign In</Button>

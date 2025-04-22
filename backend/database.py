@@ -69,7 +69,7 @@ class User(db.Model):
     sso_id    = db.Column(db.String, primary_key = True)
     password  = db.Column(db.String, nullable = True)
     name      = db.Column(db.String, nullable = False)
-    email     = db.Column(db.String, nullable = False
+    email     = db.Column(db.String, nullable = False)
     profile_picture = db.Column(db.String, nullable=True)  # Ex. URL till bilden
     program = db.Column(db.String, nullable=True)          # Ex. "Industriell Ekonomi"
     year = db.Column(db.Integer, nullable=True)            # Årskurs
