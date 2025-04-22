@@ -56,7 +56,9 @@ export default function Home() {
   async function fetchApartments(): Promise<void> {
     try {
       // Kör denna 1 gång om tokens etc knasar:
+
       //localStorage.clear()
+
       // Den kommer köras så fort ni går in på home. Uppdatera sedan sidan, starta om servern och starta om hemsidan
       const response = await fetch("http://localhost:3001/api/get-apartments", {
         method: "GET",
@@ -86,7 +88,6 @@ export default function Home() {
   }, []);
 
 
-
   return (
 
 
@@ -101,6 +102,7 @@ export default function Home() {
             style={{ backgroundImage: "url('/images/Studenthuset.jpg')", backgroundPosition: "center 1%", }}
           >
             <div className="h-full flex flex-col justify-center items-center sm:pl-8 space-y-4 backdrop-blur-md ">
+
               <h1 className="text-4xl font-bold text-black tracking-tight sm:text-5xl">
                 Find Your Perfect Student Apartment
               </h1>
@@ -120,6 +122,7 @@ export default function Home() {
               >
                 Browse Apartments
               </Button>
+
             </div>
 
           </div>
@@ -132,7 +135,9 @@ export default function Home() {
             <div className="flex items-center justify-between mt-12 mb-8">
               <div className="w-24"></div>
               <h2 className="text-2xl font-bold text-center">Featured Listings</h2>
+
               <Link href={localStorage.getItem("access_token") ? "/browse" : "/user/login"}>
+
                 <Button variant="link">View all</Button>
               </Link>
             </div>

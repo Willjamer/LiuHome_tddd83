@@ -1,52 +1,50 @@
+
 "use client"
+
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { House } from "lucide-react"
-import { useUser } from "@/app/ssologin/page"
 
 export default function Header() {
-  const { user, logout } = useUser();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const token = localStorage.getItem("access_token");
+      setIsLoggedIn(!!token);
+    };
+
+    checkAuth(); 
+    window.addEventListener("authChanged", checkAuth);
+
+    return () => {
+      window.removeEventListener("authChanged", checkAuth);
+    };
+  }, []);
+
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-      <div className="flex h-16 items-center justify-between px-4">
-        <Link
-          href="/"
-          className="flex items-center gap-2 font-bold text-xl w-1/3 justify-center"
-        >
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 ">
+      <div className="flex h-16 items-center justify-between px-4 ">
+        <Link href="/" className="flex items-center gap-2 font-bold text-xl w-1/3 justify-center">
           <House className="h-5 w-5" />
           <span>liuHome</span>
         </Link>
-
         <nav className="hidden md:flex gap-6 w-1/3 justify-center">
-          <Link
-            href="/browse"
-            className="text-sm font-medium hover:underline underline-offset-4"
-          >
+          <Link href="/browse" className="text-sm font-medium hover:underline underline-offset-4">
             Browse
           </Link>
-          <Link
-            href="/how-it-works"
-            className="text-sm font-medium hover:underline underline-offset-4"
-          >
+          <Link href="/how-it-works" className="text-sm font-medium hover:underline underline-offset-4">
             How It Works
           </Link>
-          <Link
-            href="/about"
-            className="text-sm font-medium hover:underline underline-offset-4"
-          >
+          <Link href="/about" className="text-sm font-medium hover:underline underline-offset-4">
             About
           </Link>
-          <Link
-            href="/swish"
-            className="text-sm font-medium hover:underline underline-offset-4"
-          >
-            Swish
-          </Link>
-        </nav>
 
+        </nav>
         <div className="flex items-center gap-4 w-1/3 justify-center">
+
           {user ? (
             <>
               <Link href="/list-apartment">
@@ -66,26 +64,11 @@ export default function Header() {
                 Logout
               </Button>
             </>
+
           ) : (
-            <>
-              <button
-                onClick={() => {
-                  window.location.href = "http://localhost:3001/login";
-                }}
-                className="gl-button btn btn-block btn-md btn-default gl-mt-5 gl-px-5 gl-text-center gl-display-flex gl-flex-direction-column gl-gap-3"
-                style={{
-                  backgroundColor: '#54d8e0',
-                  color: 'white',
-                  fontWeight: 'bold',
-                  fontSize: '14pt',
-                  borderRadius: '12px', // Rundare kanter
-                  border: '2px solid #d3d3d3', // Grå ram
-                  padding: '10px 20px', // Extra padding för bättre proportioner
-                }}
-              >
-                <span className="gl-button-text">Log in with LiU ID</span>
-              </button>
-            </>
+            <Link href="/user/login">
+              <Button size="sm">Sign In</Button>
+            </Link>
           )}
         </div>
       </div>

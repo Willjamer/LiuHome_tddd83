@@ -17,18 +17,16 @@ class courier:
 
     def get_specific_apartment(self, apartment_id):
         try:
-            # Använd apartment_id direkt
-            apartment = db.session.query(Apartment).filter_by(apartment_id=apartment_id).first()
+            # Hämta lägenheten från databasen baserat på apartment_id
+            apartment = Apartment.query.get(apartment_id)
             if not apartment:
-                logging.info('rq get specifik ej ok')
-                
                 return jsonify({"error": "Apartment not found"}), 404
-            logging.info('rq get specifik ok')
-            return db_get_specific_apartment(apartment_id)
-            # return jsonify(apartment.serialize()), 200
+
+            # Returnera lägenhetsdata som JSON
+            return jsonify(apartment.serialize()), 200
         except Exception as e:
-            logging.error(f"Error in get_specific_apartment: {e}")
-            return jsonify({"error": str(e)}), 500
+            print(f"Error fetching apartment: {e}")
+            return jsonify({"error": "An error occurred"}), 500
 
     def add_apartment(self, json_data): 
         print(json_data)
@@ -40,7 +38,7 @@ class courier:
         apartment_id = apartment_data.get('apartment_id')
 
         user_id = json_data.get('sso_id')
-        logging.info(user_id)
+
         title = apartment_data.get('title')
         description = apartment_data.get('description')
         address = apartment_data.get('address')
@@ -51,7 +49,7 @@ class courier:
 
         available_from_primary = apartment_data.get('available_from')
         available_from = available_from_primary.split('-')
-
+        logging.info(user_id)
 
         # this_user = db_get_user(user_id).json
         # expiry_date = this_user['user']['listing_expiry_date']
@@ -81,6 +79,10 @@ class courier:
     def get_user(self, sso_id):
         return db_get_user(sso_id)
     
+    def get_user(self, user_id):
+        logging.info('hand getus ok')
+        return db_get_user(user_id)
+    
     def get_logged_in_user(self, json_data):
         return json_data
 
@@ -103,7 +105,12 @@ class courier:
     def login(self, json_data):
         return db_login(json_data) 
     
-    def add_review(self, sso_id, json_data):
+    def update_user_profile(self, json_data):
+        logging.info('rh updus ok')
+        return db_update_user_profile(json_data)
+
+    
+    def add_review(self, json_data):
         content = json_data.get('content')
         liked = json_data.get('liked')
         reviewed_sso_id = sso_id
