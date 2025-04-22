@@ -1,19 +1,17 @@
 "use client";
-
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar } from "lucide-react";
+import { useUser } from "@/app/ssologin/page";
 
 interface User {
   sso_id: string;
   name: string;
   email: string;
-
   program: string;
   year: number;
   bio: string;
@@ -35,7 +33,6 @@ interface Apartment {
   user?: User;
 }
 
-
 interface Review {
   liked: boolean;
   content?: string;
@@ -44,20 +41,16 @@ interface Review {
   reviewed: User;
 }
 
-
 export default function BrowseSpecificPage() {
-  const { id } = useParams();
+  const { id } = useParams(); // Hämta ID från URL:en
   const [apartment, setApartment] = useState<Apartment | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [showUserModal, setShowUserModal] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewText, setReviewText] = useState("");
   const [liked, setLiked] = useState<boolean | null>(null);
 
-
   const loggedInUser = useUser();
-
 
   useEffect(() => {
     async function fetchApartment() {
@@ -65,53 +58,35 @@ export default function BrowseSpecificPage() {
         const response = await fetch(`http://localhost:3001/api/browseSpecific/${id}`);
         if (!response.ok) throw new Error("Failed to fetch apartment");
         const data: Apartment = await response.json();
-        console.log(data)
+        console.log(data);
         setApartment(data);
-
       } catch (error) {
         console.error("Error fetching apartment:", error);
-      }
-    }
-
-
-    async function getLoggedInUser() {
-      try {
-        const loggedin_sso_Id = localStorage.getItem("sso_id");
-        if (!loggedin_sso_Id) return;
-
-        const response = await fetch(`http://localhost:3001/api/get-user/${loggedin_sso_Id}`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        });
-
-        if (!response.ok) throw new Error("Failed to fetch logged-in user");
-
-        const data: { user: User } = await response.json();
-        setLoggedInUser(data.user);
-      } catch (error) {
-        console.error("Error fetching logged-in user:", error);
       }
     }
     console.log(loggedInUser)
 
     if (id) {
       fetchApartment();
-      getLoggedInUser();
     }
   }, [id]);
 
-  async function showUser() {
-    try {
-      const this_sso_id = apartment?.user?.sso_id;
+  if (!apartment) {
+    return <div>Loading...</div>;
+  }
 
-      console.log(this_sso_id)
+  async function showUser() {
+
+    try {
+      const this_sso_id = apartment?.user?.sso_id
       const response = await fetch(`http://localhost:3001/api/get-user/${this_sso_id}`, {
+
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         credentials: "include",
       });
-
       if (!response.ok) throw new Error('Failed to fetch user information');
       const data: User = await response.json();
 
@@ -121,11 +96,31 @@ export default function BrowseSpecificPage() {
 
       const recieved_reviews: Review[] = data.user.recieved_reviews;
     } catch (error) {
-      console.error("Error fetching user:", error);
+      console.error("Error fetching user:", error)
     }
+
   }
 
+  async function leaveReview() {
+    const loggedInSSOId = loggedInUser?.user?.email.split("@")[0];
+    const this_sso_id = apartment?.user?.sso_id
+    if (!loggedInSSOId || !this_sso_id || liked === null) return;
 
+    const data = {
+      reviewer_id: loggedInSSOId,
+      liked,
+      content: reviewText,
+    };
+
+    try {
+      const response = await fetch(`http://localhost:3001/api/get-user/${this_sso_id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(data),
+      });
 
       if (!response.ok) throw new Error("Failed to submit review")
 
@@ -139,10 +134,10 @@ export default function BrowseSpecificPage() {
   }
 
 
-
   return (
     <main className="w-min-screen">
       <div className="flex flex-row w-screen px-16 gap-8">
+        {/* Bildsektion */}
         <div className="w-2/3">
           <Image
             src={`/images/${apartment.location || "apartment3"}.jpg`}
@@ -154,9 +149,7 @@ export default function BrowseSpecificPage() {
           />
         </div>
 
-
         {/* Kort med hyresinformation */}
-
         <div className="w-1/3">
           <Card className="sticky top-24 h-full">
             <CardContent className="p-6">
@@ -183,9 +176,7 @@ export default function BrowseSpecificPage() {
                   </Badge>
                 </div>
 
-
                 <div className="border rounded-lg p-4">
-
                   <div className="flex items-center gap-2 mb-4">
                     <Calendar className="h-4 w-4" />
                     <span className="font-medium">Availability</span>
@@ -203,13 +194,11 @@ export default function BrowseSpecificPage() {
                 </div>
 
                 <div className="flex items-center gap-4">
-
                  
                   <div>
                     <div className="font-medium">{apartment.user?.name}</div>
                     {/* <div className="text-sm text-muted-foreground">Student at {"LiU"}</div> */}
                     {/* <div className="text-xs">{apartment.address}</div> */}
-
                     {apartment?.user?.year && (
                       <div className="text-sm text-muted-foreground">Year: {apartment.user.year}</div>
                     )}
@@ -228,7 +217,6 @@ export default function BrowseSpecificPage() {
                   </button>
 
                   {loggedInUser?.user?.email.split("@")[0] === apartment.user?.sso_id && (
-
                     <>
                       <button
                         onClick={() => console.log("Edit clicked")}
@@ -245,7 +233,6 @@ export default function BrowseSpecificPage() {
                     </>
                   )}
                 </div>
-
                 {/* <div>
                   <strong>Description:</strong> {apartment.description || "No description available"}
                 </div> */}
@@ -269,7 +256,6 @@ export default function BrowseSpecificPage() {
                     const outlookUrl = `https://outlook.office.com/mail/deeplink/compose?to=${email}&subject=${subject}&body=${body}`;
                     window.open(outlookUrl, "_blank");
                   }}
-
                 >
                   Send email
                 </Button>
@@ -280,9 +266,7 @@ export default function BrowseSpecificPage() {
         </div>
       </div>
 
-
       {/* Ny sektion för detaljerad information */}
-
       <div className="w-full px-16 mt-8">
         <Card className="p-6 shadow-lg">
           <h2 className="text-2xl font-bold mb-4">{apartment.address}</h2>
@@ -290,10 +274,8 @@ export default function BrowseSpecificPage() {
             <p><strong>Description:</strong> {apartment.description || "No description available"}</p>
 
             <p><strong>Rent:</strong> {apartment.rent_amount ? `${apartment.rent_amount} SEK/month` : "Rent not specified"}</p>
-
             <p><strong>Location:</strong> {apartment.location ? `${apartment.location}` : "location not specified"}</p>
             <p><strong>Number of rooms:</strong> {apartment.number_of_rooms ? `${apartment.number_of_rooms} ` : "rooms not specified"}</p>
-
             <p><strong>Size:</strong> {apartment.size ? `${apartment.size} m²` : "Size not specified"}</p>
 
             <p>
@@ -305,7 +287,6 @@ export default function BrowseSpecificPage() {
           </div>
         </Card>
       </div>
-
       {showUserModal && user && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 transition-opacity duration-300">
           <div className="bg-white rounded-2xl shadow-2xl p-8 w-[600px] h-[600px] relative flex flex-col">
@@ -317,7 +298,6 @@ export default function BrowseSpecificPage() {
             >
               ✕
             </button>
-
 
             {/* User Info (non-scrollable) */}
             <div className="mb-4">
@@ -431,7 +411,6 @@ export default function BrowseSpecificPage() {
                 Publish Review
               </button>
             </div>
-
           </div>
         </div>
       )}
