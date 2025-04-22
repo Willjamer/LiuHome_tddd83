@@ -42,9 +42,6 @@ python app.py
 
 ---
 
-## Troubleshooting
-jag tar 0 ansvar  
-Klaga till handledare 🙏   
 
 
 
