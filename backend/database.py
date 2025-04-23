@@ -244,10 +244,13 @@ def db_add_apartment(apartment_id, user_id, title, description, address, size, n
     
 def db_remove_appartment(this_apartment_id):
     this_apartment = Apartment.query.get(this_apartment_id)
-
-    db.session.remove(this_apartment)
-    db.session.commit()
-    return jsonify({'message': 'apartment taken down'})
+    logging.info(this_apartment)
+    if (this_apartment):
+        db.session.delete(this_apartment)
+        db.session.commit()
+        return jsonify({'message': 'apartment taken down'})
+    else:
+        return jsonify({'message': 'Apartment not found'})
 
 def db_get_user(this_sso_id):
     logging.info('db getus ok')

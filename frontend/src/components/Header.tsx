@@ -1,7 +1,8 @@
 "use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import {House} from "lucide-react"
+import { House } from "lucide-react"
 import { useUser } from "@/app/ssologin/page"
 
 export default function Header() {
@@ -47,9 +48,9 @@ export default function Header() {
                   List Your Place
                 </Button>
               </Link>
-              <div className="text-sm text-muted-foreground">
-                Welcome, {user.first_name || user.name}!
-              </div>
+              <Link href="/user">
+                <Button size="sm">My Pages</Button>
+              </Link>
               <Button
                 onClick={logout}
                 variant="ghost"
@@ -61,12 +62,23 @@ export default function Header() {
             </>
           ) : (
             <>
-              <Link href="/login">
-                <Button size="sm">Sign In</Button>
-              </Link>
-              <Link href="/ssologin">
-                <Button size="sm">Sign In SSO</Button>
-              </Link>
+              <button
+                onClick={() => {
+                  window.location.href = "http://localhost:3001/login";
+                }}
+                className="gl-button btn btn-block btn-md btn-default gl-mt-5 gl-px-5 gl-text-center gl-display-flex gl-flex-direction-column gl-gap-3"
+                style={{
+                  backgroundColor: '#54d8e0',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  fontSize: '14pt',
+                  borderRadius: '12px', // Rundare kanter
+                  border: '2px solid #d3d3d3', // Grå ram
+                  padding: '10px 20px', // Extra padding för bättre proportioner
+                }}
+              >
+                <span className="gl-button-text">Log in with LiU ID</span>
+              </button>
             </>
           )}
         </div>

@@ -20,7 +20,7 @@ microsoft_login = Blueprint('microsoft_login', __name__)
 
 SWISH_BASE_URL = "http://localhost:3005"
 
-apartments_bp = Blueprint('apartments', __name__)
+# apartments_bp = Blueprint('apartments', __name__)
 
 @apartments_bp.route("/api/paymentrequests", methods=['POST'])
 def initiate_payment():
@@ -213,12 +213,19 @@ def get_listing():
 def get_specific_apartment(apartment_id):
     return handler.get_specific_apartment(apartment_id)
 
-
-@apartments_bp.route("/api/remove-item", methods=['POST'])
-@jwt_required()
+@apartments_bp.route("/api/remove-apartment", methods=['POST'])
 def remove_item():
+    if request.method == 'OPTIONS':
+        return _build_cors_preflight_response()
+    
     json_data = request.get_json()
-    return handler.remove_item(json_data)
+    return handler.remove_apartment(json_data)
+
+# @apartments_bp.route("/api/remove-item", methods=['POST'])
+# @jwt_required()
+# def remove_item():
+#     json_data = request.get_json()
+#     return handler.remove_item(json_data)
 
 @apartments_bp.route("/api/edit-item", methods=['POST'])
 @jwt_required()

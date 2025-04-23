@@ -49,7 +49,7 @@ export default function BrowseSpecificPage() {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [reviewText, setReviewText] = useState("");
   const [liked, setLiked] = useState<boolean | null>(null);
-
+  const router = useRouter();
   const loggedInUser = useUser();
 
   useEffect(() => {
@@ -100,6 +100,30 @@ export default function BrowseSpecificPage() {
     }
 
   }
+
+    async function removeApartment() {
+    const confirmed = window.confirm("Are you sure you want to delete this apartment?");
+    if (!confirmed) return;
+
+    try {
+      const apartment_id = apartment?.apartment_id
+
+      const response = await fetch('http://localhost:3001/api/remove-apartment', {
+        method: "POST",
+        headers: { "Content-Type": "application/json",
+        },
+        body: JSON.stringify(apartment_id),
+        credentials: "include",
+      });
+
+
+      if (!response.ok) throw new Error("Failed to remove apartment");
+      router.push('/')
+    } catch (error) {
+      console.error("Error:", error)
+    }
+  };
+
 
   async function leaveReview() {
     const loggedInSSOId = loggedInUser?.user?.email.split("@")[0];
@@ -225,11 +249,12 @@ export default function BrowseSpecificPage() {
                         Edit
                       </button>
                       <button
-                        onClick={() => console.log("Delete clicked")}
+                        onClick={removeApartment}
                         className="px-3 py-2 bg-red-600 text-white rounded-md shadow-sm hover:bg-red-700"
                       >
                         Delete
                       </button>
+
                     </>
                   )}
                 </div>
