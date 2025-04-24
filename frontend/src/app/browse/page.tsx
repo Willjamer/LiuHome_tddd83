@@ -524,29 +524,30 @@ export default function BrowsePage() {
                       alt={apt.title}
                       className="object-cover w-full h-full transition-transform duration-300 ease-in-out transform group-hover:scale-105"
                     />
-                    <Badge className="absolute top-2 right-2">
-                      {apt.rent_amount} SEK/month
-                    </Badge>
+                    <Badge className="absolute top-2 right-2">{apt.rent_amount} SEK/month</Badge>
                   </div>
                   <CardContent className="p-4">
-                    <h3 className="text-lg font-semibold line-clamp-1">
-                      {apt.address}
-                    </h3>
+                    <h3 className="text-lg font-semibold line-clamp-1">{apt.address}</h3>
                     <div className="flex flex-wrap gap-4 mt-3">
                       <div className="flex items-center text-sm">
-                                    <Home className="h-4 w-4 mr-1" />
-                                                <span>
-                                                    {apt.number_of_rooms} {apt.number_of_rooms === 1 ? "room, " : "rooms, "}
-                                                    {apt.size ? `${apt.size} m²` : ""}
-                                                </span>
-                                            </div>
+                        <Home className="h-4 w-4 mr-1" />
+                        <span>
+                          {apt.number_of_rooms} {apt.number_of_rooms === 1 ? "room, " : "rooms, "}
+                          {apt.size ? `${apt.size} m²` : ""}
+                        </span>
+                      </div>
+
                       <div className="flex items-center text-sm">
+                        <MapPin className="h-4 w-4 mr-1" />
+                        <span>{apt.location}</span>
+                      </div>
+                      {/* <div className="flex items-center text-sm">
                         <Bath className="h-4 w-4 mr-1" />
                         <span>{apt.bathrooms}</span>
-                      </div>
+                      </div> */}
                     </div>
                     <div className="mt-3 text-sm text-muted-foreground">
-                      Available from: {apt.available_from}
+                      Available from: {apt.available_from ? new Date(apt.available_from).toISOString().split("T")[0] : "Not specified"}
 
                     </div>
                   </CardContent>
