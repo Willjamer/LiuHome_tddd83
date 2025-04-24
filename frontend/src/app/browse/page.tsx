@@ -41,11 +41,11 @@ export default function BrowsePage() {
   const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isPriceDropdownOpen, setIsPriceDropdownOpen] = useState(false);
-  const [priceRange, setPriceRange] = useState<[number, number]>([200, 20000]); // Declare and initialize the priceRange variable
+  const [priceRange, setPriceRange] = useState<[number, number]>([500, 20000]); 
 
-  const [sortOption, setSortOption] = useState<string>("priceLowToHigh");
+  const [sortOption, setSortOption] = useState<string>("");
 
-  const [sizeRange, setSizeRange] = useState<[number, number]>([10, 200]); // Storleksintervall
+  const [sizeRange, setSizeRange] = useState<[number, number]>([10, 150]); // Storleksintervall
 
   const [isSizeDropdownOpen, setIsSizeDropdownOpen] = useState(false);
   const [isAreaDropdownOpen, setIsAreaDropdownOpen] = useState(false);
@@ -209,12 +209,13 @@ export default function BrowsePage() {
                 className="px-4 py-2 bg-white text-black rounded-lg shadow-md flex items-center justify-between w-full hover:shadow-lg transition-shadow"
                 onClick={() => setIsPriceDropdownOpen(!isPriceDropdownOpen)}
               >
-                {`Price: ${priceRange[0]} - ${priceRange[1]}`}{" "}
-                {/* Visa alltid intervallet */}
+                <span className="flex items-center"> {/* Added flex container to prevent line breaks */}
+                  {/* {`Price: ${priceRange[0]} - ${priceRange[1]}`} */}
+                  {`Price range: `}
+
+                </span>
                 <span
-                  className={`ml-2 transform ${
-                    isPriceDropdownOpen ? "rotate-180" : "rotate-0"
-                  }`}
+                  className={`ml-2 transform ${isPriceDropdownOpen ? "rotate-180" : "rotate-0"}`}
                 >
                   ▼
                 </span>
@@ -222,13 +223,12 @@ export default function BrowsePage() {
               {isPriceDropdownOpen && (
                 <div className="absolute mt-2 bg-white shadow-lg rounded-lg p-4 w-full z-10">
                   <PriceFilter
-                    onPriceChange={(range) => setPriceRange(range)}
-                    //   priceRange={priceRange}
+                    priceRange={priceRange} // Pass the current price range to PriceFilter
+                    onPriceChange={(range) => setPriceRange(range)} // Update the price range
                   />
                 </div>
               )}
             </div>
-
 
             {/* Dropdown för Size */}
             <div className="relative w-full max-w-xs">
@@ -236,12 +236,11 @@ export default function BrowsePage() {
                 className="px-4 py-2 bg-white text-black rounded-lg shadow-md flex items-center justify-between w-full hover:shadow-lg transition-shadow"
                 onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
               >
-                {`Size: ${sizeRange[0]} - ${sizeRange[1]} sqm`}{" "}
-                {/* Visa alltid intervallet */}
+                {/* {`Size: ${sizeRange[0]} - ${sizeRange[1]} m²`} */}
+                {`Size range:`} 
+
                 <span
-                  className={`ml-2 transform ${
-                    isSizeDropdownOpen ? "rotate-180" : "rotate-0"
-                  }`}
+                  className={`ml-2 transform ${isSizeDropdownOpen ? "rotate-180" : "rotate-0"}`}
                 >
                   ▼
                 </span>
@@ -249,9 +248,8 @@ export default function BrowsePage() {
               {isSizeDropdownOpen && (
                 <div className="absolute mt-2 bg-white shadow-lg rounded-lg p-4 w-full z-10">
                   <SizeFilter
-                    onSizeChange={(range: [number, number]) =>
-                      setSizeRange(range)
-                    }
+                    sizeRange={sizeRange} // Pass the current size range to SizeFilter
+                    onSizeChange={(range) => setSizeRange(range)} // Update the size range
                   />
                 </div>
               )}
@@ -414,7 +412,7 @@ export default function BrowsePage() {
                 onClick={() => setIsRoomsDropdownOpen(!isRoomsDropdownOpen)}
               >
                 {selectedRooms.length === 0
-                  ? "Any rooms"
+                  ? "Rooms"
                   : selectedRooms.includes("4")
                   ? "4+ rooms"
                   : `${selectedRooms.join(", ")} rooms`}
@@ -476,8 +474,10 @@ export default function BrowsePage() {
                 className="px-4 py-2 bg-white text-black rounded-lg shadow-md flex items-center justify-between w-full hover:shadow-lg transition-shadow"
                 onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
               >
-                {`Sort: ${
-                  sortOption === "priceLowToHigh"
+                {`Sort by: ${
+                  sortOption === ""
+                    ? "Default"
+                    : sortOption === "priceLowToHigh"
                     ? "Price ↑"
                     : sortOption === "priceHighToLow"
                     ? "Price ↓"
@@ -493,9 +493,26 @@ export default function BrowsePage() {
                   ▼
                 </span>
               </button>
+
               {isSortDropdownOpen && (
                 <div className="absolute mt-2 bg-white shadow-lg rounded-lg p-4 w-full z-10">
                   <ul className="flex flex-col gap-2">
+                    <li>
+                      <button
+                        className={`w-full text-left px-2 py-1 rounded ${
+                          sortOption === ""
+                            ? "bg-gray-200"
+                            : "hover:bg-gray-100"
+                        }`}
+                        onClick={() => {
+                          setSortOption(""); // Set sort option to default
+                          handleSort(""); // Handle the default sorting
+                          setIsSortDropdownOpen(false); // Close dropdown
+                        }}
+                      >
+                        Default
+                      </button>
+                    </li>
                     <li>
                       <button
                         className={`w-full text-left px-2 py-1 rounded ${
@@ -504,10 +521,9 @@ export default function BrowsePage() {
                             : "hover:bg-gray-100"
                         }`}
                         onClick={() => {
-                          setSortOption("priceLowToHigh");
-                          handleSort(sortOption);
-                          console.log(sortOption);
-                          setIsSortDropdownOpen(false); // Stäng dropdownen
+                          setSortOption("priceLowToHigh"); // Set price low to high sorting
+                          handleSort("priceLowToHigh"); // Handle sorting logic
+                          setIsSortDropdownOpen(false); // Close dropdown
                         }}
                       >
                         Price ↑
@@ -521,8 +537,9 @@ export default function BrowsePage() {
                             : "hover:bg-gray-100"
                         }`}
                         onClick={() => {
-                          setSortOption("priceHighToLow");
-                          setIsSortDropdownOpen(false); // Stäng dropdownen
+                          setSortOption("priceHighToLow"); // Set price high to low sorting
+                          handleSort("priceHighToLow"); // Handle sorting logic
+                          setIsSortDropdownOpen(false); // Close dropdown
                         }}
                       >
                         Price ↓
@@ -536,8 +553,9 @@ export default function BrowsePage() {
                             : "hover:bg-gray-100"
                         }`}
                         onClick={() => {
-                          setSortOption("sizeLowToHigh");
-                          setIsSortDropdownOpen(false); // Stäng dropdownen
+                          setSortOption("sizeLowToHigh"); // Set size low to high sorting
+                          handleSort("sizeLowToHigh"); // Handle sorting logic
+                          setIsSortDropdownOpen(false); // Close dropdown
                         }}
                       >
                         Size ↑
@@ -551,8 +569,9 @@ export default function BrowsePage() {
                             : "hover:bg-gray-100"
                         }`}
                         onClick={() => {
-                          setSortOption("sizeHighToLow");
-                          setIsSortDropdownOpen(false); // Stäng dropdownen
+                          setSortOption("sizeHighToLow"); // Set size high to low sorting
+                          handleSort("sizeHighToLow"); // Handle sorting logic
+                          setIsSortDropdownOpen(false); // Close dropdown
                         }}
                       >
                         Size ↓
@@ -562,12 +581,13 @@ export default function BrowsePage() {
                 </div>
               )}
             </div>
-            <button
+
+            {/* <button
               onClick={applyFilters}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition min-w-[140px] text-center"
             >
               Apply Filters
-            </button>
+            </button> */}
           </div>
         </section>
         <section className="flex-1 justify-center ">
