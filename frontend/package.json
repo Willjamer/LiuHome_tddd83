@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"next dev\" \"cd ../backend && python3 apphandler.py\"",
+    "dev": "concurrently \"next dev\" \"cd ../backend && python3 apphandler.py\" \"cd ../swishServer && node app.js\"",   
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -25,7 +25,9 @@
     "react-dom": "^19.0.0",
     "react-feather": "^2.0.10",
     "tailwind-merge": "^3.0.2",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "express": "^4.16.4",
+    "request": "^2.88.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

@@ -3,6 +3,7 @@
 // npm install @mui/material @emotion/react @emotion/styled
 
 import { useEffect, useState } from "react";
+
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import PriceFilter from "@/components/ui/PriceFilter";
@@ -10,25 +11,30 @@ import SizeFilter from "@/components/ui/SizeFilter";
 import { Button } from "@/components/ui/button";
 import { Search, Calendar, House, Users } from "lucide-react";
 
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import SearchBar from "@/components/ui/search-bar";
 
-import { BedDouble, Bath } from "lucide-react";
+
+import {
+    Home, // Ny ikon för antal rum
+    MapPin, // Ny ikon för area
+} from "lucide-react"
 
 interface Apartment {
-  apartment_id: number;
-  user_id: number;
-  title: string;
-  description?: string;
-  address: string;
-  size: number;
-  number_of_rooms: number;
-  location: string;
-  rent_amount: number;
-  bathrooms: number;
-  is_available: boolean;
-  available_from?: string;
+    apartment_id: number;
+    user_id: number;
+    title: string;
+    description?: string;
+    address: string;
+    size: number;
+    number_of_rooms: number;
+    location: string; // Byt till "area" om backend använder det
+    rent_amount: number;
+    is_available: boolean;
+    available_from?: string;
+
 }
 
 export default function BrowsePage() {
@@ -52,6 +58,7 @@ export default function BrowsePage() {
 
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false); // Hanterar om sorteringsdropdownen är öppen
   const [sortOrder, setSortOrder] = useState<string>(""); // Håller reda på vald sorteringsordning
+
 
   async function applyFilters(): Promise<void> {
     console.log(selectedAreas);
@@ -78,6 +85,7 @@ export default function BrowsePage() {
       selectedAreas,
       roomRange,
       sortOrder,
+
     };
 
     console.log(filterLoad);
@@ -169,6 +177,7 @@ export default function BrowsePage() {
     fetchApartments();
   }, []);
 
+
   // Add state for filtering
   const [filteredApartments, setFilteredApartments] = useState<Apartment[]>([]);
 
@@ -190,6 +199,7 @@ export default function BrowsePage() {
       );
     } else {
       setFilteredApartments(apartments); // Show all apartments if no filter is selected
+
     }
   }, [selectedFilter, apartments]);
 
@@ -246,6 +256,7 @@ export default function BrowsePage() {
                 </div>
               )}
             </div>
+
 
             {/* Dropdown för Size */}
             <div className="relative w-full max-w-xs">
@@ -509,7 +520,7 @@ export default function BrowsePage() {
                 <Card className="overflow-hidden rounded-lg shadow-lg border-none p-0 h-full hover:shadow-xl transition-shadow group">
                   <div className="relative w-full h-48 overflow-hidden">
                     <img
-                      src={"/images/apartment2.jpg"} // CHANGE THIS SO WE GET DIFF IMAGES BASED ON SOME REQ, AREA/APART
+                      src={`/images/${apt.location || "apartment1"}.jpg`} // Ändra till dynamiska bilder om möjligt
                       alt={apt.title}
                       className="object-cover w-full h-full transition-transform duration-300 ease-in-out transform group-hover:scale-105"
                     />
@@ -519,13 +530,16 @@ export default function BrowsePage() {
                   </div>
                   <CardContent className="p-4">
                     <h3 className="text-lg font-semibold line-clamp-1">
-                      {apt.title}
+                      {apt.address}
                     </h3>
                     <div className="flex flex-wrap gap-4 mt-3">
                       <div className="flex items-center text-sm">
-                        <BedDouble className="h-4 w-4 mr-1" />
-                        <span>{apt.number_of_rooms}</span>
-                      </div>
+                                    <Home className="h-4 w-4 mr-1" />
+                                                <span>
+                                                    {apt.number_of_rooms} {apt.number_of_rooms === 1 ? "room, " : "rooms, "}
+                                                    {apt.size ? `${apt.size} m²` : ""}
+                                                </span>
+                                            </div>
                       <div className="flex items-center text-sm">
                         <Bath className="h-4 w-4 mr-1" />
                         <span>{apt.bathrooms}</span>
@@ -533,6 +547,7 @@ export default function BrowsePage() {
                     </div>
                     <div className="mt-3 text-sm text-muted-foreground">
                       Available from: {apt.available_from}
+
                     </div>
                   </CardContent>
                 </Card>
@@ -542,7 +557,9 @@ export default function BrowsePage() {
         </section>
       </main>
 
+
       {/* 
+
             <div className="container mx-auto py-10">
                 <h1 className="text-3xl font-bold mb-6">Available Apartments</h1>
                 {apartments.length > 0 ? (
@@ -559,6 +576,8 @@ export default function BrowsePage() {
                 )}
             </div>
             */}
+
     </div>
   );
 }
+

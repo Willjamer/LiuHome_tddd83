@@ -2,9 +2,11 @@ from flask import jsonify, request, Blueprint, current_app, session, redirect, u
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import logging
 from authextension import get_auth
+import requests
+
 
 # OM STUB, KÖR DENNA: 
-# from request_handler_stub import courier
+#from request_handler_stub import courier
 
 # OM VANLIG (databas), KÖR DENNA:
 from request_handler import courier
@@ -15,6 +17,22 @@ handler = courier()
 oauth = get_auth()
 apartments_bp = Blueprint('apartments', __name__)
 microsoft_login = Blueprint('microsoft_login', __name__)
+
+SWISH_BASE_URL = "http://localhost:3005"
+
+# apartments_bp = Blueprint('apartments', __name__)
+
+@apartments_bp.route("/api/paymentrequests", methods=['POST'])
+def initiate_payment():
+    json_data = request.get_json()
+    response = requests.post(f"{SWISH_BASE_URL}/paymentrequests", json=json_data)
+    return jsonify(response.json()), response.status_code
+
+@apartments_bp.route("/api/payment-status/<request_id>", methods=['GET'])
+def payment_status(request_id):
+    response = requests.get(f"{SWISH_BASE_URL}/paymentrequests/{request_id}")
+    return jsonify(response.json()), response.status_code
+
 
 @microsoft_login.before_app_request
 def register_oauth():
@@ -35,6 +53,7 @@ def register_oauth():
 def login():
     return oauth.microsoft.authorize_redirect(
         redirect_uri=url_for("microsoft_login.callback", _external=True)
+        
     )
 
 @apartments_bp.route("/mock-login", methods = ['POST', 'OPTIONS'])
@@ -65,7 +84,6 @@ def mock_login():
 @microsoft_login.route("/callback")
 def callback():
     token = oauth.microsoft.authorize_access_token()
-    # user = oauth.microsoft.parse_id_token(token)
     user = token.get("userinfo")
 
     session["user"] = {
@@ -81,14 +99,8 @@ def callback():
     if not handler.check_user(email):
         handler.add_user(json_data)
 
-    # We might need to use this later //Jonte
-
-    # headers = {"Authorization": f"Bearer {token['access_token']}"}
-    # graph_url = "https://graph.microsoft.com/v1.0/me"
-    # response = request.get(graph_url, headers = headers)
-    # user = response.json()
-    
-    return redirect("http://localhost:3000/ssologin?login=success")
+    # Omdirigera användaren till hemskärmen efter lyckad inloggning
+    return redirect("http://localhost:3000/")
 
 @apartments_bp.route("/api/check-session", methods=["GET"])
 def check_session():
@@ -119,14 +131,17 @@ def get_apartments():
     elif request.method == 'PUT':
         json_data = request.get_json()
         logging.info(json_data)
-        # return jsonify({'message': 'ok'})
+
         return handler.filter_apartment(json_data)
 
 def _build_cors_preflight_response():
     response = jsonify({'message': 'CORS preflight'})
-    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
+    response.headers.add("Access-Control-Allow-Credentials", "true")
     response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
-    response.headers.add("Access-Control-Allow-Methods", "GET, PUT, OPTIONS")
+
+    response.headers.add("Access-Control-Allow-Methods", "GET, PUT, POST, OPTIONS")
+
     return response
 
 @apartments_bp.route("/hello")
@@ -148,17 +163,48 @@ def add_new_user():
 def add_appartment():
     logging.info("addapt route ok")
     json_data = request.get_json()
+    logging.info(json_data)
     # user_id = get_jwt_identity()
     # json_data['user_id'] = user_id
     return handler.add_apartment(json_data)
 
-@apartments_bp.route("/api/get-user-profile", methods=['GET'])
+@apartments_bp.route("/api/get-user-profile", methods=['GET', 'OPTIONS'])
 def get_user_profile():
-    return handler.get_user_profile
+    sso_id = request.args.get("sso_id")
+    if not sso_id:
+        return jsonify({"error": "Missing sso_id"}), 400
+    return handler.get_user_profile({"sso_id": sso_id})
 
-@apartments_bp.route("/api/get-user", methods=['GET'])
-def get_user():
-    return handler.get_user()
+@apartments_bp.route("/api/update-user-profile", methods=['POST'])
+def update_user_profile():
+    logging.info('rt updus ok')
+    json_data = request.get_json()
+    logging.info(json_data)
+    return handler.update_user_profile(json_data)
+
+
+@apartments_bp.route("/api/get-user/<sso_id>", methods=['GET', 'PUT', 'POST'])
+def get_user(sso_id):
+    if request.method == 'OPTIONS':
+        return _build_cors_preflight_response()
+    
+    elif request.method == 'GET':
+        return handler.get_user(sso_id)
+    # Denna route är för att uppdatera profilen
+    elif request.method == 'PUT':
+        json_data = request.get_json()
+        return handler.update_user_profile(json_data)
+    # Denna route är för att lägga till en review
+    elif request.method == 'POST':
+        json_data = request.get_json()
+        logging.info('routes add review ok')
+        return handler.add_review(sso_id, json_data)
+    
+    
+    logging.info('routes getus ok')
+    logging.info(user_id)
+    tmp = user_id
+    return handler.get_user(user_id)
 
 @apartments_bp.route("/api/get-listing", methods=['GET'])
 def get_listing():
@@ -170,12 +216,19 @@ def get_listing():
 def get_specific_apartment(apartment_id):
     return handler.get_specific_apartment(apartment_id)
 
-
-@apartments_bp.route("/api/remove-item", methods=['POST'])
-@jwt_required()
+@apartments_bp.route("/api/remove-apartment", methods=['POST'])
 def remove_item():
+    if request.method == 'OPTIONS':
+        return _build_cors_preflight_response()
+    
     json_data = request.get_json()
-    return handler.remove_item(json_data)
+    return handler.remove_apartment(json_data)
+
+# @apartments_bp.route("/api/remove-item", methods=['POST'])
+# @jwt_required()
+# def remove_item():
+#     json_data = request.get_json()
+#     return handler.remove_item(json_data)
 
 @apartments_bp.route("/api/edit-item", methods=['POST'])
 @jwt_required()
@@ -190,6 +243,9 @@ def add_review():
     current_user = get_jwt_identity()
     json_data = request.get_json()
     return handler.add_review(current_user, json_data)
+
+
+
 
 @apartments_bp.route("/api/get-review", methods=['GET', 'PUT', 'DELETE'])
 @jwt_required()
