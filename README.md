@@ -19,7 +19,7 @@ git clone <your-repo-url>
 cd liuHome
 ```
 ---
-### **🔹 Step 3: Set Up & Run the backend**
+### **🔹 Step 3: Set Up the backend**
 Do this in a new Visualstudio code terminal
 ```bash
 cd /backend
@@ -35,7 +35,7 @@ cd ../swishServer
 npm install
 ```
 ---
-### **🔹 Step 5: Set Up & Run the Frontend (Flask)**
+### **🔹 Step 5: Set Up & Run the Frontend**
 ```bash
 cd ../frontend
 npm install    
