@@ -309,128 +309,128 @@ export default function BrowsePage() {
                     <label className="flex items-center">
                       <input
                         type="checkbox"
-                        checked={selectedAreas.includes("Area 1")}
-                        onChange={() => toggleAreaSelection("Area 1")}
+                        checked={selectedAreas.includes("Ryd")}
+                        onChange={() => toggleAreaSelection("Ryd")}
                         className="mr-2"
                       />
-                      Area 1
+                      Ryd
                     </label>
                     <label className="flex items-center">
                       <input
                         type="checkbox"
-                        checked={selectedAreas.includes("Area 2")}
-                        onChange={() => toggleAreaSelection("Area 2")}
+                        checked={selectedAreas.includes("Colonia")}
+                        onChange={() => toggleAreaSelection("Colonia")}
                         className="mr-2"
                       />
-                      Area 2
+                      Colonia
                     </label>
                     <label className="flex items-center">
                       <input
                         type="checkbox"
-                        checked={selectedAreas.includes("Area 3")}
-                        onChange={() => toggleAreaSelection("Area 3")}
+                        checked={selectedAreas.includes("Valla")}
+                        onChange={() => toggleAreaSelection("Valla")}
                         className="mr-2"
                       />
-                      Area 3
+                      Valla
                     </label>
                     <label className="flex items-center">
                       <input
                         type="checkbox"
-                        checked={selectedAreas.includes("Area 4")}
-                        onChange={() => toggleAreaSelection("Area 4")}
+                        checked={selectedAreas.includes("Lambohov")}
+                        onChange={() => toggleAreaSelection("Lambohov")}
                         className="mr-2"
                       />
-                      Area 4
+                      Lambohov
                     </label>
                     <label className="flex items-center">
                       <input
                         type="checkbox"
-                        checked={selectedAreas.includes("Area 5")}
-                        onChange={() => toggleAreaSelection("Area 5")}
+                        checked={selectedAreas.includes("T1")}
+                        onChange={() => toggleAreaSelection("T1")}
                         className="mr-2"
                       />
-                      Area 5
+                      T1
                     </label>
                     <label className="flex items-center">
                       <input
                         type="checkbox"
-                        checked={selectedAreas.includes("Area 6")}
-                        onChange={() => toggleAreaSelection("Area 6")}
+                        checked={selectedAreas.includes("Irrblosset")}
+                        onChange={() => toggleAreaSelection("Irrblosset")}
                         className="mr-2"
                       />
-                      Area 6
+                      Irrblosset
                     </label>
                     <label className="flex items-center">
                       <input
                         type="checkbox"
-                        checked={selectedAreas.includes("Area 7")}
-                        onChange={() => toggleAreaSelection("Area 7")}
+                        checked={selectedAreas.includes("Vallastaden")}
+                        onChange={() => toggleAreaSelection("Vallastaden")}
                         className="mr-2"
                       />
-                      Area 7
+                      Vallastaden
                     </label>
                     <label className="flex items-center">
                       <input
                         type="checkbox"
-                        checked={selectedAreas.includes("Area 8")}
-                        onChange={() => toggleAreaSelection("Area 8")}
+                        checked={selectedAreas.includes("Ebbepark")}
+                        onChange={() => toggleAreaSelection("Ebbepark")}
                         className="mr-2"
                       />
-                      Area 8
+                      Ebbepark
                     </label>
                     <label className="flex items-center">
                       <input
                         type="checkbox"
-                        checked={selectedAreas.includes("Area 9")}
-                        onChange={() => toggleAreaSelection("Area 9")}
+                        checked={selectedAreas.includes("Gottfridsberg")}
+                        onChange={() => toggleAreaSelection("Gottfridsberg")}
                         className="mr-2"
                       />
-                      Area 9
+                      Gottfridsberg
                     </label>
                     <label className="flex items-center">
                       <input
                         type="checkbox"
-                        checked={selectedAreas.includes("Area 10")}
-                        onChange={() => toggleAreaSelection("Area 10")}
+                        checked={selectedAreas.includes("Skäggetorp")}
+                        onChange={() => toggleAreaSelection("Skäggetorp")}
                         className="mr-2"
                       />
-                      Area 10
+                      Skäggetorp
                     </label>
                     <label className="flex items-center">
                       <input
                         type="checkbox"
-                        checked={selectedAreas.includes("Area 11")}
-                        onChange={() => toggleAreaSelection("Area 11")}
+                        checked={selectedAreas.includes("Berga")}
+                        onChange={() => toggleAreaSelection("Berga")}
                         className="mr-2"
                       />
-                      Area 11
+                      Berga
                     </label>
                     <label className="flex items-center">
                       <input
                         type="checkbox"
-                        checked={selectedAreas.includes("Area 12")}
-                        onChange={() => toggleAreaSelection("Area 12")}
+                        checked={selectedAreas.includes("Flamman")}
+                        onChange={() => toggleAreaSelection("Flamman")}
                         className="mr-2"
                       />
-                      Area 12
+                      Flamman
                     </label>
                     <label className="flex items-center">
                       <input
                         type="checkbox"
-                        checked={selectedAreas.includes("Area 13")}
-                        onChange={() => toggleAreaSelection("Area 13")}
+                        checked={selectedAreas.includes("Fjärilen")}
+                        onChange={() => toggleAreaSelection("Fjärilen")}
                         className="mr-2"
                       />
-                      Area 13
+                      Fjärilen
                     </label>
                     <label className="flex items-center">
                       <input
                         type="checkbox"
-                        checked={selectedAreas.includes("Area 14")}
-                        onChange={() => toggleAreaSelection("Area 14")}
+                        checked={selectedAreas.includes("City")}
+                        onChange={() => toggleAreaSelection("City")}
                         className="mr-2"
                       />
-                      Area 14
+                      City
                     </label>
                   </div>
                 </div>
