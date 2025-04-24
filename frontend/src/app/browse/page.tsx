@@ -11,11 +11,9 @@ import SizeFilter from "@/components/ui/SizeFilter";
 import { Button } from "@/components/ui/button";
 import { Search, Calendar, House, Users } from "lucide-react";
 
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import SearchBar from "@/components/ui/search-bar";
-
 
 import {
     Home, // Ny ikon för antal rum
@@ -58,14 +56,14 @@ export default function BrowsePage() {
 
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false); // Hanterar om sorteringsdropdownen är öppen
   const [sortOrder, setSortOrder] = useState<string>(""); // Håller reda på vald sorteringsordning
-
+  const [filteredApartments, setFilteredApartments] = useState<Apartment[]>([]);
 
   async function applyFilters(): Promise<void> {
     console.log(selectedAreas);
     console.log(priceRange);
     console.log(sizeRange);
     console.log(selectedRooms);
-    console.log(sortOrder);
+    console.log(sortOption);
 
     const numericRooms = selectedRooms.map(Number);
     const minRooms = numericRooms.length > 0 ? Math.min(...numericRooms) : 1;
@@ -77,14 +75,12 @@ export default function BrowsePage() {
 
     const roomRange = [minRooms, maxRooms];
 
-    console.log(roomRange);
-
     const filterLoad = {
       priceRange,
       sizeRange,
       selectedAreas,
       roomRange,
-      sortOrder,
+      sortOption,
 
     };
 
@@ -109,13 +105,7 @@ export default function BrowsePage() {
       setApartments([]);
     }
   }
-  // const applyFilters = () => {
-  //   console.log(selectedAreas);
-  //   console.log(priceRange);
-  //   console.log(sizeRange);
-  //   console.log(selectedRooms);
-  //   console.log(sortOrder);
-  // }
+
   const toggleAreaSelection = (area: string) => {
     setSelectedAreas(
       (prev) =>
@@ -177,31 +167,13 @@ export default function BrowsePage() {
     fetchApartments();
   }, []);
 
-
-  // Add state for filtering
-  const [filteredApartments, setFilteredApartments] = useState<Apartment[]>([]);
-
-  // Update filtered apartments whenever the selected filter changes
   useEffect(() => {
-    if (selectedFilter === "area1") {
-      setFilteredApartments(
-        apartments.filter((apt) => apt.location === "Area 1")
-      );
-    } else if (selectedFilter === "area2") {
-      setFilteredApartments(
-        apartments.filter((apt) => apt.location === "Area 2")
-      );
-    } else if (selectedFilter === "lowRent") {
-      setFilteredApartments(apartments.filter((apt) => apt.rent_amount < 5000));
-    } else if (selectedFilter === "highRent") {
-      setFilteredApartments(
-        apartments.filter((apt) => apt.rent_amount >= 5000)
-      );
-    } else {
-      setFilteredApartments(apartments); // Show all apartments if no filter is selected
+    (async () => {
+      await applyFilters();
+    })();
+  }, [selectedAreas, priceRange, sizeRange, selectedRooms, sortOrder]);
+  // Add state for filtering
 
-    }
-  }, [selectedFilter, apartments]);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -284,7 +256,6 @@ export default function BrowsePage() {
                 </div>
               )}
             </div>
-
             {/* Dropdown för Area */}
             <div className="relative w-full max-w-xs">
               <button
@@ -599,10 +570,9 @@ export default function BrowsePage() {
             </button>
           </div>
         </section>
-
         <section className="flex-1 justify-center ">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-center">
-            {filteredApartments.map((apt) => (
+            {apartments.map((apt) => (
               <Link
                 href={`/browseSpecific/${apt.apartment_id}`}
                 key={apt.apartment_id}
@@ -647,27 +617,6 @@ export default function BrowsePage() {
           </div>
         </section>
       </main>
-
-
-      {/* 
-
-            <div className="container mx-auto py-10">
-                <h1 className="text-3xl font-bold mb-6">Available Apartments</h1>
-                {apartments.length > 0 ? (
-                    <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {apartments.map((apt) => (
-                            <li key={apt.apartment_id} className="border p-4 rounded-lg shadow-md">
-                                <h3 className="text-lg font-semibold">{apt.title}</h3>
-                                <p>{apt.location} - {apt.rent_amount} SEK/month</p>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>No apartments found.</p>
-                )}
-            </div>
-            */}
-
     </div>
   );
 }

@@ -71,13 +71,12 @@ class courier:
         size_interval = json_data.get('sizeRange')
         room_interval = json_data.get('roomRange')
         locations = json_data.get('selectedAreas')
-        sort_factor = json_data.get('sortOrder')
+        sort_factor = json_data.get('sortOption')
 
-        if "LowToHigh" or "earliest" in sort_factor:
+        if "LowToHigh" in sort_factor or "earliest" in sort_factor:
             asc = True
-        elif "HighToLow" or "latest" in sort_factor:
-            asc = True
-        
+        elif "HighToLow" in sort_factor or "latest" in sort_factor:
+            asc = False
         return db_filtering(rent_interval, size_interval, room_interval, locations, sort_factor, asc)
 
     def get_user(self, sso_id):

@@ -163,11 +163,11 @@ def db_get_all_apartments():
 
 
 def db_sort_apartments(apartments, sort_factor, asc):
-    match sort_factor:
-        case "rent_amount":
-            order = apartments.rent_amount
-        case "size":
-            order = apartments.size
+
+    if "price" in sort_factor:
+        order = Apartment.rent_amount
+    elif "size" in sort_factor:
+        order = Apartment.size
 
     if not asc:
         order = order.desc()
