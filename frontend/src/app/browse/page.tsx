@@ -342,6 +342,96 @@ export default function BrowsePage() {
                       />
                       Area 4
                     </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedAreas.includes("Area 5")}
+                        onChange={() => toggleAreaSelection("Area 5")}
+                        className="mr-2"
+                      />
+                      Area 5
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedAreas.includes("Area 6")}
+                        onChange={() => toggleAreaSelection("Area 6")}
+                        className="mr-2"
+                      />
+                      Area 6
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedAreas.includes("Area 7")}
+                        onChange={() => toggleAreaSelection("Area 7")}
+                        className="mr-2"
+                      />
+                      Area 7
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedAreas.includes("Area 8")}
+                        onChange={() => toggleAreaSelection("Area 8")}
+                        className="mr-2"
+                      />
+                      Area 8
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedAreas.includes("Area 9")}
+                        onChange={() => toggleAreaSelection("Area 9")}
+                        className="mr-2"
+                      />
+                      Area 9
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedAreas.includes("Area 10")}
+                        onChange={() => toggleAreaSelection("Area 10")}
+                        className="mr-2"
+                      />
+                      Area 10
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedAreas.includes("Area 11")}
+                        onChange={() => toggleAreaSelection("Area 11")}
+                        className="mr-2"
+                      />
+                      Area 11
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedAreas.includes("Area 12")}
+                        onChange={() => toggleAreaSelection("Area 12")}
+                        className="mr-2"
+                      />
+                      Area 12
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedAreas.includes("Area 13")}
+                        onChange={() => toggleAreaSelection("Area 13")}
+                        className="mr-2"
+                      />
+                      Area 13
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedAreas.includes("Area 14")}
+                        onChange={() => toggleAreaSelection("Area 14")}
+                        className="mr-2"
+                      />
+                      Area 14
+                    </label>
                   </div>
                 </div>
               )}
