@@ -32,6 +32,7 @@ interface Apartment {
     rent_amount: number;
     is_available: boolean;
     available_from?: string;
+    available_to?: string;
 
 }
 
@@ -59,11 +60,6 @@ export default function BrowsePage() {
   const [filteredApartments, setFilteredApartments] = useState<Apartment[]>([]);
 
   async function applyFilters(): Promise<void> {
-    console.log(selectedAreas);
-    console.log(priceRange);
-    console.log(sizeRange);
-    console.log(selectedRooms);
-    console.log(sortOption);
 
     const numericRooms = selectedRooms.map(Number);
     const minRooms = numericRooms.length > 0 ? Math.min(...numericRooms) : 1;
@@ -84,7 +80,6 @@ export default function BrowsePage() {
 
     };
 
-    console.log(filterLoad);
 
     try {
       const response = await fetch("http://localhost:3001/api/get-apartments", {
@@ -130,7 +125,6 @@ export default function BrowsePage() {
   };
 
   const handleSearch = (newQuery: string) => {
-    console.log("Search query:", newQuery);
     setQuery(newQuery);
   };
 
@@ -582,12 +576,6 @@ export default function BrowsePage() {
               )}
             </div>
 
-            {/* <button
-              onClick={applyFilters}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition min-w-[140px] text-center"
-            >
-              Apply Filters
-            </button> */}
           </div>
         </section>
         <section className="flex-1 justify-center ">
@@ -626,9 +614,13 @@ export default function BrowsePage() {
                         <span>{apt.bathrooms}</span>
                       </div> */}
                     </div>
-                    <div className="mt-3 text-sm text-muted-foreground">
+                    <div className="mt-3 text-sm text-muted-foreground flex gap-6">
+                      <span>
                       Available from: {apt.available_from ? new Date(apt.available_from).toISOString().split("T")[0] : "Not specified"}
-
+                      </span>
+                      <span>
+                      Available to: {apt.available_to ? new Date(apt.available_to).toISOString().split("T")[0] : "Not specified"}
+                      </span>
                     </div>
                   </CardContent>
                 </Card>

@@ -20,7 +20,6 @@ microsoft_login = Blueprint('microsoft_login', __name__)
 
 SWISH_BASE_URL = "http://localhost:3005"
 
-# apartments_bp = Blueprint('apartments', __name__)
 
 @apartments_bp.route("/api/paymentrequests", methods=['POST'])
 def initiate_payment():
@@ -70,7 +69,6 @@ def mock_login():
     
     session["user"] = json_data
     user = session.get("user")
-    logging.info(user)
     email = user.get("email")
     
     if not handler.check_user(email):
@@ -125,12 +123,10 @@ def get_apartments():
         return _build_cors_preflight_response()
     
     elif request.method == 'GET':
-        logging.info("routes get ok")
         return handler.get_all_apartments()
 
     elif request.method == 'PUT':
         json_data = request.get_json()
-        logging.info(json_data)
 
         return handler.filter_apartment(json_data)
 
@@ -153,19 +149,9 @@ def add_new_user():
     json_data = request.get_json()
     return handler.add_user(json_data)
 
-# @apartments_bp.route('/login', methods = ['POST'])
-# def login():
-#     json_data = request.get_json()
-#     return handler.login(json_data)
-
 @apartments_bp.route("/api/add-apartment", methods=['POST'])
-# @jwt_required()
 def add_appartment():
-    logging.info("addapt route ok")
     json_data = request.get_json()
-    logging.info(json_data)
-    # user_id = get_jwt_identity()
-    # json_data['user_id'] = user_id
     return handler.add_apartment(json_data)
 
 @apartments_bp.route("/api/get-user-profile", methods=['GET', 'OPTIONS'])
@@ -177,9 +163,7 @@ def get_user_profile():
 
 @apartments_bp.route("/api/update-user-profile", methods=['POST'])
 def update_user_profile():
-    logging.info('rt updus ok')
     json_data = request.get_json()
-    logging.info(json_data)
     return handler.update_user_profile(json_data)
 
 
@@ -197,22 +181,14 @@ def get_user(sso_id):
     # Denna route är för att lägga till en review
     elif request.method == 'POST':
         json_data = request.get_json()
-        logging.info('routes add review ok')
-        logging.info(json_data)
         return handler.add_review(sso_id, json_data)
     
-    
-    logging.info('routes getus ok')
-    logging.info(user_id)
-    tmp = user_id
-    return handler.get_user(user_id)
 
 @apartments_bp.route("/api/get-listing", methods=['GET'])
 def get_listing():
     json_data = request.get_json()
     return handler.get_Listing(json_data)
 
-#lagt till denna, osäker på hur korrekt det är /Nils
 @apartments_bp.route("/api/browseSpecific/<int:apartment_id>", methods=['GET'])
 def get_specific_apartment(apartment_id):
     return handler.get_specific_apartment(apartment_id)
@@ -225,31 +201,20 @@ def remove_item():
     json_data = request.get_json()
     return handler.remove_apartment(json_data)
 
-# @apartments_bp.route("/api/remove-item", methods=['POST'])
-# @jwt_required()
-# def remove_item():
-#     json_data = request.get_json()
-#     return handler.remove_item(json_data)
-
 @apartments_bp.route("/api/edit-item", methods=['POST'])
-@jwt_required()
 def edit_item():
     json_data = request.get_json()
     return handler.edit_item(json_data)
 
 
 @apartments_bp.route("/api/add-review", methods=['POST'])
-@jwt_required()
 def add_review():
     current_user = get_jwt_identity()
     json_data = request.get_json()
     return handler.add_review(current_user, json_data)
 
 
-
-
 @apartments_bp.route("/api/get-review", methods=['GET', 'PUT', 'DELETE'])
-@jwt_required()
 def edit_review():
     json_data = request.get_json()
 

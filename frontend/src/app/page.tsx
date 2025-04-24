@@ -76,7 +76,6 @@ export default function Home() {
       const data = await response.json();
       const apartments: Apartment[] = data.Apartments;
       setApartments(apartments.slice(0, 3));
-      console.log("Apartments:", apartments);
 
     } catch (error) {
       console.error("Error:", error);
@@ -177,8 +176,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-
 
         <section className="py-12 px-6 ">
           <h2 className="text-2xl font-bold text-center mb-8 ">How It Works</h2>

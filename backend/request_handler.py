@@ -8,7 +8,6 @@ logging.basicConfig(level=logging.DEBUG)
 class courier:
         
     def get_all_available_apartments(self):
-        logging.info("rq get ok")
         return db_get_all_available_apartments()
     
     def get_all_apartments(self):
@@ -29,9 +28,6 @@ class courier:
             return jsonify({"error": "An error occurred"}), 500
 
     def add_apartment(self, json_data): 
-        print(json_data)
-        logging.info(json_data)
-        # This one  is temporary
 
         apartment_data = json_data.get('apartment')
         payment_data = json_data.get('payment')
@@ -48,15 +44,11 @@ class courier:
         rent_amount = apartment_data.get('rent_amount')
 
         available_from_primary = apartment_data.get('available_from')
+        available_to_primary = apartment_data.get('available_to')
+
         available_from = available_from_primary.split('-')
-        logging.info(user_id)
-
-        # this_user = db_get_user(user_id).json
-        # expiry_date = this_user['user']['listing_expiry_date']
-
-        # Something to check if the user already has a listing to 
-        # db_add_apartment(user_id, title, description, address, size, number_of_rooms, location, rent_amount, available_from)
-        db_add_apartment(apartment_id, user_id, title, description, address, size, number_of_rooms, location, rent_amount, available_from)
+        available_to = available_to_primary.split('-')
+        db_add_apartment(apartment_id, user_id, title, description, address, size, number_of_rooms, location, rent_amount, available_from, available_to)
 
 
         return {'message': 'apartment added successfully'}
@@ -77,7 +69,7 @@ class courier:
             asc = True
         elif "HighToLow" in sort_factor or "latest" in sort_factor:
             asc = False
-        else: #Default
+        else: # Default case
             asc = True
         return db_filtering(rent_interval, size_interval, room_interval, locations, sort_factor, asc)
 
@@ -85,33 +77,25 @@ class courier:
         return db_get_user(sso_id)
     
     def get_user(self, user_id):
-        logging.info('hand getus ok')
         return db_get_user(user_id)
     
     def get_logged_in_user(self, json_data):
         return json_data
 
     def add_user(self, json_data):
-        logging.info('json_data', json_data)
         email = str(json_data.get('email'))
-        logging.info(email)
         sso_id = str(email.split('@')[0])
-        logging.info(sso_id)
         name = str(json_data.get('name'))
-        logging.info(name)
         password = json_data.get('password')
-        logging.info(password)
         return db_add_user(sso_id, name, password, email)
     
     def update_user_profile(self, json_data):
-        logging.info('rh updus ok')
         return db_update_user_profile(json_data)
     
     def login(self, json_data):
         return db_login(json_data) 
     
     def update_user_profile(self, json_data):
-        logging.info('rh updus ok')
         return db_update_user_profile(json_data)
 
     
@@ -120,7 +104,6 @@ class courier:
         liked = json_data.get('liked')
         reviewed_sso_id = sso_id
         reviwer_sso_id = json_data.get('reviewer_id')
-        logging.info('rq add review ok')
         db_add_review(content, liked, reviwer_sso_id, reviewed_sso_id)
         return {'message': 'review added'}
     

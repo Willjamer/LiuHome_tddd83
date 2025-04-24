@@ -39,6 +39,7 @@ export default function AddApartmentPage() {
     rent_amount: 0,
     is_available: true,
     available_from: "",
+    available_to: "",
   });
 
   const [payer, setPayer] = useState("");
@@ -93,7 +94,9 @@ export default function AddApartmentPage() {
       apartment.number_of_rooms > 0 &&
       apartment.area.trim() !== "" &&
       apartment.rent_amount > 0 &&
-      apartment.available_from.trim() !== ""
+      apartment.available_from.trim() !== "" &&
+      apartment.available_to.trim() !== ""
+
     );
   };
 
@@ -162,7 +165,6 @@ export default function AddApartmentPage() {
               sso_id,
               apartment,
             };
-            console.log("Submitting apartment:", payload);
 
             try {
               const apartmentRes = await fetch(
@@ -177,7 +179,6 @@ export default function AddApartmentPage() {
               if (!apartmentRes.ok) throw new Error("Failed to add apartment");
 
               const result = await apartmentRes.json();
-              console.log("Apartment added:", result);
             } catch (error) {
               console.error("Apartment submission error:", error);
               alert("Something went wrong. Please try again.");
@@ -406,6 +407,22 @@ export default function AddApartmentPage() {
                       value={apartment.available_from}
                       onChange={handleChange}
                       min={new Date().toISOString().split("T")[0]} // Sätter dagens datum som minsta tillåtna datum
+                      className="focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                      <Calendar className="h-4 w-4 text-blue-600" />
+                      Available To
+                    </label>
+                    <Input
+                      type="date"
+                      name="available_to"
+                      value={apartment.available_to}
+                      onChange={handleChange}
+                      min={apartment.available_from} // Sätter tillgängligt datum till som minst available_from
+                      // min={new Date().toISOString().split("T")[0]} // Sätter dagens datum som minsta tillåtna datum
                       className="focus:ring-blue-500 focus:border-blue-500"
                       required
                     />

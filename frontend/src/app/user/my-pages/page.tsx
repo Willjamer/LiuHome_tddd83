@@ -11,7 +11,6 @@ import { House } from "lucide-react"
 export const UserContext = createContext<any>(null);
 export const useUser = () => useContext(UserContext)
 
-
 export default function ProfilePage() {
   const router = useRouter();
   const [profile, setProfile] = useState({
@@ -38,7 +37,6 @@ export default function ProfilePage() {
 
     const fetchProfile = async () => {
       try {
-        console.log(ssoId)
         const response = await axios.get("http://localhost:3001/api/get-user-profile", {
           params: { sso_id: ssoId },
           headers: { Authorization: `Bearer ${token}` }

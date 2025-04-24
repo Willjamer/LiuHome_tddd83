@@ -25,6 +25,7 @@ class Apartment(db.Model):
     rent_amount     = db.Column(db.Integer, nullable = False)
     is_available    = db.Column(db.Boolean, nullable = False, default = True)
     available_from  = db.Column(db.Date, nullable = True)
+    available_to    = db.Column(db.Date, nullable = True)
 
     user = db.relationship('User', back_populates='apartment')
     
@@ -46,6 +47,7 @@ class Apartment(db.Model):
             "rent_amount": self.rent_amount,
             "is_available": self.is_available,
             "available_from": self.available_from,
+            "available_to": self.available_to,
             "user": {
                 "sso_id": self.user.sso_id,
                 "name": self.user.name,
@@ -206,14 +208,11 @@ def db_filtering(rent_interval, size_interval, room_interval, locations, sort_fa
     
 def db_get_specific_apartment(this_apartment_id):
     this_apartment = Apartment.query.get(this_apartment_id)
-    logging.info('database getspec ok ')
-    logging.info(this_apartment)
     return jsonify({'apartment' : this_apartment.serialize()})
 
 
 # def db_add_apartment(user_id, title, description, address, size, number_of_rooms, location, rent_amount, available_from):
-def db_add_apartment(apartment_id, user_id, title, description, address, size, number_of_rooms, location, rent_amount, available_from):
-    logging.info(apartment_id)
+def db_add_apartment(apartment_id, user_id, title, description, address, size, number_of_rooms, location, rent_amount, available_from, available_to):
     try:
         new_apartment = Apartment(
             # apartment_id = 1000, # Temporary
@@ -227,7 +226,9 @@ def db_add_apartment(apartment_id, user_id, title, description, address, size, n
             location = location,
             rent_amount = rent_amount,
             is_available = True,
-            available_from = datetime.date(int(available_from[0]), int(available_from[1]), int(available_from[2]))
+            available_from = datetime.date(int(available_from[0]), int(available_from[1]), int(available_from[2])),
+            available_to = datetime.date(int(available_to[0]), int(available_to[1]), int(available_to[2]))
+
         )
 
         db.session.add(new_apartment)
@@ -238,7 +239,6 @@ def db_add_apartment(apartment_id, user_id, title, description, address, size, n
     
 def db_remove_appartment(this_apartment_id):
     this_apartment = Apartment.query.get(this_apartment_id)
-    logging.info(this_apartment)
     if (this_apartment):
         db.session.delete(this_apartment)
         db.session.commit()
@@ -247,13 +247,8 @@ def db_remove_appartment(this_apartment_id):
         return jsonify({'message': 'Apartment not found'})
 
 def db_get_user(this_sso_id):
-    logging.info('db getus ok')
-    logging.info(this_sso_id)
     this_user = User.query.get(this_sso_id)
     if this_user:
-        logging.info("1")
-        logging.info(this_user)
-        logging.info("2")
 
         return jsonify({'user': this_user.serialize()})
     else:
@@ -262,7 +257,6 @@ def db_get_user(this_sso_id):
 def db_add_user(json_data):
     try:
         sso_id = json_data.get('sso_id')
-        logging.info(sso_id)
         name = json_data.get('name')
         email = json_data.get('email')
         password = json_data.get('password')
@@ -295,7 +289,6 @@ def db_add_user(json_data):
 
 def db_update_user_profile(json_data):
     try:
-        logging.info('db updus ok')
         sso_id = json_data.get('sso_id')
         this_user = User.query.get(sso_id)
         if not this_user:
@@ -311,7 +304,6 @@ def db_update_user_profile(json_data):
             this_user.program = json_data.get('program')
         if json_data.get('year'):
             try:
-                logging.info(json_data.get('year'))
                 this_user.year = int(json_data.get('year'))
             except ValueError:
                 pass
@@ -347,19 +339,14 @@ def db_add_review(content, liked, reviewer_sso_id, reviewed_sso_id):
     if (reviewing_user and reviewed_user):
         try:
             new_review = Review(
-                # review_id = review_id,
-                # review_id = 1000,
                 content = content,
                 liked = liked,
                 review_date = datetime.datetime.today(),
-                # reviewer = reviewing_user,
-                # reviewed_user = reviewed_user
                 reviewer_sso_id = reviewer_sso_id,
                 reviewed_sso_id = reviewed_sso_id,
             )
             db.session.add(new_review)
             db.session.commit()
-            logging.info('db add review ok')
             return jsonify({'message': 'Review added successfully'})
         except Exception as e:
             traceback.print_exc()
@@ -374,7 +361,6 @@ def db_get_review(review_id):
 
 def db_update_user_profile(json_data):
     try:
-        logging.info('db updus ok')
         sso_id = json_data.get('sso_id')
         this_user = User.query.get(sso_id)
         if not this_user:
@@ -390,7 +376,6 @@ def db_update_user_profile(json_data):
             this_user.program = json_data.get('program')
         if json_data.get('year'):
             try:
-                logging.info(json_data.get('year'))
                 this_user.year = int(json_data.get('year'))
             except ValueError:
                 pass
@@ -480,7 +465,6 @@ def db_check_SSO_user(email):
 
 def db_add_SSO_user(email, name):
     try:
-        logging.info("db add user")
         sso_id = email.split('@')[0]
         new_SSO_user = User(
             sso_id = sso_id,
@@ -489,7 +473,6 @@ def db_add_SSO_user(email, name):
         )
         db.session.add(new_SSO_user)
         db.session.commit()
-        logging.info("db add ok")
     except Exception as e:
         traceback.print_exc()
     return jsonify({'message': 'user added with sso successfully'}), 200

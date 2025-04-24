@@ -58,13 +58,11 @@ export default function BrowseSpecificPage() {
         const response = await fetch(`http://localhost:3001/api/browseSpecific/${id}`);
         if (!response.ok) throw new Error("Failed to fetch apartment");
         const data: Apartment = await response.json();
-        console.log(data);
         setApartment(data);
       } catch (error) {
         console.error("Error fetching apartment:", error);
       }
     }
-    console.log(loggedInUser)
 
     if (id) {
       fetchApartment();
@@ -90,7 +88,6 @@ export default function BrowseSpecificPage() {
       if (!response.ok) throw new Error('Failed to fetch user information');
       const data: User = await response.json();
 
-      console.log(data.user.recieved_reviews)
       setUser(data.user)
       setShowUserModal(true);
 

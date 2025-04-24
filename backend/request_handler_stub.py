@@ -6,7 +6,6 @@ class courier:
 
     #Fetch DB
     def get_all_apartments(self):
-        logging.info("stub get ok")
         item = [{
             
             "apartment_id": 1234,
