@@ -67,13 +67,17 @@ class courier:
         return {'message': 'apartment successfully taken down'}
     
     def filter_apartment(self, json_data):
-        rent_interval = (json_data.get('min_rent'), json_data.get('max_rent'))
-        size_interval = (json_data.get('min_size'), json_data.get('max_size'))
-        room_interval = (json_data.get('min_rooms'), json_data.get('max_rooms'))
-        locations = json_data.get('locations')
-        sort_factor = json_data.get('sort_factor')
-        asc = json_data.get('asc')
+        rent_interval = json_data.get('priceRange')
+        size_interval = json_data.get('sizeRange')
+        room_interval = json_data.get('roomRange')
+        locations = json_data.get('selectedAreas')
+        sort_factor = json_data.get('sortOrder')
 
+        if "LowToHigh" or "earliest" in sort_factor:
+            asc = True
+        elif "HighToLow" or "latest" in sort_factor:
+            asc = True
+        
         return db_filtering(rent_interval, size_interval, room_interval, locations, sort_factor, asc)
 
     def get_user(self, sso_id):

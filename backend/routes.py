@@ -131,6 +131,7 @@ def get_apartments():
     elif request.method == 'PUT':
         json_data = request.get_json()
         logging.info(json_data)
+
         return handler.filter_apartment(json_data)
 
 def _build_cors_preflight_response():
@@ -138,7 +139,9 @@ def _build_cors_preflight_response():
     response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
     response.headers.add("Access-Control-Allow-Credentials", "true")
     response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+
     response.headers.add("Access-Control-Allow-Methods", "GET, PUT, POST, OPTIONS")
+
     return response
 
 @apartments_bp.route("/hello")

@@ -35,6 +35,9 @@ class Apartment(db.Model):
     all_locations = ["Ryd", "Colonia", "Valla", "Lambohov", "T1", "Irrblosset", "Vallastaden", "Ebbepark", "Gottfridsberg", "Skäggetorp", "Berga", "Flamman", "Fjärilen", "City"]
 
 
+    all_locations = ["Ryd", "Colonia", "Valla", "Lambohov", "T1", "Irrblosset", "Vallastaden", "Ebbepark", "Gottfridsberg", "Skäggetorp", "Berga", "Flamman", "Fjärilen", "City"]
+
+
     def __repr__(self):
         return f"<Apartment {self.apartment_id}: {self.title}: {self.description}: {self.address}: {self.size}: {self.number_of_rooms}: {self.location}: {self.rent_amount}: {self.available_from}>"
 
@@ -200,7 +203,9 @@ def db_filtering(rent_interval, size_interval, room_interval, locations, sort_fa
                                  Apartment.number_of_rooms <= max_rooms,
                                  Apartment.location.in_(locations))
 
-    if sort_factor != ' ':
+
+    if sort_factor != '':
+
         apartments = db_sort_apartments(apartments, sort_factor, asc)
     
     apartments_list = apartments if isinstance(apartments, list) else apartments.all()
