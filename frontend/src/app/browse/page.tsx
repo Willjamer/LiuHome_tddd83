@@ -540,10 +540,10 @@ export default function BrowsePage() {
                                                     {apt.size ? `${apt.size} m²` : ""}
                                                 </span>
                                             </div>
-                      <div className="flex items-center text-sm">
+                      {/* <div className="flex items-center text-sm">
                         <Bath className="h-4 w-4 mr-1" />
                         <span>{apt.bathrooms}</span>
-                      </div>
+                      </div> */}
                     </div>
                     <div className="mt-3 text-sm text-muted-foreground">
                       Available from: {apt.available_from}
