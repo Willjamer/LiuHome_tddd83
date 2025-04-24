@@ -198,6 +198,7 @@ def get_user(sso_id):
     elif request.method == 'POST':
         json_data = request.get_json()
         logging.info('routes add review ok')
+        logging.info(json_data)
         return handler.add_review(sso_id, json_data)
     
     

@@ -114,7 +114,7 @@ class courier:
         return db_update_user_profile(json_data)
 
     
-    def add_review(self, json_data):
+    def add_review(self, sso_id, json_data):
         content = json_data.get('content')
         liked = json_data.get('liked')
         reviewed_sso_id = sso_id
