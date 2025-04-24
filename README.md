@@ -19,29 +19,36 @@ git clone <your-repo-url>
 cd liuHome
 ```
 ---
-### **🔹 Step 3: Set Up & Run the Frontend**
-```bash
-cd frontend
-npm install
-npm run dev
-```
-- The frontend will run at: **http://localhost:3000**
-
----
-
-### **🔹 Step 4: Set Up & Run the Backend (Flask)**
+### **🔹 Step 3: Set Up & Run the backend**
 Do this in a new Visualstudio code terminal
 ```bash
-cd ../backend
+cd /backend
 python3 -m venv venv       
 source venv/bin/activate    
 pip install -r requirements.txt 
-python app.py
+
 ```
-- The backend will run at: **http://localhost:5000**
+
+### **🔹 Step 4: Setup swish server**
+```bash
+cd ../swishServer
+npm install
+```
+---
+### **🔹 Step 5: Set Up & Run the Frontend (Flask)**
+```bash
+cd ../frontend
+npm install    
+npm run dev
+```
+
 
 ---
-
+### **🔹 Troubleshoot**
+in frontend
+```bash
+lsof -ti :3000 | xargs kill -9 & lsof -ti :3001 | xargs kill -9 & lsof -ti :3005 | xargs kill -9 & clear & npm run dev
+```
 
 
 
