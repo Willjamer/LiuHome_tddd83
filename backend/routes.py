@@ -191,7 +191,11 @@ def get_listing():
 
 @apartments_bp.route("/api/browseSpecific/<int:apartment_id>", methods=['GET'])
 def get_specific_apartment(apartment_id):
-    return handler.get_specific_apartment(apartment_id)
+    user = session.get("user")
+    if not user:
+        return jsonify({"error": "User not logged in"}), 401
+    else:
+        return handler.get_specific_apartment(apartment_id)
 
 @apartments_bp.route("/api/remove-apartment", methods=['POST'])
 def remove_item():

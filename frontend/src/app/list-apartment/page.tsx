@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,26 @@ import { useUser } from "../ssologin/page";
 
 export default function AddApartmentPage() {
   const router = useRouter();
+
+  useEffect(() => {
+    async function checkSession() {
+      try {
+        const response = await fetch("http://localhost:3001/api/check-session", {
+          credentials: "include",
+        });
+
+        if (response.status === 401) {
+          router.push("http://localhost:3001/login");
+        }
+      } catch (error) {
+        console.error("Error", error);
+      }
+    }
+
+    checkSession();
+  }, [router]);
+    
+  
   const [apartment, setApartment] = useState({
     title: "",
     description: "",
@@ -431,7 +451,7 @@ export default function AddApartmentPage() {
                 <div className="pt-4">
                   <Button
                     type="button"
-                    onClick={() => setShowForm(false)} // 👈 switch to payment
+                    onClick={() => setShowForm(false)} 
                     className={`w-full py-3 rounded-lg transition-all duration-200 font-medium text-lg shadow-md ${
                       isFormValid()
                         ? "bg-blue-600 text-white hover:bg-blue-700"

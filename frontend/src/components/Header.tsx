@@ -20,12 +20,21 @@ export default function Header() {
         </Link>
 
         <nav className="hidden md:flex gap-6 w-1/3 justify-center">
-          <Link
-            href="/browse"
-            className="text-sm font-medium hover:underline underline-offset-4"
-          >
-            Browse
-          </Link>
+          {user ? (
+            <Link
+              href="/browse"
+              className="text-sm font-medium hover:underline underline-offset-4"
+            >
+              Browse
+            </Link>
+          ) : (
+            <Link
+              href="http://localhost:3001/login"
+              className="text-sm font-medium hover:underline underline-offset-4"
+            >
+              Browse
+            </Link>
+          )}
           <Link
             href="/how-it-works"
             className="text-sm font-medium hover:underline underline-offset-4"

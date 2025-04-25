@@ -9,6 +9,7 @@ import { Search, Calendar, House, Users, MapPin } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
+import { useUser } from "@/app/ssologin/page";
 
 interface Apartment {
   apartment_id: number;
@@ -29,6 +30,7 @@ export default function Home() {
   const [data, setData] = useState(null);
   const router = useRouter();
   const [apartments, setApartments] = useState<Apartment[]>([]);
+  const {user} = useUser();
 
   const featuredListings = [
     {
@@ -110,16 +112,18 @@ export default function Home() {
               </p>
               <Button
                 onClick={() => {
-                  if (localStorage.getItem("access_token")) {
+                  if (user) {
                     router.push('/browse');
                   } else {
-                    router.push('/user/login');
+                    router.push('http://localhost:3001/login');
                   }
                 }}
                 variant="outline"
-                className="whitespace-nowrap font-bold"
+                className="whitespace-nowrap font-bold ${
+                user ? cursor not allowed : cursor pointer
+                }"
               >
-                Browse Apartments
+                {user ? "Browse Apartments" : "Log in to Browse"}
               </Button>
 
             </div>
@@ -135,7 +139,7 @@ export default function Home() {
               <div className="w-24"></div>
               <h2 className="text-2xl font-bold text-center">Featured Listings</h2>
 
-              <Link href={localStorage.getItem("access_token") ? "/browse" : "/user/login"}>
+              <Link href={user ? "/browse" : "$http://localhost:3001/login"} className="w-24 flex justify-end">
 
                 <Button variant="link">View all</Button>
               </Link>
