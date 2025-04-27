@@ -86,8 +86,8 @@ class courier:
         email = str(json_data.get('email'))
         sso_id = str(email.split('@')[0])
         name = str(json_data.get('name'))
-        password = json_data.get('password')
-        return db_add_user(sso_id, name, password, email)
+        # password = json_data.get('password')
+        return db_add_user(sso_id, name, email)
     
     def update_user_profile(self, json_data):
         return db_update_user_profile(json_data)

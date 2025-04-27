@@ -254,12 +254,13 @@ def db_get_user(this_sso_id):
     else:
         return jsonify({'message': 'user not found', 'User': []})
 
-def db_add_user(json_data):
+# def db_add_user(json_data):
+def db_add_user(sso_id, name, password, email):
     try:
-        sso_id = json_data.get('sso_id')
-        name = json_data.get('name')
-        email = json_data.get('email')
-        password = json_data.get('password')
+        # sso_id = json_data.get('sso_id')
+        # name = json_data.get('name')
+        # email = json_data.get('email')
+        # password = json_data.get('password')
 
         # FAKE SSO CREATION
         if not sso_id:
@@ -278,7 +279,7 @@ def db_add_user(json_data):
             name=name,
             email=email
         )
-        new_user.set_password(password)
+        # new_user.set_password(password)
         db.session.add(new_user)
         db.session.commit()
         return jsonify({'message': 'user created successfully', 'sso_id': sso_id})
