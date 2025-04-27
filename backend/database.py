@@ -255,7 +255,7 @@ def db_get_user(this_sso_id):
         return jsonify({'message': 'user not found', 'User': []})
 
 # def db_add_user(json_data):
-def db_add_user(sso_id, name, password, email):
+def db_add_user(sso_id, name, email):
     try:
         # sso_id = json_data.get('sso_id')
         # name = json_data.get('name')
