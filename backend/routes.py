@@ -82,6 +82,11 @@ def mock_login():
 @microsoft_login.route("/callback")
 def callback():
     token = oauth.microsoft.authorize_access_token()
+    # token = oauth.microsoft.authorize_access_token(
+    #     claims_options={
+    #         "nbf": {"essential": False, "validate": True, "leeway": 60}
+    #     }
+    # )
     user = token.get("userinfo")
 
     session["user"] = {
