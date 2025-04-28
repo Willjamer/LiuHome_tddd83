@@ -55,12 +55,19 @@ export default function BrowseSpecificPage() {
   useEffect(() => {
     async function fetchApartment() {
       try {
-        const response = await fetch(`http://localhost:3001/api/browseSpecific/${id}`);
+        const response = await fetch(`http://localhost:3001/api/browseSpecific/${id}`, {
+          credentials: "include",
+        });
+        if (response.status === 401) {
+         router.push("http://localhost:3001/login");
+        }
+
         if (!response.ok) throw new Error("Failed to fetch apartment");
         const data: Apartment = await response.json();
         setApartment(data);
       } catch (error) {
         console.error("Error fetching apartment:", error);
+        
       }
     }
 
