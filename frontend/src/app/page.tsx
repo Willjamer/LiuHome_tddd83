@@ -139,7 +139,7 @@ export default function Home() {
               <div className="w-24"></div>
               <h2 className="text-2xl font-bold text-center">Featured Listings</h2>
 
-              <Link href={user ? "/browse" : "$http://localhost:3001/login"} className="w-24 flex justify-end">
+              <Link href={user ? "/browse" : "http://localhost:3001/login"} className="w-24 flex justify-end">
 
                 <Button variant="link">View all</Button>
               </Link>
