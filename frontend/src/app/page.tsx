@@ -130,9 +130,11 @@ export default function Home() {
             <div className="flex items-center justify-between mt-12 mb-8">
               <div className="w-24"></div>
               <h2 className="text-2xl font-bold text-center">Featured Listings</h2>
-              <Link href={localStorage.getItem("access_token") ? "/browse" : "/user/login"}>
-                <Button variant="link">View all</Button>
-              </Link>
+                {typeof window !== "undefined" && (
+                  <Link href={localStorage.getItem("access_token") ? "/browse" : "/user/login"}>
+                    <Button variant="link">View all</Button>
+                  </Link>
+                )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-between px-2">
