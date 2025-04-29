@@ -32,7 +32,7 @@ class Apartment(db.Model):
     # expiry_date     = db.Column(db.Date, nullable = False)
     # Något här om images, vet ej än hur
     user = db.relationship('User', back_populates='apartment')
-    all_locations = ["Ryd", "Valla", "Irrblosset", "T1", "Lambohov", "Gottfridsberg"]
+    all_locations = ["Ryd", "Colonia", "Valla", "Lambohov", "T1", "Irrblosset", "Vallastaden", "Ebbepark", "Gottfridsberg", "Skäggetorp", "Berga", "Flamman", "Fjärilen", "City"]
 
     def __repr__(self):
         return f"<Apartment {self.apartment_id}: {self.title}: {self.description}: {self.address}: {self.size}: {self.number_of_rooms}: {self.location}: {self.rent_amount}: {self.available_from}>"

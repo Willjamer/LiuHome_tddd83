@@ -103,6 +103,7 @@ def remove_item():
 @apartments_bp.route("/api/edit-item", methods=['POST'])
 @jwt_required()
 def edit_item():
+    
     json_data = request.get_json()
     return handler.edit_item(json_data)
 
