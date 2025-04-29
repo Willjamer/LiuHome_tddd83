@@ -76,6 +76,7 @@ export default function ProfilePage() {
           "Content-Type": "application/json",
         },
         credentials: "include",
+
         body: JSON.stringify(profile),
       });
 
@@ -85,7 +86,9 @@ export default function ProfilePage() {
     } catch (error) {
       setError("Failed to update profile");
     }
+
   };
+
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
@@ -99,6 +102,7 @@ export default function ProfilePage() {
 
   return (
     <div className="flex justify-center items-start gap-8 p-8 w-full">
+
 
       <div className="flex flex-col w-1/3 space-y-4">
         <Card>
@@ -157,6 +161,7 @@ export default function ProfilePage() {
               src="/images/Icon.png"
               alt="user icon"
               className="h-20 mx-auto mb-4 rounded-full border bg-gray-100"
+
             />
             <form onSubmit={handleSubmit} className="space-y-4">
               <Input name="name" placeholder="Name" value={profile.name} onChange={handleChange} disabled />
@@ -181,6 +186,7 @@ export default function ProfilePage() {
         </Card>
       </div>
 
+
       <div className="w-1/3">
         <Card>
           <CardContent className="p-4">
@@ -202,6 +208,7 @@ export default function ProfilePage() {
                 </div>
               </Link>
             )}
+
           </CardContent>
         </Card>
       </div>
