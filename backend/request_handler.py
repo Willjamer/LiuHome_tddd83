@@ -40,7 +40,7 @@ class courier:
         address = apartment_data.get('address')
         size = apartment_data.get('size')
         number_of_rooms = apartment_data.get('number_of_rooms')
-        location = apartment_data.get('area')
+        location = apartment_data.get('location') #area eller location?
         rent_amount = apartment_data.get('rent_amount')
 
         available_from_primary = apartment_data.get('available_from')
@@ -76,8 +76,11 @@ class courier:
     def get_user(self, sso_id):
         return db_get_user(sso_id)
     
-    def get_user(self, user_id):
-        return db_get_user(user_id)
+    def get_user_profile(self, sso_id: str):
+        """
+        Returnerar hela user-objektet (inkl. apartment) som JSON
+        """
+        return db_get_user(sso_id)
     
     def get_logged_in_user(self, json_data):
         return json_data
@@ -94,10 +97,6 @@ class courier:
     
     def login(self, json_data):
         return db_login(json_data) 
-    
-    def update_user_profile(self, json_data):
-        return db_update_user_profile(json_data)
-
     
     def add_review(self, sso_id, json_data):
         content = json_data.get('content')

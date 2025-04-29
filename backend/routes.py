@@ -159,12 +159,32 @@ def add_appartment():
     json_data = request.get_json()
     return handler.add_apartment(json_data)
 
-@apartments_bp.route("/api/get-user-profile", methods=['GET', 'OPTIONS'])
+@apartments_bp.route("/api/get-user-profile", methods=["GET", "OPTIONS"])
 def get_user_profile():
+    if request.method == "OPTIONS":
+        return _build_cors_preflight_response()
+
+    user = session.get("user")
+    if not user:
+        response = jsonify({"message": "Not logged in"})
+        response.status_code = 401
+    else:
+        sso_id = user["email"].split("@")[0]
+        response = handler.get_user_profile(sso_id)
+
+    response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
+    response.headers.add("Access-Control-Allow-Credentials", "true")
+    return response
+
+@apartments_bp.route("/api/get-user-by-id", methods=["GET", "OPTIONS"])
+def get_user_by_id():
+    if request.method == "OPTIONS":
+        return _build_cors_preflight_response()
+
     sso_id = request.args.get("sso_id")
     if not sso_id:
         return jsonify({"error": "Missing sso_id"}), 400
-    return handler.get_user_profile({"sso_id": sso_id})
+    return handler.get_user_profile(sso_id)
 
 @apartments_bp.route("/api/update-user-profile", methods=['POST'])
 def update_user_profile():

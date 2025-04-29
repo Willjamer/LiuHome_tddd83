@@ -12,7 +12,7 @@ import { useUser } from "../ssologin/page";
 
 export default function ProfilePage() {
   const router = useRouter();
-  const [profile, setProfile] = useState({
+  const [profile, setProfile] = useState<any>({
     sso_id: "",
     email: "",
     name: "",
@@ -20,6 +20,7 @@ export default function ProfilePage() {
     program: "",
     year: "",
     bio: "",
+    apartment: null,
     created_reviews: [],
     recieved_reviews: [],
   });
@@ -30,8 +31,8 @@ export default function ProfilePage() {
   const user = useUser().user;
   const ssoId = user?.email.split("@")[0];
   useEffect(() => {
-    
-    
+
+
     console.log(user)
     console.log(user?.id)
     if (!ssoId) {
@@ -43,11 +44,11 @@ export default function ProfilePage() {
       try {
         console.log(ssoId)
         const response = await fetch(`http://localhost:3001/api/get-user/${ssoId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
         });
         if (!response.ok) throw new Error('Failed to fetch user information');
         const data = await response.json();
@@ -76,39 +77,39 @@ export default function ProfilePage() {
 
   const handleSubmit = async () => {
     try {
-        const response = await fetch(`http://localhost:3001/api/get-user/${ssoId}`, {
+      const response = await fetch(`http://localhost:3001/api/get-user/${ssoId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
         body: JSON.stringify(profile)
-        });
+      });
 
-        if (response.ok) {
-            setUpdateMessage("Profile updated successfully!");
-        }
+      if (response.ok) {
+        setUpdateMessage("Profile updated successfully!");
+      }
     } catch (error) {
-        setError("Failed to update profile");
+      setError("Failed to update profile");
     }
   }
-//   const handleSubmit = (e: React.FormEvent) => {
-//     try {
-//         const response = await 
-//     }
-//     e.preventDefault();
-//     const token = localStorage.getItem("access_token");
-//     axios
-//       .post("http://localhost:3001/api/update-user-profile", profile, {
-//         headers: { Authorization: `Bearer ${token}` },
-//       })
-//       .then((response) => {
-//         setUpdateMessage("Profile updated successfully!");
-//       })
-//       .catch((err) => {
-//         setError("Failed to update profile");
-//       });
-//   };
+  //   const handleSubmit = (e: React.FormEvent) => {
+  //     try {
+  //         const response = await 
+  //     }
+  //     e.preventDefault();
+  //     const token = localStorage.getItem("access_token");
+  //     axios
+  //       .post("http://localhost:3001/api/update-user-profile", profile, {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       })
+  //       .then((response) => {
+  //         setUpdateMessage("Profile updated successfully!");
+  //       })
+  //       .catch((err) => {
+  //         setError("Failed to update profile");
+  //       });
+  //   };
 
   // Log Out
   const handleLogout = () => {
@@ -123,9 +124,9 @@ export default function ProfilePage() {
 
   return (
     // <UserContext.Provider value = {{ user: profile, setUser: setProfile}}>
-      <div className="flex flex-col h-screen gap-8 pb-32 justify-center items-center w-full">
+    <div className="flex flex-col h-screen gap-8 pb-32 justify-center items-center w-full">
       <img
-        src={"/images/liu-logga.png"} 
+        src={"/images/liu-logga.png"}
         alt={"YOOOOOO"}
         className="w-1/4"
       />
@@ -134,9 +135,9 @@ export default function ProfilePage() {
         <Card className="w-full max-w-md">
           <CardContent className="p-6">
             <img
-              src = {"/images/Icon.png"}
-              alt = {"user icon"}
-              className = "h-20 mx-auto mb-4 rounded-full border-1 border-black bg-gray-100 hover:bg-gray-300 transition-colors duration-200 ease-in-out"
+              src={"/images/Icon.png"}
+              alt={"user icon"}
+              className="h-20 mx-auto mb-4 rounded-full border-1 border-black bg-gray-100 hover:bg-gray-300 transition-colors duration-200 ease-in-out"
             />
             <form onSubmit={handleSubmit} className="space-y-4">
               <Input
@@ -189,7 +190,7 @@ export default function ProfilePage() {
 
             </form>
 
-                        {/* Created Reviews */}
+            {/* Created Reviews */}
             <div className="w-full max-w-md mt-8">
               <h2 className="text-xl font-bold mb-2">Created Reviews</h2>
               {profile.created_reviews.length === 0 ? (
@@ -224,12 +225,38 @@ export default function ProfilePage() {
                 ))
               )}
             </div>
+            {/* ----------  My Listings  ---------- */}
+            <div className="w-full max-w-md mt-8">
+              <h2 className="text-xl font-bold mb-2">My Listings</h2>
+
+              {!profile.apartment ? (
+                <p className="text-gray-500">You have no current listings.</p>
+              ) : (
+                <Card>
+                  <CardContent className="flex gap-4 p-4">
+                    <House className="w-10 h-10 shrink-0" />
+                    <div>
+                      <p className="font-semibold">{profile.apartment.title}</p>
+                      <p>{profile.apartment.address}</p>
+                      <p className="text-sm">
+                        {profile.apartment.size} m² • {profile.apartment.number_of_rooms} rum
+                      </p>
+                      <p className="font-medium">
+                        {profile.apartment.rent_amount} kr/mån
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+            {/* ----------  slut  My Listings  ---------- */}
+
 
           </CardContent>
         </Card>
       </div>
     </div>
     // </UserContext.Provider>
-    
+
   );
 }
