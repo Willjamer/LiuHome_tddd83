@@ -8,7 +8,7 @@ app = Flask(__name__)
 # app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://neondb_owner:npg_LK8b5tZIUSeX@ep-mute-block-ab13wto4-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require"
 
-app.config['JWT_SECRET_KEY'] = "Kursen TDDD83 är en av de i särklass sämsta kurserna jag har läst i mitt liv och det är liksom inte ens kul hur den bara blir sämre och sämre"
+app.config['JWT_SECRET_KEY'] = "[1] INFO:werkzeug:WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead."
 
 app.config["SECRET_KEY"] = "my_temp_key_which_should_be_longer"
 app.config["MICROSOFT_CLIENT_ID"] = "0b0f8650-fca0-47a0-8887-939b62c27038"
