@@ -79,7 +79,7 @@ const AboutPage: React.FC = () => {
                   href="mailto:nilvo233@student.liu.se"
                   className="text-blue-500 hover:underline text-lg"
                 >
-                  Contact HR                </a>
+                  Contact us                 </a>
               </div>
             </div>
           </section>
